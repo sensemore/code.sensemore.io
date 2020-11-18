@@ -5,7 +5,6 @@ Wired kullanım kılavuzu
 Wired cihazın çalışma durumu üzerinde bulunan LED gösterge ile takip edilebilir.
 
 Cihaz ışığı kısa veya uzun yanabilir.
-
 Kısa: LED 250 ms açık, 250 ms kapalı
 
 Uzun: LED 1000 ms açık, 250 ms kapalı.

@@ -1,4 +1,4 @@
 - [Android API](android_api.md)
-- [Wired Documentation](wired.md)
+- [Wired Docs](wired.md)
 - Tools
   -  [Vibration Calculator](vibration_calculator.md)
