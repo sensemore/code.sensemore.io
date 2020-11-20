@@ -1,7 +1,7 @@
 
 ## 1.1. Introduction
-SensemoreApi is a library that helps developers to integrate their android applications to Sensemore productions."Sensemore Infinity" is main production right now. 
-You can easily scan/connect/measure SensemoreInfinity via using this library. If you want to have the library please contact with hello@sensemore.io. 
+SensemoreApi is a library that helps developers to integrate their android applications to Sensemore productions."Sensemore Infinity" is the main product right now. 
+You can easily scan/connect/measure SensemoreInfinity via using this library. If you want to have the library please contact hello@sensemore.io. 
 
 You can also skip the reading part and check out example application to understand fundamental usages of this api.
 
@@ -11,7 +11,7 @@ You can also skip the reading part and check out example application to understa
 Make sure you are including these libraries to your app.gradle
 Dependencies:
 
-SensemoreApi using reactivex modules to manage async operations 
+SensemoreApi uses reactivex modules to manage async operations 
  **API level must be greater than 24**
 ```gradle
 implementation 'io.reactivex.rxjava2:rxandroid:2.1.1' //manage asyn operations
@@ -47,9 +47,10 @@ requestPermissions(new String[]{ Manifest.permission.BLUETOOTH, Manifest.permiss
 
 Build your api instance as
 ```api = SensemoreApi.Build(this);``` then you are ready to go. Almost all api methods use reactive consumers to handle situations.
+
 ### 2.0.1. Scan
-Scan method is making ble scan with filter of Sensemore products names so you can only retrieve Sensemore products. Scan will be destroyed after connection state changes.
-```
+Scan method is making BLE scans with name filter of Sensemore products names so you can only connect to Sensemore products. Scan will be destroyed after connection state changes.
+```java
  api.Search(scanResult -> {
             Log("Scan result " + scanResult.DeviceName + ", mac:" + scanResult.MacAddress + ", rssi:" + scanResult.Rssi);
         }, throwable -> {
@@ -58,7 +59,7 @@ Scan method is making ble scan with filter of Sensemore products names so you ca
 ```
 
 ### 2.0.2. Connect/Disconnect
-Connect requires valid macaddress and state callback as parameter. Invalid mac address' will break the application. 
+Connect requires valid macaddress and state callback as parameter. Invalid mac addresses will break the application. 
 In order to disconnect from device, you just need to call ```api.Disconnect()``` method. 'onDisconnect and onDisconnected' events will be consumed.
 
 ```java
@@ -115,11 +116,12 @@ Stream measurement immediately streams measurement chunks to the callback, Strea
 
 ### 2.1.1. Tag
 You could want to track your measurements by some reference. Use tags as your reference.
+
 ### 2.1.2. Profile
 
 Properties:
 
-| WARNING: You should be e careful while setting the SampleSize and SamplingRate. The relation of them will determine the measurement time (sampleSize/samplingRate). If you give a too big value for samplesize you could cause a very long measurement and it will consume devices battery drastically |
+| WARNING: You should be e careful while setting the SampleSize and SamplingRate. The relation of them will determine the measurement time (sampleSize/samplingRate). If   samplesize is too big you could cause a very long measurement and it will consume device's battery drastically |
 
 - Name
     - Profile holds information related to measurement configurations. You could give a name and store for further usage.
@@ -143,7 +145,7 @@ Profile profile= new Profile(name, sampleSize, samplingRate, accelerometerRange,
 ```
 ### 2.1.3. BatchMeasurement
 Profile needs to be given in order to take batch measurement.
-After definig a profile just need to pass profile and tags to the BatchMeasure method
+After defining a profile you just need to pass the profile and tags to the BatchMeasure method
 ```java
   api.BatchMeasurement(profile, tags, () -> {
                     Log("Data reading started");
@@ -165,7 +167,7 @@ You do not have to calibrate sensemore devices. Sensemore devices calculate cali
 Profile needs to be given in order to take batch measurement.
 After definig a profile just need to pass profile and tags to the BatchMeasure method
 
-| WARNING: Do not forget to stop stream measurement when you dont need it. There is no timeout control that stops communications. |
+| WARNING: Do not forget to stop stream measurement when you don't need it. There is no timeout control that stops communications. |
 ```java
   api.StreamMeasurement(profile, tags, streamChunk -> {
                     Log(streamChunk.accelerometerX +

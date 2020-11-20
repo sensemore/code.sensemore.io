@@ -1,152 +1,152 @@
 # **Wired v1.0.2**
-Wired kullanım kılavuzu
-## 1. Wired cihaz durumları ve LED göstergesi
+Wired User Manual
+##  1.Wired device statuses and LED indicator
 
-Wired cihazın çalışma durumu üzerinde bulunan LED gösterge ile takip edilebilir.
+The operating status of the Wired device can be followed by the LED indicator.
 
-Cihaz ışığı kısa veya uzun yanabilir.
-Kısa: LED 250 ms açık, 250 ms kapalı
+The device's light can blink short or long.
+Short: LED 250 ms on, 250 ms off
 
-Uzun: LED 1000 ms açık, 250 ms kapalı.
+Long: LED 1000 ms on, 250 ms off.
 
-Tablo 1 : Wired LED belirteci ve cihazın anlık durumu
+Table 1: Wired LED indicator and the current status of the device
 
-| **LED süresi** | **LED rengi** | **LED durumu** | **Cihaz durumu** |
+| **LED duration** | **LED color** | **LED status** | **Device status** |
 | --- | --- | --- | --- |
-| 1 saniye | Sarı | Sabit | Cihaz açılış |
-| 6 defa | Sarı | Kısa | Uygulamaya geçmeden önce cihaz hazırlanıyor |
-| İşlem olmadığında | Yeşil | Sabit | Dinlemede komut bekliyor |
-| Silme işlemi boyunca | Mavi | Sabit | Hafızadan önceki ölçüm siliniyor |
-| Ölçüm bitiminden başlangıcına kadar | Beyaz | Yanıp-Sönme | Ölçüm alıyor |
-| Ölçüm verileri gönderilene kadar | Mor | Yanıp-Sönme | Ölçüm verilerini gönderiyor |
-| 1 dakika | Açık Mavi | Sabit | Güncelleme modunda mesaj bekleniyor |
-| Güncelleme mesajı boyunca | Sarı | Yanıp-Sönme | Güncelleme modunda mesaj alındı |
-| 3 defa | Yeşil | Kısa | Güncelleme mesajı başarıyla alındı |
-| 1 defa | Kırmızı | Uzun | Güncelleme mesajı sırasında hata oluştu |
-| 3 defa | Kırmızı | Uzun | Güncelleme modunda 1 dakika bekleme sonunda mesaj alınmadı |
-| 1 saniye | Mor | Sabit | Güncelleme başladı |
-| Yeni güncelleme cihaza yazılana kadar | Mor | Yanıp-Sönme | Güncelleme verisi cihaza yazılıyor |
-| 3 defa | Yeşil | Kısa | Güncelleme başarıyla tamamlandı |
-| Tekrar sayısı hata kodunu verir. | Kırmızı | Uzun | Güncelleme sırasında problem oluştu |
-| 5 defa | Kırmızı | Uzun | Son 5 güncelleme denemesi hatalı |
+| 1 second | Yellow | Solid | The device is initializing |
+| 6 times | Yellow | Short | The device is getting ready before initializing the application |
+| Idle | Green | Solid | Waiting for command |
+| During the deletion process | Blue | Solid | Previous measurement in the memory is being reset |
+| From the end of the measurement to the start | White | Blinking | Taking measurement |
+| Until measurement data is sent | Purple | Blinking | Sending measurement data |
+| 1 minute | Light blue | Solid | Waiting for message in firmware update mode |
+| During the update message | Yellow | Blinking | Message received in firmware update mode |
+| 3 times | Green | Short | Update message is received successfully |
+| 1 time | Red | Long | Error occurred during the update message |
+| 3 times | Red | Long | No message received in firmware update mode within 1 minute |
+| 1 second | Purple | Solid | Update started |
+| Until the new update is installed on the device | Purple | Blinking | Update data is being installed on the device |
+| 3 times | Green | Short | Update completed successfully |
+| Number of repetitions returns error code | Red | Long | Problem occurred during update |
+| 5 times | Red | Long | Last 5 update attempts failed |
 
-## 2. Wired haberleşme protokolü
+## 2. Wired Communication Protocol
 
-Wired cihazlarda kullanılan haberleşme protokolü aşağıdaki gibidir. Veri alma ve gönderme protokolü UART - RS485 protokolü üzerine çalışmaktadır. Cihazın bu versiyonunda UART baud rate 1000000 olarak sabitlenmiştir. Veri protokolünde başlangıç sayısı ve bitiş sayısı sabit tutulmalıdır. 2-bit olarak ayrılan mesaj tipi de _0b00_ şeklinde sabit kalmalıdır. Gönderilen bütün mesajlar aşağıda gösterildiği şekilde paketlenmiş halde olmalıdır. Alınan mesajların çözülmesi de yine aynı şekilde yapılmalıdır.
+The communication protocol used in Wired devices is as below. The data receiving and sending protocol uses the UART - RS485 protocol.In this version of the device, the UART baud rate is set to 1000000. The starting and ending number must be kept constant in the data protocol. The message type that is reserved as 2-bit must also stay constant as 0b00. All messages sent must be packaged as shown below. The decoding of the received messages must also be done likewise.
 
-![Figür 1 : Haberleşme protokolü](/images/wired-protocol.jpg)
+![Figür 1 : Communication protocol](/images/wired-protocol.jpg)
 
-Veri boyutu alanı bir bayt ile temsil edilir, bu sebepten veri boyutu maksimum 255 olabilir olabilir.
+The data size area is represented by one byte. Therefore, the data size can be a maximum of 255.
 
-Adres alanı 4-bit alıcı, 4-bit verici olmak üzere toplamda 1 bayt olmalıdır. Wired cihazlar bir ağ içinde birden fazla bulunabilecekleri için adres alanından istenilen cihazın adresi belirtilerek sadece o cihaza komut gönderilebilir. Gönderilen mesaj paketinde alıcı adresi 15(0x0F) şeklindeyse ağda bulunan bütün cihazlar bu mesajı alabilir. Cihazın tuttuğu adres sonradan atanan bir sayı değeridir, isteğe göre değiştirilebilir. Cihaz her başladığında 14(0x0E) adresini dinlemeye başlar.
+The address field must be one byte in total, 4-bit receiver and 4-bit transmitter.As Wired devices can be found more than once in a network, a command can only be sent to the desired device by specifying the address of that device in the address field.If the recipient address is 15 (0x0F) in the message packet that is sent, all devices on the network can receive the message.The address that is kept by the device is a numerical value assigned afterwards and it may be changed on demand.The device starts listening to address 14 (0x0E) every time it is initialized.
 
-Gönderici adresi olarak istenilen değer girilebilir, ancak Wired cihazlar her zaman 13(0x0D) adresini alıcı olarak belirleyip mesaj gönderirler. Bu yüzden 13 adresinin gönderici adresi olarak kullanılması uygundur.
+Any desired value can be entered as the sender address.However, Wired devices always set the recipient address as 13(0x0D) and send a message. For this reason, it is appropriate to use the address 13 as the sender address.
 
-Mesaj indeksi önceden belirlenen mesaj tiplerine göre ayrılmıştır. Sadece 0x0A - 0x13 (11 - 19) aralığındaki mesaj indeksleri kullanıcıya ayrılmıştır. Kalan değerler başka işlemler için tutulmuştur ve kullanılmamalıdır.
+The message index is reserved by predetermined message types.Only the message indices between the range of 0x0A - 0x13 (11 - 19) are reserved for the user.The remaining values are kept for other processes and should not be used.
 
-Taşınan veri paketin başlangıç serisi ile bitiş serisi arasına sıkıştırılarak gönderilmelidir. Paket başlıklarının veri boyutları önceden belirli olduğu için veri boyunun belirlenmesi paket bitiminin kontrolü için önem taşır.
+The transferred data must be sent in compression between the starting and ending series of the packet. Because the data size of the packet headers is predetermined, determining the data length is crucial for checking the end of the packet.
 
-CRC hesabı başlangıç sayısından başlayarak verinin son baytına kadar yapılır. Sadece iki bayt CRC verisi ile paket sonundaki 0xBF bitiş sayısı CRC hesabına dâhil edilmez. CRC için kullanılan algoritma [Hata tespiti (CRC) kontrolü](#_eva3w140pn4z) bölümünde anlatılmıştır.
+The CRC calculation is done beginning from the starting number to the last byte of data.Only the two bytes of the CRC data and the 0xBF ending number at the end of the packet are not included in the CRC calculation.The algorithm that is used in CRC is explained in the section named Error Detection (CRC) Check.
 
-## 3. Mesaj (Komut) tipleri
+## 3. Message (Command) types
 
-Mesaj tipleri Wired cihazların daha önceden belirlenen işlemleri yapmalarını sağlar. Daha önce açıklanan protokolün başlangıç serisinde yer alan _mesaj indeksi_ komut isimlerinin yanında yer almaktadır. Cihaz ile sorunsuz bir haberleşme için mesajlar uygun formatta gönderilmeli, cevaplar ise belirtilen formatta işlenmelidir.
+Message types allow Wired devices to perform predetermined processes. They are located next to the message index command names in the starting series of the protocol, which is described earlier.For a trouble-free communication with the device, the messages have to be sent in the proper format and the responses should be processed in the designated format.
 
-Bazı mesaj içeriklerinde mesaj durumu değişkeni bulunmaktadır. Bu değişken aşağıda verilen tablodaki değerleri alır ve Wired tarafından gelen cevapların durumunu anlamak için kullanılır.
+Some message contents contain a message status variable. This variable takes the values in the table given below and is used by Wired to understand the status of received responses.
 
-Tablo 2 : Mesajlarda bulunan durum değişkeni
+Table 2: Status variable in messages
 
-| Mesaj durumu | Mesaj kodu |
+| **Message status** | **Message code** |
 | --- | --- |
-| Hata | 0x00 |
-| Başarılı | 0x01 |
-| Zaman aşımı | 0x02 |
-| Veri | 0x03 |
-| Yanlış mesaj tipi | 0x04 |
-| Bozulmuş paket | 0x05 |
+| Failure | 0x00 |
+| Success | 0x01 |
+| Time out | 0x02 |
+| Data | 0x03 |
+| Wrong message type | 0x04 |
+| Corrupted packet | 0x05 |
 
-### 3.0 Cihaz versiyonu okuma (0x0A)
+### 3.0 Reading the device version (0x0A)
 
-Cihazın hangi sürümde olduğunu okumak için 0x0A mesaj indeksine boş mesaj gönderilir.
+In order to read the version of the device, a null message is sent to the 0x0A message index.
 
-Tablo 3 : Versiyon okuma gönderilen mesaj formatı
+Table 3: Message format sent to read the version
 
-| Boş mesaj |
+| **Null message** |
 | --- |
-| 0 bayt |
+| 0 byte |
 
-Buna cevap olarak cihazdan beklenen mesaj şu formattadır:
+The message expected from the device in response to this is in the following format:
 
-Tablo 4 : Versiyon okuma alınan mesaj formatı
+Table 4: Message format received to read the version
 
-| Major | Minor | Patch |
+| **Major** | **Minor** | **Patch** |
 | --- | --- | --- |
-| 1 bayt | 1 bayt | 1 bayt |
+| 1 byte | 1 byte | 1 byte |
 
-### 3.1 Cihaz MAC adresini okuma (0x0B)
+### 3.1 Reading the device MAC address (0x0B)
 
-Cihaza 0x0B mesaj indeksi ile 5 adet sıfır veri olarak gönderildiğinde cihaz cevap olarak üzerinde bulunan 6 baytlık MAC adresini gönderir. Sıfır haricinde başka veri gönderilmesi cihazın konfigürasyonunu değiştirip mesajın geç gelmesine sebep olabilir. Bu alan daha sonra kullanılmak için ayrılmıştır.
+If 5 zeros are sent to the device as data with the 0x0B message index, the device sends the 6-byte MAC address on it in response. Sending data other than zero may change the configuration of the device, causing the message to arrive late. This area is reserved for later use.
 
-Tablo 5 : MAC adres okuma gönderilen mesaj formatı
+Table 5: Message format sent to read the MAC address
 
-| Cihaz konfigürasyonu için ayrılmış veriler |
+| **Data reserved for device configuration** |
 | --- |
-| 5 bayt - (00000) |
+| 5 byte - (00000) |
 
-Tablo 6 : MAC adres okuma alınan mesaj formatı
+Table 6: Message format received to read the MAC address
 
-| MAC adresi |
+| **MAC address** |
 | --- |
-| 6 bayt |
+| 6 byte |
 
 
-### 3.2 Cihaza haberleşme için adres atama (0x0C)
+### 3.2 Assigning an address to the device for communication (0x0C)
 
-Wired cihazlar çalışmaya başladıklarında 14 adresine kayıt olup bu adresi dinlemeye başlarlar. Eğer bir Wired cihaz ile çalışılacaksa alıcı adresi olarak mesajlarda 14 kullanılabilir, ancak birden fazla Wired aynı hatta yer alacaksa adres atanması gerekir.
+When Wired devices initialize, they register to address 14 and start listening to this address. If working with a Wired device, 14 can be used as the recipient address.
 
-Bunun için mesaj içeriğinde Wired MAC adresi ve atanan adres olmalıdır. Bir hatta izin verilen maksimum Wired sayısı 11 ile sınırlandırılmıştır. Bu yüzden atanabilecek adresler 0-11 aralığında olmalıdır.
+ However, if more than one Wired device is on the same line, an address must be assigned. Hence, the message content must contain the Wired MAC address and the assigned address. The maximum number of Wired devices permitted on a line is limited to 11. For this reason, addresses that can be assigned have to be in the range 0-11.
 
-Tablo 7 : Adres atama gönderilen mesaj formatı
+Table 7: Message format sent for address assignment
 
-| Atanan adres | MAC adresi |
+| **Assigned address** | **MAC address** |
 | --- | --- |
-| 1 bayt | 6 bayt |
+| 1 byte | 6 byte |
 
-Bu mesaja herhangi bir cevap dönülmez, bir sonraki mesaj için cihaz artık verilen adresi dinlemeye başlar. MAC adresinin hatalı olması durumunda adres atanması yapılamaz. Cihaz önceki adresinden haberleşmeye devam eder.
+No response is given to this message.For the next message, the device now starts listening to the given address. No address assignment can be made if the MAC address is wrong. The device continues to communicate from the previous address.
 
-Tablo 8 : Adres atama beklenilen mesaj formatı
+Table 8: Message format expected for address assignment
 
-| Mesaj dönülmez |
+| **No response given** |
 | --- |
 | - |
 
-### 3.3 Ölçüm başlatma (0x0D)
+### 3.3 Initializing the measurement (0x0D)
 
-Cihazın ölçüme başlaması için mesaj indeksi 0x0D yapılır. Gönderilen mesaj formatı şu şekilde olmalıdır.
+The message index is set to 0x0D for the device to initialize the measurement. The message format sent should be as follows.
 
-Tablo 9 : Ölçüm başlatma gönderilen mesaj formatı
+Table 9: Message format sent to initialize the measurement
 
-| İvmeölçer indeksi | Frekans indeksi | Örnekleme boyutu | Ölçüm bitimini bildirme |
+| Accelerometer index | Frequency index | Sampling size |  Reporting the end of the measurement |
 | --- | --- | --- | --- |
-| 1 bayt | 1 bayt | 4 bayt (Little Endian) | 1 bayt |
+| 1 byte | 1 byte | 4 byte (Little Endian) | 1 byte |
 
-- İvmeölçer aralığı : İvmeölçer ölçeklendirmesi için atanan ivme aralığı, Tablo 10 üzerinde ivmeölçer indeksi ve aralıklar olarak belirtilmiştir.
-- Frekans indeksi : Örnekleme frekansı için atanan frekans indeksi Tablo 11 üzerinde indeksler ve değerler olarak belirtilmiştir.
-- Örnekleme boyutu : cihazın bir anda tutabileceği maksimum örnek boyutu 1,369,429 örnek şeklindedir.
-- Ölçüm bitimini bildirme : Eğer 1 gönderilirse cihaz ölçüm bitimine yine aynı mesaj indeksi ile dönüş yapar. Bu cevapta ölçümün başarılı bitip bitmediği yer alır. Eğer 0 gönderilirse ölçüm alınır ve cihaz normal çalışmasına devam eder, ölçüm sonucunun ne zaman alınacağı kullanıcı tarafından hesaplanmalıdır.
+- Accelerometer range: The acceleration range assigned for accelerometer scaling is indicated as accelerometer index and ranges in Table 10.
+- Frequency index: The frequency index assigned for the sampling frequency is indicated as indices and values in Table 11.
+- Sampling size: The maximum sample size that the device can keep at a time is 1,369,429 samples.
+- Reporting the end of the measurement: If 1 is sent, the device returns to the end of the measurement with the same message index. This response includes whether the measurement is ended successfully or not.If 0 is sent, the measurement is taken and the device continues its regular operation.When the measurement result will be obtained should be calculated by the user.
 
-Tablo 10 : İvmeölçer indeksi ve karşılık düşen aralık
+Table 10: Accelerometer index and corresponding range
 
-| İvmeölçer indeksi | İvme ölçer aralığı |
+| Accelerometer index | Accelerometer range |
 | --- | --- |
 | 0x01 | ±2 g |
 | 0x02 | ±4 g |
 | 0x03 | ±8 g |
 | 0x04 | ±16 g |
 
-Tablo 11 : Frekans indeksi ve karşılık düşen frekans değeri
+Table 11: Frequency index and corresponding frequency value
 
-| Frekans indeksi | Frekans Değeri |
+| Frequency index | Frequency value |
 | --- | --- |
 | 0x05 | 800 Hz |
 | 0x06 | 1600 Hz |
@@ -154,190 +154,189 @@ Tablo 11 : Frekans indeksi ve karşılık düşen frekans değeri
 | 0x08 | 6400 Hz |
 | 0x09 | 12800 Hz |
 
-Ölçüm bitiminde cevap istenmiş ise cihaz daha önce belirtilen durum kodlarını gönderir. Bu veri uzunluğu boyutu bir bayttır.
+If a response is requested at the end of the measurement, the device sends the status codes previously specified. The size of the data length is one byte.
 
-Tablo 12 : Ölçüm başlatma beklenilen mesaj format (Ölçüm bildirme 1 durumunda)
+Table 12: Message format expected to initialize the measurement (If 1 is sent)
 
-| Ölçüm durumu |
+| Measurement status |
 | --- |
-| 1 bayt |
+| 1 byte |
 
-Örnek olarak aşağıdaki konfigürasyonlarla bir ölçüm başlatmak için gönderilmesi gereken mesaj verisi şu şekilde olmalıdır :
+For example, the message data to be sent to initiate a measurement with the following configurations should be:
 
-Tablo 13 : Örnek ölçüm konfigürasyonu
+Table 13: Measurement configuration example
 
-| İvmeölçer indeksi | Frekans indeksi | Örnekleme boyutu | Ölçüm bitimini bildirme |
+| Accelerometer index | Frequency index |Sampling size | Reporting the end of the measurement |
 | --- | --- | --- | --- |
 | 3 | 6 | 10000 | 1 |
 
-Örnekleme boyutu mesaj içerisinde _Little Endian_ şeklinde betimlenmelidir. Yani düşük önemli bitler verinin ilk kısmında olmalı, en önemli bit ise verinin son kısmında yer almalıdır. Tablo 14&#39;te 10000 sayısının 4-bayt dizi şeklinde gösterimi yer almaktadır. İstenilen örnekleme boyutu örnekteki gibi bayt dizisine çevrilmelidir.
+The sampling size should be described in the message as _Little Endian_.In other words, leastsignificant bits should be in the first part of the data and the most significant bit should be in the last part of the data. The 4-byte array representation of the number 10000 is given in Table 14. The desired sampling size should be converted into a byte array as in the example.
 
-Tablo 14 : Örnek ölçüm konfigürasyonu için hazırlanan veri formatı (onaltılık tabanda)
+Table 14: Data format prepared for the measurement configuration example (in hexadecimal [Base-16])
 
-| İvmeölçer indeksi [7:0] | Frekans indeksi[7:0] | Örnekleme boyutu[7:0] | Ölçüm bitimini bildirme[7:0] |
+| Accelerometer index [7:0] | Frequency index[7:0] | Sampling size[7:0] | Reporting the end of the measurement[7:0] |
 | --- | --- | --- | --- |
 | 0x03 | 0x06 |<table>  <thead>  <tr>  <th>[7:0]</th> <th> [15:8]</th><th>[23:16]</th><th>[31:24]</th></tr></thread><tbody><td>0x10</td><td>0x27</td><td>0x0</td><td>0x0</td></tbody></table> | 0x01 |
 
-Haberleşme protokolü ile birlikte yukarıda hazırlanan mesaj toplamda 14 bayt ile gösterilir şu şekli almalıdır :
+Together with the communication protocol, the message prepared above is shown in 14 bytes in total and should take the following form:
 
-Tablo 15 : Örnek ölçüm konfigürasyonunda hazırlanması gereken mesaj paketi (onluk tabanda)
+Table 15: Message package to be prepared in the measurement configuration example (in base-10)
 
 | 251 | 7 | 222 | 52 | 3 | 6 | 16 | 39 | 0 | 0 | 1 | 137 | 231 | 191 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 
-### 3.4 Ölçüm okuma (0x0E)
+### 3.4 Reading the measurement (0x0E)
 
-Cihaz meşgul durumda değilse hafızada yer alan son ölçüm istenilen her zaman okunabilir. Ölçüm okuma komutuna boş mesaj gönderilir.
+If the device is not busy, the last measurement in the memory can be read at any time. A null message is sent to the measurement read command.
 
-Tablo 16 : Ölçüm okuma gönderilen mesaj formatı
+Table 16: Message format sent to read the measurement
 
-| Boş mesaj |
+| Null message |
 | --- |
-| 0 bayt |
+| 0 byte |
 
-Wired tarafından bu mesaja cevap olarak farklı formatlarda mesajlar gönderilir. Ancak bütün mesajlar 0x0E mesaj indeksi ile döner.
+The Wired device sends messages in different formats in response to this message. However, all messages return with the 0x0E message index.
 
-Tablo 17 : Ölçüm okuma başarılı durumda beklenilen mesaj formatı
+Table 17: Message format that is expected if measurement reading is successful
 
-| Mesaj durumu | Ölçüm boyutu | Ölçüm verisi |
+| Message status | Measurement size | Measurement data |
 | --- | --- | --- |
-| 1 bayt (0x03) | 1 bayt | 6 bayt - 240 bayt (_Little Endian_ - işaretli) |
+| 1 byte (0x03) | 1 byte | 6 bytes - 240 bytes (_Little Endian_ - signed) |
 
-Ölçüm verisinin formatı minimum 6 bayt, maksimum 240 bayt olabilir. Bir örnek 6 bayt veriden oluşur. 16-bit tamsayı formatında önce X-ekseni, sonra Y-ekseni ve son olarak Z-ekseni gönderilir (15.bit işaret bitini temsil eder). 16-bit tamsayı, 8-bit olarak iki adet _Little Endian_ formatında yazılır. Böylelikle cihazdan minimum 1 örnek, maksimum 40 örnek bir mesaj paketinde okunabilir.
+Measurement data format can be a minimum of 6 bytes and a maximum of 240 bytes. Each sample consists of 6 bytes of data. In 16-bit integer format, the X-axis is sent first, then the Y-axis, and finally the Z-axis is sent (15th bit represents the sign bit). The 16-bit integer is written in two Little Endian formats as 8-bit. In this way, a minimum of 1 sample and a maximum of 40 samples can be read in a message packet.
 
-Tablo 18 : Bir ölçüm verisinin bayt dizisi şeklinde gösterimi
+Table 18: Representation of a measurement data as a byte array
 
 | X1 | Y1 | Z1 |
 | --- | --- | --- |
-| X[7:0] | X[15:8] | Y[7:0] | Y[15:8] | Z[7:0] | Z[15:8] |
-| 2bayt | 2bayt | 2bayt |
+| X[7:0] | X[15:8] | Y[7:0] |
+| 2byte | 2byte | 2byte |
 
-Her örnek yukarıdaki şekilde _Little Endian_ olarak temsil edilir.
+Each instance is represented as Little Endian in the figure above.
 
-240 baytlık bir ölçüm verisi şu şekilde örneklere ayrılır :
+A 240-byte measurement data is divided into samples as follows:
 
-3 (eksen) \* 2 (16 bitlik tamsayı) \* 40 örnek = 240 bayt
+3 (axis) \* 2 (16-bit integer) \* 40 samples = 240 bytes
 
-Tablo 19 : Ölçüm paketinin ivmeölçer eksen verisi üzerinden gösterimi
+Table 19: Representation of the measurement package via accelerometer axis data:
 
 | X1 | Y1 | Z1 | X2 | Y2 | Z2 | ... | X40 | Y40 | Z40 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 2byte | 2byte | 2byte | 2byte | 2byte | 2byte | ... | 2byte | 2byte | 2byte |
 
-Alıcı taraf ölçüm boyutunu bilmiyorsa gelen mesajlarda ölçüm boyutuna bakarak (bayt formatında) cihazdaki son ölçümün örnekleme boyutunu alınan paketlerin toplam boyutunu 6&#39;ya bölerek bulabilir. Ölçüm verileri gönderilirken mesaj durumu Tablo-1&#39;de gösterilen Veri durumu ile gösterilir ve değeri 0x03 olur.
+If the receiving party does not know the measurement size,they can find the sampling size of the last measurement in the device by dividing the total size of the packets by six by looking at the measurement size (in the byte format) in the received messages.While sending measurement data, the message status is shown with the data status represented in Table 1 and its value becomes 0x03.
 
-Son ölçüm paketi gönderildikten sonra Wired yine aynı mesaj indeksine mesaj durumunu değiştirerek kalibrasyon frekansını ve cihazın ölçüm aldığı sıcaklığı gönderir. Mesaj formatı şu şekildedir :
+After the last measurement packet is sent, the Wired device changes the message status to the same message index and sends the calibration frequency and the temperature measured by the device. The message format is as follows:
 
-Tablo 20 : Ölçüm okuma başarılı bitmişse beklenilen mesaj formatı
+Table 20: Expected message format if measurement reading is completed successfully
 
-| Mesaj durumu | Kalibrasyon frekansı | Sıcaklık |
+| Message status | Calibration frequency | Temperature |
 | --- | --- | --- |
-| 1 bayt (0x01) | 4 bayt (_Little Endian_ - işaretsiz) | 2 bayt (_Little Endian -_ işaretli) |
+| 1 byte (0x01) | 4 bytes (_Little Endian_ – not signed) | 2 bytes (_Little Endian -_ signed) |
 
-Eğer ölçüm okuma sırasında herhangi bir hata çıkmışsa ;
+If there is any error occurred during reading the measurement;
 
-Tablo 21 : Ölçüm okuma sırasında bir hata oluşmuşsa
+Table 21: If an error occurred during reading the measurement
 
-| Mesaj durumu | Hata kodu |
+| Message status | Error code |
 | --- | --- |
-| 1 bayt (0x00) | 1 bayt |
+| 1 byte (0x00) | 1 byte |
 
-Tablo 22 : Ölçüm okuması sırasında oluşabilecek hatalar ve kodları
+Table 22: Errors that may occur during reading the measurement and their codes
 
-| Hata durumu | Hata kodu |
+| Error condition | Error code |
 | --- | --- |
-| Ölçüm yok | 0x00 |
-| Ölçüm paketleri bozuk | 0x01 |
-| Zaman aşımı | 0x02 |
+| No measurement | 0x00 |
+| Corrupted measurement packets | 0x01 |
+| Time out | 0x02 |
 
-### 3.5 Clearance okuma (0x0F)
+### 3.5 Reading the clearance (0x0F)
 
-Sadece mesaj indeksi 0x0F olmalı ve gönderilen veri boyutu sıfır olmalıdır.
+Only the message index should be 0x0F and data size that is sent has to be zero.
 
-Tablo 23 : Clearance gönderilen mesaj formatı
+Table 23: Message format sent for clearance
 
-| Boş mesaj |
+| Null message |
 | --- |
-| 0 bayt |
+| 0 byte |
 
-Tablo 24 : Clearance okuma beklenilen mesaj formatı
+Table 24: Expected message format to read the clearance
 
 | Clearance-X | Clearance-Y | Clearance-Z |
 | --- | --- | --- |
-| 8 bayt (IEEE-754 double) | 8 bayt (IEEE-754 double) | 8 bayt (IEEE-754 double) |
+| 8 byte (IEEE-754 double) | 8 byte (IEEE-754 double) | 8 byte (IEEE-754 double) |
 
-### 3.6 Crest okuma (0x10)
+### 3.6 Reading the crest (0x10)
 
-Sadece mesaj indeksi 0x10 olmalı ve gönderilen veri boyutu sıfır olmalıdır.
+Only the message index should be 0x10 and data size that is sent has to be zero.
 
-Tablo 25 : Crest okuma gönderilen mesaj formatı
+Table 25: Message format sent to read the crest
 
-| Boş mesaj |
+| Null message |
 | --- |
-| 0 bayt |
+| 0 byte |
 
-Tablo 26 : Crest okuma beklenilen mesaj formatı
+Table 26: Expected message format to read the crest
 
 | Crest-X | Crest-Y | Crest-Z |
 | --- | --- | --- |
-| 8 bayt (IEEE-754 double) | 8 bayt (IEEE-754 double) | 8 bayt (IEEE-754 double) |
+| 8 byte (IEEE-754 double) | 8 byte (IEEE-754 double) | 8 byte (IEEE-754 double) |
 
-### 3.7 GRMS okuma (0x11)
+### 3.7 Reading the GRMS (0x11)
 
-Sadece mesaj indeksi 0x11 olmalı ve gönderilen veri boyutu sıfır olmalıdır.
+Only the message index should be 0x11 and data size that is sent has to be zero.
 
-Tablo 27 : GRMS okuma gönderilen mesaj formatı
+Table 27: GRMS Message format sent to read the GRMS
 
-| Boş mesaj |
+| Null message |
 | --- |
-| 0 bayt |
+| 0 byte |
 
-Tablo 28 : GRMS okuma beklenilen mesaj formatı
+Table 28: Expected message format to read the GRMS
 
 | GRMS-X | GRMS-Y | GRMS-Z |
 | --- | --- | --- |
-| 8 bayt (IEEE-754 double) | 8 bayt (IEEE-754 double) | 8 bayt (IEEE-754 double) |
+| 8 byte (IEEE-754 double) | 8 byte (IEEE-754 double) | 8 byte (IEEE-754 double) |
 
 ###
 
-### 3.8 Kurtosis okuma (0x12)
+### 3.8 Reading the kurtosis (0x12)
 
-Sadece mesaj indeksi 0x12 olmalı ve gönderilen veri boyutu sıfır olmalıdır.
+Only the message index should be 0x12 and data size that is sent has to be zero.
 
-Tablo 29 : Kurtosis okuma gönderilen mesaj formatı
+Table 29: Message format sent to read the kurtosis
 
-| Boş mesaj |
+| Null message |
 | --- |
-| 0 bayt |
+| 0 byte |
 
-Tablo 30 : Kurtosis okuma beklenilen mesaj formatı
+Table 30: Expected message format to read the kurtosis
 
 | Kurtosis-X | Kurtosis-Y | Kurtosis-Z |
 | --- | --- | --- |
-| 8 bayt (IEEE-754 double) | 8 bayt (IEEE-754 double) | 8 bayt (IEEE-754 double) |
+| 8 byte (IEEE-754 double) | 8 byte (IEEE-754 double) | 8 byte (IEEE-754 double) |
 
-### 3.9 Skewness okuma (0x13)
+### 3.9 Reading the skewness (0x13)
 
-Sadece mesaj indeksi 0x13 olmalı ve gönderilen veri boyutu sıfır olmalıdır.
+Only the message index should be 0x13 and data size that is sent has to be zero.
 
-Tablo 31 : Skewness okuma gönderilen mesaj formatı
+Table 31: Message format sent to read the skewness
 
-| Boş mesaj |
+| Null message |
 | --- |
-| 0 bayt |
+| 0 byte |
 
-Tablo 32 : Skewness okuma beklenilen mesaj formatı
+Table 32: Expected message format to read the skewness
 
 | Skewness-X | Skewness-Y | Skewness-Z |
 | --- | --- | --- |
-| 8 bayt (IEEE-754 double) | 8 bayt (IEEE-754 double) | 8 bayt (IEEE-754 double) |
+| 8 byte (IEEE-754 double) | 8 byte (IEEE-754 double) | 8 byte (IEEE-754 double) |
 
-## 4. Hata tespiti (CRC) kontrolü
+## 4. Error Detection (CRC) Check
 
-Haberleşme protokolünde kullanılan CRC hesabı için CRC-16 algoritması tercih edilmiştir. Aşağıda bir bayt veri için hesaplanan CRC örnek kodu yer almaktadır.
+The CRC-16 algorithm is preferred for the CRC calculation used in the communication protocol. The CRC sample code that is calculated for one byte of data is below.
 
-CRC polinomu x^16 + x^15 + x^2 + 1, POLY\_IBM ile gösterilmiştir. CRC değişkeni ilk olarak CRC\_IBM\_SEED (0xFFFF) ile başlamalı ve hesaplanan her crc değeri bir sonraki bayt için gösterilen fonksiyona parametre olarak verilmelidir.
-
+The CRC polynomial is represented by x^16 + x^15 + x^2 + 1, POLY\_IBM. The CRC variable must first start with CRC\_IBM\_SEED (0xFFFF) and each calculated CRC value must be given as a parameter to the represented function for the next byte.
 ```cpp
 //Polynomial x^16 + x^15 + x^2 + 1
 #define POLY_IBM 0x8005 //'0b1000000000000101'
@@ -357,17 +356,15 @@ uint16_t compute_crc_ibm(uint16_t crc, uint8_t data){
 
 ```
 
-Figür 2 : 1 bayt veri için örnek CRC kodu
+Figure 2: The CRC sample code for one byte of data.
 
+## 5. Cable connections
 
-## 5. Kablo bağlantıları
+Cable connections and the color codes
 
-Kablo bağlantıları ve renk kodları
-
-| Renk | Kablo ismi |
+| Color | Cable name |
 | --- | --- |
-| Kalın siyah (makaronlu) | GND (Shield) |
-| İnce siyah | VCC (5-36V) |
-| Beyaz | A |
-| Kırmızı | B |
-
+| Thick black (tubular) | GND (Shield) |
+| Thin black | VCC (5-36V) |
+| White | A |
+| Red | B |

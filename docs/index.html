@@ -15,11 +15,15 @@
   <div id="app"></div>
   <script>
     window.$docsify = {
-      name       : 'Sensemore ',
+      name: 'Sensemore ',
       subMaxLevel: 3,
-      auto2top   : true,
+      auto2top: true,
       loadSidebar: true,
-      executeScript :true
+      loadNavbar: true,
+      executeScript: true,
+      alias: {
+        "/wired/(.*)":"$1/wired.md",
+      },
     }
   </script>
   <!-- Docsify v4 -->
@@ -29,16 +33,17 @@
   <script src="https://unpkg.com/docsify/lib/plugins/search.js"></script>
 
   <style>
-    iframe{
+    iframe {
       border: 0px !important;
     }
+
     :root {
       /* Reduce the font size */
       --base-font-size: 14px;
-  
+
       /* Change the theme color hue */
       --theme-hue: 325;
-  
+
       /* Change the sidebar bullets */
     }
   </style>
