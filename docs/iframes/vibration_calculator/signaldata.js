@@ -1,4 +1,3 @@
-
 define(function () {
     return {
         "calibratedSamplingRate": 6000,
