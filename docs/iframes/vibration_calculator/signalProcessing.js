@@ -62,7 +62,7 @@ define(function () {
     
       let t_signal = tf.tensor1d(data, "float32");
       let t_mean = t_signal.mean()
-      let grms = t_signal.pow(2).div(data.length).sum().sqrt().dataSync()[0]
+      let grms = t_signal.sub(t_mean).pow(2).div(data.length).sum().sqrt().dataSync()[0]
 
       return grms;
     }
