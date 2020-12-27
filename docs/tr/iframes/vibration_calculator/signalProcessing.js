@@ -54,11 +54,17 @@ define(function () {
     }
     function Grms_score(data) {
       if (!data.length) return 0;
-      var fft = Grms(data)
-      fft = fft.slice(1, parseInt(fft.length / 2) + 1);
-      let t_rms = tf.tensor1d(fft, "float32");
-      let grms_score = Math.sqrt(t_rms.pow(2).sum().dataSync())
-      return grms_score;
+    //   var fft = Grms(data)
+    //   fft.shift()
+    //  // fft = fft.slice(1, parseInt(fft.length / 2) + 1);
+    //   let t_rms = tf.tensor1d(fft, "float32");
+    //   let grms_score = Math.sqrt(t_rms.pow(2).sum().dataSync())
+    
+      let t_signal = tf.tensor1d(data, "float32");
+      let t_mean = t_signal.mean()
+      let grms = t_signal.pow(2).div(data.length).sum().sqrt().dataSync()[0]
+
+      return grms;
     }
     function highpass(signal,samplingRate,threshold) {
       threshold = threshold || 1000
@@ -67,35 +73,33 @@ define(function () {
         return null
       }
       let t_signal = tf.tensor1d(signal, "float32")
-      let t_sign = tf.sign(t_signal)// fazı kaydediyorum ilerde kullanacağım
-  
-      let t_imag = tf.zerosLike(t_signal)
-      let t_complex = tf.complex(t_signal, t_imag)
-  
-      var t_fft = t_complex.fft() //FFT aldım complex' tensör
+      var t_fft = t_signal.rfft() //FFT aldım complex' tensör
+
       // 1000Hz'nin başlangıç indexini buluyorum
       let frequency_index = freqToindex(threshold, signal.length, samplingRate)
-  
       let t_zeros = tf.zeros([frequency_index]) //nyquist olduğu için baştan ve sondan bu kadar kırpacağım
-      let t_ones = tf.ones([signal.length - (2 * frequency_index)]) // baştan ve sondan kırptığım kısım harici kadar duracak
-      let t_filter = tf.concat([t_zeros, t_ones, t_zeros])///000001111110000 şeklinde maske oluşturuyorum
+      let t_ones = tf.ones([t_fft.shape - frequency_index]) // baştan ve sondan kırptığım kısım harici kadar duracak
+      let t_filter = tf.concat([t_zeros, t_ones])///0000011111
       let t_filtered = t_fft.mul(t_filter) //maskeyi uyguluyorum
-      let t_filtered_signal = tf.ifft(t_filtered);
+      //tensorflow fft 
+      let t_filtered_signal = tf.irfft(t_filtered);
   
-      let t_abs = t_filtered_signal.abs()
-      let t_rebuilded_signal = t_abs.mul(t_sign);
-  
-      return t_rebuilded_signal.arraySync();
+      return t_filtered_signal.arraySync()[0];
     }
     function Crest_star(data,samplingRate) {
       if(!samplingRate)return null;
       if (!data.length) return null;
-      let highpass_signal = highpass(data,samplingRate)
-      let t_signal = tf.tensor1d(highpass_signal, "float32");
+      let filtered_signal = highpass(data,samplingRate)
+      let t_filtered_signal = tf.tensor1d(filtered_signal, "float32");
       let a1 = 1, a2 = 1, a3 = 1;
-      let peek = t_signal.abs().max().dataSync()[0];
+      let filtered_peek = t_filtered_signal.max().dataSync()[0];
+     
+      let filtered_grms = Grms_score(filtered_signal)
       let grms = Grms_score(data)
-      return a1 * peek + a2 * grms + a3 * (peek / grms);
+      console.log('grms',grms)
+      console.log('filteredGrms',filtered_grms)
+      console.log('filtered_peek',filtered_peek)
+      return (a1 * filtered_peek) + (a2 * filtered_grms) + a3 * (filtered_peek / grms);
     }
     function Vrms_range_score(data, min, max, frequency) {
       if(!frequency)return null;
@@ -162,32 +166,16 @@ define(function () {
       }
       return vrms;
     }
-    function Grms(data, window) {
+    function Grms(data) {
   
       let t_signal = tf.tensor1d(data, "float32");
-  
-      if (window) {
-        var windowArray = generateWindow(
-          window,
-          data.length
-        );
-        var correctionCoefficient = getCorrectionCoefficient(
-          window,
-          "amplitude"
-        );
-        var tWindow = tf.tensor1d(windowArray, "float32");
-        var tCorrectionCoefficient = tf.scalar(correctionCoefficient);
-        t_signal = t_signal.mul(tWindow);
-        t_signal = t_signal.mul(tCorrectionCoefficient);
-      }
   
       // FFT GRMS
       // var sampleSize = data.length
       let t_imag = tf.zeros(t_signal.shape)
       let t_complex = tf.complex(t_signal, t_imag)
-  
-      var fft = t_complex.fft()
-      var t_mag = tf.abs(fft)
+      let t_fft = tf.rfft(t_signal)
+      var t_mag = tf.abs(t_fft)
       var multiplier = tf.scalar(Math.sqrt(2) / data.length);
       fft = tf.mul(t_mag, multiplier);
       return fft.arraySync();
