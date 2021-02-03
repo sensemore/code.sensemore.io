@@ -67,10 +67,17 @@ define(function (require) {
         putResult("Kurtosis X", signalProcessor.Kurtosis(dataX))
         putResult("Kurtosis Y", signalProcessor.Kurtosis(dataY))
         putResult("Kurtosis Z", signalProcessor.Kurtosis(dataZ))
+
+        putResult("Roll", signalProcessor.Roll(dataY, dataZ))
+        putResult("Picth", signalProcessor.Pitch(dataX, dataY, dataZ))
+
         loader.style = "display:none";
         resultsDom.style = "display:block";
     })
     function putResult(label, result) {
+        if(label=="Roll"){
+            console.log("Geldi",result)
+        }
         results.appendChild(createElementFromHTML(`<tr><td>${label}</td><td>${result}</td></tr>`));
     }
 

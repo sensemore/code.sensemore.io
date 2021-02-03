@@ -17,7 +17,9 @@ define(function () {
       Crest,
       Crest_star,
       Skewness,
-      Clearance
+      Clearance,
+      Roll,
+      Pitch
 
     })
 
@@ -32,14 +34,34 @@ define(function () {
       let clearance = t_signal.abs().max().div(t_signal.abs().sqrt(2).sum().div(t_signal.size).pow(2));
       return clearance.dataSync()[0]
     }
+    //yaw = 180 * atan (accelerationZ/sqrt(accelerationX*accelerationX + accelerationZ*accelerationZ))/M_PI;
+
+
+    function Roll(y_data, z_data) {
+      if (!y_data.length) return 0;
+      let y_data_mean = tf.tensor1d(y_data, "float32").mean();
+      let z_data_mean = tf.tensor1d(z_data, "float32").mean();
+      let roll = tf.atan2(y_data_mean, z_data_mean).mul(57.3)
+
+      return roll.dataSync()
+    }
+
+    function Pitch(x_data, y_data, z_data) {
+      if (!x_data.length) return 0;
+      let x_data_mean = tf.tensor1d(x_data, "float32").mul(-1).mean();
+      let y_data_mean = tf.tensor1d(y_data, "float32").mean();
+      let z_data_mean = tf.tensor1d(z_data, "float32").mean();
+      let pitch = tf.atan2(x_data_mean, tf.add(y_data_mean.square(), z_data_mean.square()).sqrt()).mul(57.3)
+      return pitch.dataSync()
+    }
 
     function Crest(data) {
       if (!data.length) return 0;
       let t_signal = tf.tensor1d(data, "float32");
-
-      let peek = t_signal.abs().max().dataSync()[0];
-      let grms = Grms_score(data)
-
+      const data_mean = t_signal.mean();
+      var normalized = t_signal.sub(data_mean)
+      let peek = normalized.abs().max().dataSync()[0];
+      let grms = Grms_score(normalized.arraySync())
       return peek / grms;
     }
     function Skewness(data) {
