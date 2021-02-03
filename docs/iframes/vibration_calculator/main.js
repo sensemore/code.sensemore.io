@@ -75,9 +75,6 @@ define(function (require) {
         resultsDom.style = "display:block";
     })
     function putResult(label, result) {
-        if(label=="Roll"){
-            console.log("Geldi",result)
-        }
         results.appendChild(createElementFromHTML(`<tr><td>${label}</td><td>${result}</td></tr>`));
     }
 
