@@ -1,4 +1,4 @@
-# **Wired v1.0.2**
+# **Wired v1.0.8**
 Wired kullanım kılavuzu
 ## 1. Wired cihaz durumları ve LED göstergesi
 
@@ -32,9 +32,9 @@ Tablo 1 : Wired LED belirteci ve cihazın anlık durumu
 
 ## 2. Wired haberleşme protokolü
 
-Wired cihazlarda kullanılan haberleşme protokolü aşağıdaki gibidir. Veri alma ve gönderme protokolü UART - RS485 protokolü üzerine çalışmaktadır. Cihazın bu versiyonunda UART baud rate 1000000 olarak sabitlenmiştir. Veri protokolünde başlangıç sayısı ve bitiş sayısı sabit tutulmalıdır. 2-bit olarak ayrılan mesaj tipi de _0b00_ şeklinde sabit kalmalıdır. Gönderilen bütün mesajlar aşağıda gösterildiği şekilde paketlenmiş halde olmalıdır. Alınan mesajların çözülmesi de yine aynı şekilde yapılmalıdır.
+Wired cihazlarda kullanılan haberleşme protokolü aşağıdaki gibidir. Veri alma ve gönderme protokolü UART - RS485 protokolü üzerine çalışmaktadır. Cihazın bu versiyonunda UART baud rate 115200 olarak sabitlenmiştir. Veri protokolünde başlangıç sayısı ve bitiş sayısı sabit tutulmalıdır. 2-bit olarak ayrılan mesaj tipi de _0b00_ şeklinde sabit kalmalıdır. Gönderilen bütün mesajlar aşağıda gösterildiği şekilde paketlenmiş halde olmalıdır. Alınan mesajların çözülmesi de yine aynı şekilde yapılmalıdır.
 
-![Figür 1 : Haberleşme protokolü](/images/wired-protocol.jpg)
+![Figür 1 : Haberleşme protokolü](/images/smcom_wired_protocol-tr.svg)
 
 Veri boyutu alanı bir bayt ile temsil edilir, bu sebepten veri boyutu maksimum 255 olabilir olabilir.
 
@@ -176,7 +176,7 @@ Tablo 14 : Örnek ölçüm konfigürasyonu için hazırlanan veri formatı (onal
 
 | İvmeölçer indeksi [7:0] | Frekans indeksi[7:0] | Örnekleme boyutu[7:0] | Ölçüm bitimini bildirme[7:0] |
 | --- | --- | --- | --- |
-| 0x03 | 0x06 |<table>  <thead>  <tr>  <th>[7:0]</th> <th> [15:8]</th><th>[23:16]</th><th>[31:24]</th></tr></thread><tbody><td>0x10</td><td>0x27</td><td>0x0</td><td>0x0</td></tbody></table> | 0x01 |
+| 0x03 | 0x06 |<Tablo>  <thead>  <tr>  <th>[7:0]</th> <th> [15:8]</th><th>[23:16]</th><th>[31:24]</th></tr></thread><tbody><td>0x10</td><td>0x27</td><td>0x0</td><td>0x0</td></tbody></Tablo> | 0x01 |
 
 Haberleşme protokolü ile birlikte yukarıda hazırlanan mesaj toplamda 14 bayt ile gösterilir şu şekli almalıdır :
 
@@ -207,10 +207,10 @@ Tablo 17 : Ölçüm okuma başarılı durumda beklenilen mesaj formatı
 
 Tablo 18 : Bir ölçüm verisinin bayt dizisi şeklinde gösterimi
 
-| X1 | Y1 | Z1 |
-| --- | --- | --- |
-| X[7:0] | X[15:8] | Y[7:0] | Y[15:8] | Z[7:0] | Z[15:8] |
-| 2bayt | 2bayt | 2bayt |
+| X1 | X1 | Y1 | Y1 | Z1 | Z1 |
+| --- | --- | --- | --- | --- | --- |
+| X[7:0] | X[15:8]| Y[7:0] | Y[15:8] | Z[7:0] | Z[15:8]
+| 1 byte | 1 byte | 1 byte | 1byte | 1 byte | 1 byte
 
 Her örnek yukarıdaki şekilde _Little Endian_ olarak temsil edilir.
 
@@ -332,6 +332,87 @@ Tablo 32 : Skewness okuma beklenilen mesaj formatı
 | --- | --- | --- |
 | 8 bayt (IEEE-754 double) | 8 bayt (IEEE-754 double) | 8 bayt (IEEE-754 double) |
 
+### 3.10 Parça parça ölçüm okuma (0x14)
+
+Cihaz meşgul durumda değilse hafızada yer alan son ölçüm istenilen her zaman okunabilir. Bu okuma tipi bölüm 3.4'ten farklılık göstererek bayt ofsete ve okunacak bayt sayısına ihtiyaç duyar. İstenilen bayt kadar okuma yapmak için ölçümün toplam örnekleme boyutu bilinmelidir. İlk ölçüm için bayt ofseti 0'dan başlar. İlk okumadan sonra, ilk okumada okunan bayt sayısı ikinci okumanın bayt ofseti olmalıdır. Bu şekilde her pakette bir önceki okumanın boyutu bayt ofsete eklenirse bütün ölçüm parça olarak okunabilir, bu operasyonun tamamı alıcı tarafından kontrol edilmelidir. Paketler arasında herhangi bir zaman kısıtlaması yoktur, istenilen bayt ofset ve bayt uzunluğu herhangi bir zamanda okunabilir.
+
+Tablo 33: Ölçüm okuma gönderilen mesaj formatı
+
+| Byte offset | Read amount |
+| --- | --- | 
+| 4 bytes (_Little Endian_) | 4 bytes (_Little Endian_) |
+
+
+Tablo 34: Ölçüm okuma başarılı durumda beklenilen mesaj formatı
+
+| Message status | Measurement size | Measurement data |
+| --- | --- | --- |
+| 1 byte (0x03) | 1 byte | 6 bytes - 240 bytes (_Little Endian_ - signed) |
+
+Ölçüm verisinin formatı minimum 6 bayt, maksimum 240 bayt olabilir. Bir örnek 6 bayt veriden oluşur. 16-bit tamsayı formatında önce X-ekseni, sonra Y-ekseni ve son olarak Z-ekseni gönderilir (15.bit işaret bitini temsil eder). 16-bit tamsayı, 8-bit olarak iki adet _Little Endian_ formatında yazılır. Böylelikle cihazdan minimum 1 örnek, maksimum 40 örnek bir mesaj paketinde okunabilir.
+
+Tablo 35 : Bir ölçüm verisinin bayt dizisi şeklinde gösterimi
+
+| X1 | X1 | Y1 | Y1 | Z1 | Z1 |
+| --- | --- | --- | --- | --- | --- |
+| X[7:0] | X[15:8]| Y[7:0] | Y[15:8] | Z[7:0] | Z[15:8]
+| 1 byte | 1 byte | 1 byte | 1byte | 1 byte | 1 byte
+
+Her örnek yukarıdaki şekilde _Little Endian_ olarak temsil edilir.
+
+240 baytlık bir ölçüm verisi şu şekilde örneklere ayrılır :
+
+3 (eksen) \* 2 (16 bitlik tamsayı) \* 40 örnek = 240 bayt
+
+Tablo 36 : Ölçüm paketinin ivmeölçer eksen verisi üzerinden gösterimi
+
+| X1 | Y1 | Z1 | X2 | Y2 | Z2 | ... | X40 | Y40 | Z40 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2byte | 2byte | 2byte | 2byte | 2byte | 2byte | ... | 2byte | 2byte | 2byte |
+
+Alıcı taraf ölçüm boyutunu bilmiyorsa gelen mesajlarda ölçüm boyutuna bakarak (bayt formatında) cihazdaki son ölçümün örnekleme boyutunu alınan paketlerin toplam boyutunu 6&#39;ya bölerek bulabilir. Ölçüm verileri gönderilirken mesaj durumu Tablo-1&#39;de gösterilen Veri durumu ile gösterilir ve değeri 0x03 olur.
+
+Son ölçüm paketi gönderildikten sonra Wired yine aynı mesaj indeksine mesaj durumunu değiştirerek kalibrasyon frekansını ve cihazın ölçüm aldığı sıcaklığı gönderir. Mesaj formatı şu şekildedir :
+
+
+Tablo 37 : Ölçüm okuma sırasında bir hata oluşmuşsa
+
+| Mesaj durumu | Hata kodu |
+| --- | --- |
+| 1 bayt (0x00) | 1 bayt |
+
+Tablo 38 : Ölçüm okuması sırasında oluşabilecek hatalar ve kodları
+
+| Hata durumu | Hata kodu |
+| --- | --- |
+| Ölçüm yok | 0x00 |
+| Ölçüm paketleri bozuk | 0x01 |
+| Zaman aşımı | 0x02 |
+
+
+### 3.11 Telemetri verisi okuma (0x16)
+
+Cihazda alınan son ölçüm için (eğer cihazın gücü kesilmemiş ise), cihaz içinde hesaplanan bazı telemetry değerleri bir paket halinde okunabilir.
+
+Sadece mesaj indeksi 0x16 olmalı ve gönderilen veri boyutu sıfır olmalıdır.
+
+Tablo 39: Telemetri verisi okuma gönderilen mesaj formatı
+
+| Null message |
+| --- |
+| 0 byte |
+
+
+Tablo 40: Telemetri verisi okuma beklenilen mesaj formatı
+
+|Mesaj durumu | SICAKLIK | ÖRNEKLEME ORANI | CLEARANCE-[X,Y,Z]| CREST-[X,Y,Z] | GRMS-[X,Y,Z] | KURTOSIS-[X,Y,Z] | SKEWNESS-[X,Y,Z] |
+| --- | --- | --- | ---| --- | --- | --- | --- |
+| 1 bayt | 2 bayt(_Little Endian_) | 4 bayt (_Little Endian_) | double | double | double | double | double |
+
+- Mesaj durumu okumanın durumu belirtir
+- Sıcaklık değeri 100.0 ile bölünmeli ve float olarak dönüştürülmelidir 
+- Bütün double telemetry verisi IEEE-754 double formatını sağlar ve [X,Y,Z] şeklinde gösterilen veriler double dizisini gösterir.
+
 ## 4. Hata tespiti (CRC) kontrolü
 
 Haberleşme protokolünde kullanılan CRC hesabı için CRC-16 algoritması tercih edilmiştir. Aşağıda bir bayt veri için hesaplanan CRC örnek kodu yer almaktadır.
@@ -364,10 +445,20 @@ Figür 2 : 1 bayt veri için örnek CRC kodu
 
 Kablo bağlantıları ve renk kodları
 
+![Figure 3: RS485 kablo bağlantıları](/images/wired_rs485_cable.svg)
+
+Figür 3: RS485 kablo bağlantıları (kapalı uçlu kablolar için)
+
+Tablo 41: Siyah koruma içinde kablo renkleri ve bağlantıları (açık uçlu kablolar için)
+
 | Renk | Kablo ismi |
 | --- | --- |
 | Kalın siyah (makaronlu) | GND (Shield) |
 | İnce siyah | VCC (5-36V) |
 | Beyaz | A |
 | Kırmızı | B |
+
+
+
+
 
