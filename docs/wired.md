@@ -1,4 +1,4 @@
-# **Wired v1.0.2**
+# **Wired v1.0.8**
 Wired User Manual
 ##  1.Wired device statuses and LED indicator
 
@@ -32,9 +32,9 @@ Table 1: Wired LED indicator and the current status of the device
 
 ## 2. Wired Communication Protocol
 
-The communication protocol used in Wired devices is as below. The data receiving and sending protocol uses the UART - RS485 protocol.In this version of the device, the UART baud rate is set to 1000000. The starting and ending number must be kept constant in the data protocol. The message type that is reserved as 2-bit must also stay constant as 0b00. All messages sent must be packaged as shown below. The decoding of the received messages must also be done likewise.
+The communication protocol used in Wired devices is as below. The data receiving and sending protocol uses the UART - RS485 protocol.In this version of the device, the UART baud rate is set to 115200. The starting and ending number must be kept constant in the data protocol. The message type that is reserved as 2-bit must also stay constant as 0b00. All messages sent must be packaged as shown below. The decoding of the received messages must also be done likewise.
 
-![Figür 1 : Communication protocol](/images/wired-protocol.jpg)
+![Figure 1 : Communication protocol](/images/smcom_wired_protocol-en.svg)
 
 The data size area is represented by one byte. Therefore, the data size can be a maximum of 255.
 
@@ -207,10 +207,10 @@ Measurement data format can be a minimum of 6 bytes and a maximum of 240 bytes. 
 
 Table 18: Representation of a measurement data as a byte array
 
-| X1 | Y1 | Z1 |
-| --- | --- | --- |
-| X[7:0] | X[15:8] | Y[7:0] |
-| 2byte | 2byte | 2byte |
+| X1 | X1 | Y1 | Y1 | Z1 | Z1 |
+| --- | --- | --- | --- | --- | --- |
+| X[7:0] | X[15:8]| Y[7:0] | Y[15:8] | Z[7:0] | Z[15:8]
+| 1 byte | 1 byte | 1 byte | 1byte | 1 byte | 1 byte
 
 Each instance is represented as Little Endian in the figure above.
 
@@ -332,6 +332,87 @@ Table 32: Expected message format to read the skewness
 | --- | --- | --- |
 | 8 byte (IEEE-754 double) | 8 byte (IEEE-754 double) | 8 byte (IEEE-754 double) |
 
+### 3.10 Reading the measurement - Chunk-wise (0x14)
+
+If the device is not busy, the last measurement in the memory can be read at any time. This reading type differs from section 3.4 and requires byte offset and read amount in message. In order to read desired amount of bytes, measurement sample size must be known beforehand to arrange byte offset value. For the first measurement, chunk byte offset starts from 0. After the first read, read amount of first read should be added to the byte offset. In this way, the whole measurement can be read if the receiver side handles this procedure. Any desired packet can be read any time, there is no time obligation between read operations.
+
+Table 33: Message format sent to read the measurement
+
+| Byte offset | Read amount |
+| --- | --- | 
+| 4 bytes (_Little Endian_) | 4 bytes (_Little Endian_) |
+
+
+Table 34: Message format that is expected if measurement reading is successful
+
+| Message status | Measurement size | Measurement data |
+| --- | --- | --- |
+| 1 byte (0x03) | 1 byte | 6 bytes - 240 bytes (_Little Endian_ - signed) |
+
+Measurement data format can be a minimum of 6 bytes and a maximum of 240 bytes. Each sample consists of 6 bytes of data. In 16-bit integer format, the X-axis is sent first, then the Y-axis, and finally the Z-axis is sent (15th bit represents the sign bit). The 16-bit integer is written in two Little Endian formats as 8-bit. In this way, a minimum of 1 sample and a maximum of 40 samples can be read in a message packet.
+
+Table 35: Representation of a measurement data as a byte array
+
+| X1 | X1 | Y1 | Y1 | Z1 | Z1 |
+| --- | --- | --- | --- | --- | --- |
+| X[7:0] | X[15:8]| Y[7:0] | Y[15:8] | Z[7:0] | Z[15:8]
+| 1 byte | 1 byte | 1 byte | 1byte | 1 byte | 1 byte
+
+Each instance is represented as Little Endian in the figure above.
+
+A 240-byte measurement data is divided into samples as follows:
+
+3 (axis) \* 2 (16-bit integer) \* 40 samples = 240 bytes
+
+Table 36: Representation of the measurement package via accelerometer axis data:
+
+| X1 | Y1 | Z1 | X2 | Y2 | Z2 | ... | X40 | Y40 | Z40 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2byte | 2byte | 2byte | 2byte | 2byte | 2byte | ... | 2byte | 2byte | 2byte |
+
+If there is any error occurred during reading the measurement;
+
+Table 37: If an error occurred during reading the measurement
+
+| Message status | Error code |
+| --- | --- |
+| 1 byte (0x00) | 1 byte |
+
+Table 38: Errors that may occur during reading the measurement and their codes
+
+| Error condition | Error code |
+| --- | --- |
+| No measurement | 0x00 |
+| Corrupted measurement packets | 0x01 |
+| Time out | 0x02 |
+
+
+### 3.11 Reading the telemetry values (0x16)
+
+For the last measurement (if device is not powered off) telemetry values can be read any time. 
+
+Only the message index should be 0x16 and data size that is sent has to be zero.
+
+Table 39: Telemetry Message format sent to read the all telemetry
+
+| Null message |
+| --- |
+| 0 byte |
+
+
+
+Table 40: Expected message format for the response
+
+|Message status | TEMPERATURE | SAMPLING RATE | CLEARANCE-[X,Y,Z]| CREST-[X,Y,Z] | GRMS-[X,Y,Z] | KURTOSIS-[X,Y,Z] | SKEWNESS-[X,Y,Z] |
+| --- | --- | --- | ---| --- | --- | --- | --- |
+| 1 byte | 2 bytes(_Little Endian_) | 4 bytes (_Little Endian_) | double | double | double | double | double |
+
+- Message status indicates the read operation status
+- Temperature value must be divided by 100.0 to convert it to float value
+- All double telemetry data satisfy the IEEE-754 double format and [X,Y,Z] represents double array
+
+
+
 ## 4. Error Detection (CRC) Check
 
 The CRC-16 algorithm is preferred for the CRC calculation used in the communication protocol. The CRC sample code that is calculated for one byte of data is below.
@@ -355,12 +436,19 @@ uint16_t compute_crc_ibm(uint16_t crc, uint8_t data){
 }
 
 ```
-
 Figure 2: The CRC sample code for one byte of data.
 
 ## 5. Cable connections
 
 Cable connections and the color codes
+
+
+![Figure 3: RS485 cable connections](/images/wired_rs485_cable.svg)
+
+Figure 3: RS485 cable pinout (for closed ended cables)
+
+
+Table 41: Cable colors and connections inside the black shield (for open ended cables)
 
 | Color | Cable name |
 | --- | --- |
@@ -368,3 +456,5 @@ Cable connections and the color codes
 | Thin black | VCC (5-36V) |
 | White | A |
 | Red | B |
+
+
