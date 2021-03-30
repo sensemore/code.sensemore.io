@@ -2,7 +2,7 @@
 	- [Accessing Web Configuration Page](#accessing-web-configuration-page)
 	- [MQTT Broker and Certificates](#mqtt-broker-and-certificates)
 	- [NTP](#ntp)
-	- [Operasyonlar](#operasyonlar)
+	- [Operations](#operations)
 		- [Scan](#scan)
 		- [Requesting Senseway Version](#requesting-senseway-version)
 		- [Requesting Version for Endnode](#requesting-version-for-endnode)
@@ -14,6 +14,7 @@
 		- [Byte To Int](#byte-to-int)
 		- [Accelerometer Range Correction](#accelerometer-range-correction)
 		- [Example](#example)
+	- [Device Firmware Update(OTA)](#device-firmware-updateota)
 	- [TLS](#tls)
 		- [Mosquitto Configuration](#mosquitto-configuration)
 		- [Certificate Generation](#certificate-generation)
@@ -48,7 +49,7 @@ _Default: http://pool.ntp.org/_
 Time information is also used in the measurement messages sent by Senseway. Time synchronization is needed for this. For OnPremise installations, the time server can be defined from  `Advance > NTP`.
 
 
-## Operasyonlar
+## Operations
 It explains which topics to use when communicating with Senseway and how messages should be interpreted.
 
 `Aktör` sends  `Payload` with  `PayloadType` format to `Topic` 
@@ -602,6 +603,73 @@ Z
 <br>
 
 
+
+
+
+
+## Device Firmware Update(OTA)
+Sensemore end node devices accept firmware update over http. In order to start firmware update on end-node device, valid binary link sent to firmware update topic.
+
+<table>
+<tr>
+<th>Actor</th>
+<th>Topic</th>
+<th>Payload Type</th>
+<th>Payload Schema</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+User
+</td>
+
+<td><b>prod/gateway/&lt;SensewayID&gt;/device/&lt;DeviceMac&gt;/ota</b></td>
+<td>string</td>
+<td>
+<i>http url</i>
+</td>
+<td>
+http://ftp.mydomain.com/Wired1.0.10.gbl
+</td>
+</tr>
+<tr>
+<td>
+Senseway
+</td>
+
+<td><b>prod/gateway/&lt;SensewayID&gt;/device/&lt;DeviceMac&gt;/ota/accepted</b></td>
+<td><i>empty</i></td>
+<td><i>empty</i></td>
+<td></td>
+</tr>
+<tr>
+<td>
+Senseway
+</td>
+
+<td><b>prod/gateway/&lt;SensewayID&gt;/device/&lt;DeviceMac&gt;/ota/rejected</b></td>
+<td><i>Error Code</i></td>
+<td><i>NO_DEVICE</i></td>
+<td></td>
+</tr>
+<tr>
+<td>
+Senseway
+</td>
+<td><b>prod/gateway/&lt;SensewayID&gt;/device/&lt;DeviceMac&gt;/ota/done</b></td>
+<td><i>empty</i></td>
+<td><i>empty</i></td>
+<td></td>
+</tr>
+</table>
+
+> Caution: A binary url should be `http` not ~`https`~
+
+Senseway downloads the binary from given url and start firmware update for particular device.
+
+Firmware updates led sequence of wired end nodes shown in the <a href="#/wired?id=_1wired-device-statuses-and-led-indicator">Wired documentation.</a> 
+
+
 ## TLS 
 Senseway devices implement TLS for a secure mqtt connection. If you manage your mqtt broker yourself, it is necessary to configure the broker's TLS and generate the required certificates.
 ### Mosquitto Configuration
@@ -625,10 +693,12 @@ Requirement: `openssl`
 
 #### CA Generation 
 ca.key: `openssl genrsa -des3 -out ca.key 2048` 
+
 ca.crt:  `openssl req -new -x509 -days 1826 -key ca.key -out ca.crt`
 
 #### Server Certificate Generation
 server.key `openssl genrsa -out server.key 2048`
+
 server.csr ` openssl req -new -out server.csr -key server.key`
 
 > While generating a Certificate Signing Request (CSR), you should write the domain name of your broker server in the "common name" field in the form filled in. If your server does not have a domain name, you must type in the IP address directly.
@@ -637,10 +707,12 @@ Normally, for certificate generation, the CRS is sent to the CA and the CA signs
 
 server.crt `openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out server.crt -days 3600` 
 
-Artık `ca.crt`,`server.crt` ve `server.key` mosquitto yapılandırmasında kullanılabilir.
+Now `ca.crt`,`server.crt` and `server.key` can be used to configure mosquitto service with TLS support.
+
 
 #### Client Certificate Generation
 client.key `openssl genrsa -out client.key 2048`
+
 client.csr `openssl req -new -out client.csr -key client.key`
 
 > While generating a Certificate Signing Request (CSR), you should write the domain name of your broker server in the "common name" field in the form filled in. If your server does not have a domain name, you must type in the IP address directly.

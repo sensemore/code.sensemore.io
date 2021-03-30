@@ -14,6 +14,7 @@
 		- [Byte To Int](#byte-to-int)
 		- [İvme Ölçer Aralık Düzelmesi](#i̇vme-ölçer-aralık-düzelmesi)
 		- [Örnek](#örnek)
+	- [Sensör Yazılım Güncelleme(OTA)](#sensör-yazılım-güncellemeota)
 	- [TLS](#tls)
 		- [Mosquitto yapılandırması](#mosquitto-yapılandırması)
 		- [Sertifika Üretimi](#sertifika-üretimi)
@@ -599,6 +600,67 @@ Z
 <br>
 
 <br>
+
+## Sensör Yazılım Güncelleme(OTA)
+Sensemore uç cihazların yazılımları, senseway üzerinden http ile yazım güncellemeye olanak verirler.
+Başarılı bir yazılım güncelleme için, senseway tarafından erişilebilen binary dosyanın http url'i ilgili yazılım güncelleme topic'ine mesaj olarak gönderilir.
+
+<table>
+<tr>
+<th>Aktör</th>
+<th>Topic</th>
+<th>Payload Tipi</th>
+<th>Payload Şeması</th>
+<th>Örnek</th>
+</tr>
+<tr>
+<td>
+User
+</td>
+
+<td><b>prod/gateway/&lt;SensewayID&gt;/device/&lt;DeviceMac&gt;/ota</b></td>
+<td>string</td>
+<td>
+<i>http url</i>
+</td>
+<td>
+http://ftp.mydomain.com/Wired1.0.10.gbl
+</td>
+</tr>
+<tr>
+<td>
+Senseway
+</td>
+
+<td><b>prod/gateway/&lt;SensewayID&gt;/device/&lt;DeviceMac&gt;/ota/accepted</b></td>
+<td><i>empty</i></td>
+<td><i>empty</i></td>
+<td></td>
+</tr>
+<tr>
+<td>
+Senseway
+</td>
+
+<td><b>prod/gateway/&lt;SensewayID&gt;/device/&lt;DeviceMac&gt;/ota/rejected</b></td>
+<td><i>Error Code</i></td>
+<td><i>NO_DEVICE</i></td>
+<td></td>
+</tr>
+<tr>
+<td>
+Senseway
+</td>
+<td><b>prod/gateway/&lt;SensewayID&gt;/device/&lt;DeviceMac&gt;/ota/done</b></td>
+<td><i>empty</i></td>
+<td><i>empty</i></td>
+<td></td>
+</tr>
+</table>
+
+> Dikkat:  Yazılım güncelleme paketinin url'i  `http` olmalıdır  ~`https`~ değil.
+
+Yazılım güncelleme sırasında uç sensörde görünen led sekanslarına <a href="#/tr/wired?id=_1-wired-cihaz-durumları-ve-led-göstergesi">Wired dökümantasyonundan.</a> 'dan ulaşabilirsiniz.
 
 
 ## TLS 
