@@ -34,7 +34,7 @@ Tablo 1 : Wired LED belirteci ve cihazın anlık durumu
 
 Wired cihazlarda kullanılan haberleşme protokolü aşağıdaki gibidir. Veri alma ve gönderme protokolü UART - RS485 protokolü üzerine çalışmaktadır. Cihazın bu versiyonunda UART baud rate 115200 olarak sabitlenmiştir. Veri protokolünde başlangıç sayısı ve bitiş sayısı sabit tutulmalıdır. 2-bit olarak ayrılan mesaj tipi de _0b00_ şeklinde sabit kalmalıdır. Gönderilen bütün mesajlar aşağıda gösterildiği şekilde paketlenmiş halde olmalıdır. Alınan mesajların çözülmesi de yine aynı şekilde yapılmalıdır.
 
-![Figür 1 : Haberleşme protokolü](/images/smcom_wired_protocol-tr.svg)
+![Figür 1 : Haberleşme protokolü](./images/smcom_wired_protocol-tr.svg)
 
 Veri boyutu alanı bir bayt ile temsil edilir, bu sebepten veri boyutu maksimum 255 olabilir olabilir.
 
@@ -79,7 +79,7 @@ Buna cevap olarak cihazdan beklenen mesaj şu formattadır:
 
 Tablo 4 : Versiyon okuma alınan mesaj formatı
 
-| **Major** | **Minor** | **Patch** |
+| **Patch** | **Minor** | **Major** |
 | --- | --- | --- |
 | 1 bayt | 1 bayt | 1 bayt |
 
@@ -445,7 +445,7 @@ Figür 2 : 1 bayt veri için örnek CRC kodu
 
 Kablo bağlantıları ve renk kodları
 
-![Figure 3: RS485 kablo bağlantıları](/images/wired_rs485_cable.svg)
+![Figure 3: RS485 kablo bağlantıları](./images/wired_rs485_cable.svg)
 
 Figür 3: RS485 kablo bağlantıları (kapalı uçlu kablolar için)
 

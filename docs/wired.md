@@ -1,6 +1,24 @@
-# **Wired v1.0.8**
-Wired User Manual
-##  1.Wired device statuses and LED indicator
+# **Wired User Manual - v1.0.3**
+
+
+
+The following operating instructions provide information on how to use Wired device from Sensemore.
+
+ This user manual is intended for custom communication with Wired for third party integrations. 
+
+We also provide Wired serial communication framework in Python which allows easy use without any development.
+
+Check the links below,
+
+- Sensemore communication library SMCom is available for C++ and Python [SMComPy](https://pypi.org/project/SMComPy/)
+
+- Wired library and framework in Python [SMWiredPy](https://pypi.org/project/SMWiredPy/)
+
+  
+
+*Supported device versions  >= v1.0.9 for manual v1.0.3*
+
+##  1. Wired device statuses and LED indicator
 
 The operating status of the Wired device can be followed by the LED indicator.
 
@@ -34,19 +52,19 @@ Table 1: Wired LED indicator and the current status of the device
 
 The communication protocol used in Wired devices is as below. The data receiving and sending protocol uses the UART - RS485 protocol.In this version of the device, the UART baud rate is set to 115200. The starting and ending number must be kept constant in the data protocol. The message type that is reserved as 2-bit must also stay constant as 0b00. All messages sent must be packaged as shown below. The decoding of the received messages must also be done likewise.
 
-![Figure 1 : Communication protocol](/images/smcom_wired_protocol-en.svg)
+![Figure 1 : Communication protocol](./images/smcom_wired_protocol-en.svg)
 
 The data size area is represented by one byte. Therefore, the data size can be a maximum of 255.
 
-The address field must be one byte in total, 4-bit receiver and 4-bit transmitter.As Wired devices can be found more than once in a network, a command can only be sent to the desired device by specifying the address of that device in the address field.If the recipient address is 15 (0x0F) in the message packet that is sent, all devices on the network can receive the message.The address that is kept by the device is a numerical value assigned afterwards and it may be changed on demand.The device starts listening to address 14 (0x0E) every time it is initialized.
+The address field must be one byte in total, 4-bit receiver and 4-bit transmitter. As Wired devices can be found more than once in a network, a command can only be sent to the desired device by specifying the address of that device in the address field. If the recipient address is 15 (0x0F) in the message packet that is sent, all devices on the network can receive the message. The address that is kept by the device is a numerical value assigned afterwards and it may be changed on demand. The device starts listening to address 14 (0x0E) every time it is initialized.
 
-Any desired value can be entered as the sender address.However, Wired devices always set the recipient address as 13(0x0D) and send a message. For this reason, it is appropriate to use the address 13 as the sender address.
+Any desired value can be entered as the sender address. However, Wired devices always set the recipient address as 13(0x0D) and send a message. For this reason, it is appropriate to use the address 13 as the sender address.
 
-The message index is reserved by predetermined message types.Only the message indices between the range of 0x0A - 0x13 (11 - 19) are reserved for the user.The remaining values are kept for other processes and should not be used.
+The message index is reserved by predetermined message types. Only the message indices between the range of 0x0A - 0x13 (11 - 19) are reserved for the user. The remaining values are kept for other processes and should not be used.
 
 The transferred data must be sent in compression between the starting and ending series of the packet. Because the data size of the packet headers is predetermined, determining the data length is crucial for checking the end of the packet.
 
-The CRC calculation is done beginning from the starting number to the last byte of data.Only the two bytes of the CRC data and the 0xBF ending number at the end of the packet are not included in the CRC calculation.The algorithm that is used in CRC is explained in the section named Error Detection (CRC) Check.
+The CRC calculation is done beginning from the starting number to the last byte of data. Only the two bytes of the CRC data and the 0xBF ending number at the end of the packet are not included in the CRC calculation.The algorithm that is used in CRC is explained in the section named Error Detection (CRC) Check.
 
 ## 3. Message (Command) types
 
@@ -79,9 +97,77 @@ The message expected from the device in response to this is in the following for
 
 Table 4: Message format received to read the version
 
-| **Major** | **Minor** | **Patch** |
+| **Patch** | **Minor** | Major |
 | --- | --- | --- |
 | 1 byte | 1 byte | 1 byte |
+
+- Example code for sending message **0x0A**
+
+```c
+const uint8_t receiver_id_mask      = 0b00001111;
+const uint8_t transmitter_id_mask   = 0b11110000;
+const uint8_t message_index_mask    = 0b11111100;
+const uint8_t message_type_mask     = 0b00000011;
+
+uint8_t receiver_id     = 0x0E; //Default id when wired has no address assigned
+uint8_t transmitter_id  = 0x0D;
+uint8_t message_index   = 0x0A; //Version message
+uint8_t message_type    = 0x00; //constant
+
+uint8_t read_wired_version_buffer[7] = {
+    	0xFB,   /* Start byte*/
+        0x0,    /* Data length*/
+        ((transmitter_id<<4) & transmitter_id_mask) |(receiver_id & receiver_id_mask), /* Address byte*/
+        ((message_index<<2)&message_index_mask) | (message_type & message_type_mask), /* Message identifier byte*/
+        0, //CRC-H - not calculated 
+    	0, //CRC-L - not calculated
+    	0xBF  //End byte
+};
+
+//Now calculate CRC, do not include the last 3 bytes
+uint16_t crc = CRC_IBM_SEED;
+for(int i = 0; i<sizeof(read_wired_version_buffer)-3; ++i){
+    crc = compute_crc_ibm(crc,read_wired_version_buffer[i]);
+}
+printf("crc:%x\n",crc);
+read_wired_version_buffer[sizeof(read_wired_version_buffer)-3] = (crc>>8) & 0xFF;
+read_wired_version_buffer[sizeof(read_wired_version_buffer)-2] = (crc) & 0xFF;
+
+//Now expected result:  [0xFB,0x0,0xDE,0x28,0x98,0xF0,0xBF];
+```
+
+-  Expected message buffer from Wired for message **0x0A**
+
+```c
+/*
+ If above message frame is sent, Wired will return the following response
+ version field and crc field may change from device to device, this response is left as an example to check message frames
+ The following version message is for v1.0.14
+*/
+
+//Example parsing scheme for C/C++
+struct response_wired_get_version{
+	uint8_t patch;
+	uint8_t minor;
+	uint8_t major;
+};
+
+//Version v1.0.14 and Mac:CA:B8:31:00:00:55
+uint8_t expected_response[10] = {
+    0xFB, /*Start byte*/
+    0x03, /*Data length for version, which is 3*/
+    0xED, /*Wired's id 0xE, Received id 0xD */
+    0x28, /*Message identifier byte*/
+    0xE, /*Version patch*/
+    0x0, /*Version minor*/
+    0x1, /*Version major*/
+    0xAB, /*CRC-H*/
+    0x3A, /*CRC-L*/
+    0xBF /*End byte*/
+};
+```
+
+
 
 ### 3.1 Reading the device MAC address (0x0B)
 
@@ -95,9 +181,86 @@ Table 5: Message format sent to read the MAC address
 
 Table 6: Message format received to read the MAC address
 
-| **MAC address** |
-| --- |
-| 6 byte |
+| **MAC address** | Version - Patch | Version-Minor | Version-Major |
+| --- | --- | --- | --- |
+| 6 byte | 1 byte | 1 byte | 1 byte |
+
+- Example code for sending message **0x0B**
+
+```c
+
+const uint8_t receiver_id_mask      = 0b00001111;
+const uint8_t transmitter_id_mask   = 0b11110000;
+const uint8_t message_index_mask    = 0b11111100;
+const uint8_t message_type_mask     = 0b00000011;
+
+uint8_t receiver_id     = 0x0E; //Default id when wired has no address assigned
+uint8_t transmitter_id  = 0x0D;
+uint8_t message_index   = 0x0B; //Reading mac and version message
+uint8_t message_type    = 0x00; //constant
+
+
+uint8_t read_wired_mac_buffer[12] = {
+    	0xFB,   /* Start byte*/
+        0x5,    /* Data length*/
+        ((transmitter_id<<4) & transmitter_id_mask) |(receiver_id & receiver_id_mask), /* Address byte*/
+        ((message_index<<2)&message_index_mask) | (message_type & message_type_mask), /* Message identifier byte*/
+        0,0,0,0,0, //Zero message in order to read Mac
+    	0, //CRC-H - not calculated 
+    	0, //CRC-L - not calculated
+    	0xBF  //End byte
+};
+
+//Now calculate CRC, do not include the last 3 bytes
+uint16_t crc = CRC_IBM_SEED;
+for(int i = 0; i<sizeof(read_wired_mac_buffer)-3; ++i){
+    crc = compute_crc_ibm(crc,read_wired_mac_buffer[i]);
+}
+read_wired_mac_buffer[sizeof(read_wired_mac_buffer)-3] = (crc>>8) & 0xFF;
+read_wired_mac_buffer[sizeof(read_wired_mac_buffer)-2] = (crc) & 0xFF;
+
+//Now expected result:  [0xFB,0x5,0xDE,0x2C,0x0,0x0,0x0,0x0,0x0,0xC8,0x73,0xBF]
+```
+
+- Expected message buffer from Wired for message **0x0B**
+
+```c
+/*
+ If above example message frame is sent, Wired will return the following response
+ version field and crc field may change from device to device, this response is left as an example to check message frames
+ The following version message is for v1.0.14 and Mac: CA:B8:31:00:00:55
+ The first 3 octets are constant for Wired devices
+*/
+
+//Example parsing scheme for C/C++
+struct response_wired_get_mac_and_version{
+	uint8_t mac[6];
+	uint8_t patch;
+	uint8_t minor;
+	uint8_t major;
+};
+
+//Version v1.0.14 and Mac:CA:B8:31:00:00:55
+uint8_t expected_response[16] = {
+    0xFB, /*Start byte*/
+    0x09, /*Data length for mac and version, which is 6+3 = 9*/
+    0xED, /*Wired's id 0xE, Received id 0xD */
+    0x2C, /*Message identifier byte*/
+    0xCA, /*Mac[0]*/
+    0xB8, /*Mac[1]*/
+    0x31, /*Mac[2]*/
+    0x0,  /*Mac[3]*/
+    0x0,  /*Mac[4]*/
+    0x55, /*Mac[5]*/
+    0xE,  /*Version patch*/
+    0x0,  /*Version minor*/
+    0x1,  /*Version major*/
+    0x45, /*CRC-H*/
+    0xA6, /*CRC-L*/
+    0xBF  /*End byte*/
+};
+```
+
 
 
 ### 3.2 Assigning an address to the device for communication (0x0C)
@@ -170,7 +333,7 @@ Table 13: Measurement configuration example
 | --- | --- | --- | --- |
 | 3 | 6 | 10000 | 1 |
 
-The sampling size should be described in the message as _Little Endian_.In other words, leastsignificant bits should be in the first part of the data and the most significant bit should be in the last part of the data. The 4-byte array representation of the number 10000 is given in Table 14. The desired sampling size should be converted into a byte array as in the example.
+The sampling size should be described in the message as _Little Endian_. In other words, least significant bits should be in the first part of the data and the most significant bit should be in the last part of the data. The 4-byte array representation of the number 10000 is given in Table 14. The desired sampling size should be converted into a byte array as in the example.
 
 Table 14: Data format prepared for the measurement configuration example (in hexadecimal [Base-16])
 
@@ -203,7 +366,7 @@ Table 17: Message format that is expected if measurement reading is successful
 | --- | --- | --- |
 | 1 byte (0x03) | 1 byte | 6 bytes - 240 bytes (_Little Endian_ - signed) |
 
-Measurement data format can be a minimum of 6 bytes and a maximum of 240 bytes. Each sample consists of 6 bytes of data. In 16-bit integer format, the X-axis is sent first, then the Y-axis, and finally the Z-axis is sent (15th bit represents the sign bit). The 16-bit integer is written in two Little Endian formats as 8-bit. In this way, a minimum of 1 sample and a maximum of 40 samples can be read in a message packet.
+Measurement data format can be a minimum of 6 bytes and a maximum of 240 bytes. Each sample consists of 6 bytes of data. In 16-bit integer format, the X-axis is sent first, then the Y-axis, and finally the Z-axis is sent (15th bit represents the sign bit). The 16-bit integer is written in two little endian formats as 8-bit. In this way, a minimum of 1 sample and a maximum of 40 samples can be read in a message packet.
 
 Table 18: Representation of a measurement data as a byte array
 
@@ -339,7 +502,7 @@ If the device is not busy, the last measurement in the memory can be read at any
 Table 33: Message format sent to read the measurement
 
 | Byte offset | Read amount |
-| --- | --- | 
+| --- | --- |
 | 4 bytes (_Little Endian_) | 4 bytes (_Little Endian_) |
 
 
@@ -399,13 +562,27 @@ Table 39: Telemetry Message format sent to read the all telemetry
 | --- |
 | 0 byte |
 
-
-
 Table 40: Expected message format for the response
 
-|Message status | TEMPERATURE | SAMPLING RATE | CLEARANCE-[X,Y,Z]| CREST-[X,Y,Z] | GRMS-[X,Y,Z] | KURTOSIS-[X,Y,Z] | SKEWNESS-[X,Y,Z] |
-| --- | --- | --- | ---| --- | --- | --- | --- |
-| 1 byte | 2 bytes(_Little Endian_) | 4 bytes (_Little Endian_) | double | double | double | double | double |
+- For versions <= v1.0.8
+
+|Message status | TEMPERATURE | SAMPLING RATE | CLEARANCE-[X,Y,Z]| CREST-[X,Y,Z] | GRMS-[X,Y,Z] | KURTOSIS-[X,Y,Z] | SKEWNESS-[X,Y,Z] | VRMS-[X,Y,Z] | PEAK-[X,Y,Z] | SUM-[X,Y,Z] |
+| --- | --- | --- | ---| --- | --- | --- | --- | --- | --- | --- |
+| 1 byte | 2 bytes(_Little Endian_) | 4 bytes (_Little Endian_) | double | double | double | double | double | double | double | double |
+
+- For versions >=1.0.9 , <= 1.0.12
+
+| Message status | TEMPERATURE              | SAMPLING RATE             | CLEARANCE-[X,Y,Z] | CREST-[X,Y,Z] | GRMS-[X,Y,Z] | KURTOSIS-[X,Y,Z] | SKEWNESS-[X,Y,Z] | VRMS-[X,Y,Z] | PEAK-[X,Y,Z] | SUM-[X,Y,Z] |
+| -------------- | ------------------------ | ------------------------- | ----------------- | ------------- | ------------ | ---------------- | ---------------- | ------------ | ------------ | ----------- |
+| 1 byte         | 2 bytes(_Little Endian_) | 4 bytes (_Little Endian_) | double            | double        | double       | double           | double           | double       | double       | double      |
+
+- For versions >= v1.0.13
+
+| Message status | TEMPERATURE              | SAMPLING RATE             | CLEARANCE-[X,Y,Z] | CREST-[X,Y,Z] | GRMS-[X,Y,Z] | KURTOSIS-[X,Y,Z] | SKEWNESS-[X,Y,Z] | VRMS-[X,Y,Z] | PEAK-[X,Y,Z] | SUM-[X,Y,Z] | PEAK_TO_PEAK [X,Y,Z] |
+| -------------- | ------------------------ | ------------------------- | ----------------- | ------------- | ------------ | ---------------- | ---------------- | ------------ | ------------ | ----------- | -------------------- |
+| 1 byte         | 2 bytes(_Little Endian_) | 4 bytes (_Little Endian_) | double            | double        | double       | double           | double           | double       | double       | double      | double               |
+
+
 
 - Message status indicates the read operation status
 - Temperature value must be divided by 100.0 to convert it to float value
@@ -434,7 +611,6 @@ uint16_t compute_crc_ibm(uint16_t crc, uint8_t data){
    }
    return crc;
 }
-
 ```
 Figure 2: The CRC sample code for one byte of data.
 
@@ -443,7 +619,7 @@ Figure 2: The CRC sample code for one byte of data.
 Cable connections and the color codes
 
 
-![Figure 3: RS485 cable connections](/images/wired_rs485_cable.svg)
+![Figure 3: RS485 cable connections](./images/wired_rs485_cable.svg)
 
 Figure 3: RS485 cable pinout (for closed ended cables)
 
