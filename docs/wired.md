@@ -163,7 +163,7 @@ uint16_t crc = CRC_IBM_SEED;
 for(int i = 0; i<sizeof(read_wired_version_buffer)-3; ++i){
     crc = compute_crc_ibm(crc,read_wired_version_buffer[i]);
 }
-printf("crc:%x\n",crc);
+
 read_wired_version_buffer[sizeof(read_wired_version_buffer)-3] = (crc>>8) & 0xFF;
 read_wired_version_buffer[sizeof(read_wired_version_buffer)-2] = (crc) & 0xFF;
 
@@ -222,7 +222,6 @@ Table 6: Message format received to read the MAC address
 - Example code for sending message **0x0B**
 
 ```c
-
 const uint8_t receiver_id_mask      = 0b00001111;
 const uint8_t transmitter_id_mask   = 0b11110000;
 const uint8_t message_index_mask    = 0b11111100;
@@ -274,7 +273,7 @@ struct response_wired_get_mac_and_version{
 	uint8_t major;
 };
 
-//Version v1.0.14 and Mac:CA:B8:31:00:00:55
+//Example buffer for Version v1.0.14 and Mac:CA:B8:31:00:00:55
 uint8_t expected_response[16] = {
     0xFB, /*Start byte*/
     0x09, /*Data length for mac and version, which is 6+3 = 9*/
@@ -596,19 +595,19 @@ Table 39: Telemetry Message format sent to read the all telemetry
 | --- |
 | 0 byte |
 
-Table 40: Expected message format for the response. *For versions* <= **1.0.8**
+Table 40: Expected message format for the response. *For versions <= 1.0.8*
 
 |Message status | TEMPERATURE | SAMPLING RATE | CLEARANCE-[X,Y,Z]| CREST-[X,Y,Z] | GRMS-[X,Y,Z] | KURTOSIS-[X,Y,Z] | SKEWNESS-[X,Y,Z] | VRMS-[X,Y,Z] | PEAK-[X,Y,Z] | SUM-[X,Y,Z] |
 | --- | --- | --- | ---| --- | --- | --- | --- | --- | --- | --- |
 | 1 byte | 2 bytes(_Little Endian_) | 4 bytes (_Little Endian_) | double | double | double | double | double | double | double | double |
 
-Table 41: Expected message format for the response. *For versions* >=**1.0.9**, <= **1.0.12**
+Table 41: Expected message format for the response. *For versions >=1.0.9, <= 1.0.12*
 
 | Message status | TEMPERATURE              | SAMPLING RATE             | CLEARANCE-[X,Y,Z] | CREST-[X,Y,Z] | GRMS-[X,Y,Z] | KURTOSIS-[X,Y,Z] | SKEWNESS-[X,Y,Z] | VRMS-[X,Y,Z] | PEAK-[X,Y,Z] | SUM-[X,Y,Z] |
 | -------------- | ------------------------ | ------------------------- | ----------------- | ------------- | ------------ | ---------------- | ---------------- | ------------ | ------------ | ----------- |
 | 1 byte         | 2 bytes(_Little Endian_) | 4 bytes (_Little Endian_) | double            | double        | double       | double           | double           | double       | double       | double      |
 
-Table 41: Expected message format for the response. *For versions* <= **1.0.13**
+Table 41: Expected message format for the response. *For versions <= 1.0.13*
 | Message status | TEMPERATURE              | SAMPLING RATE             | CLEARANCE-[X,Y,Z] | CREST-[X,Y,Z] | GRMS-[X,Y,Z] | KURTOSIS-[X,Y,Z] | SKEWNESS-[X,Y,Z] | VRMS-[X,Y,Z] | PEAK-[X,Y,Z] | SUM-[X,Y,Z] | PEAK_TO_PEAK [X,Y,Z] |
 | -------------- | ------------------------ | ------------------------- | ----------------- | ------------- | ------------ | ---------------- | ---------------- | ------------ | ------------ | ----------- | -------------------- |
 | 1 byte         | 2 bytes(_Little Endian_) | 4 bytes (_Little Endian_) | double            | double        | double       | double           | double           | double       | double       | double      | double               |
