@@ -14,7 +14,6 @@ Check the links below,
 
 - Wired library and framework in Python [SMWiredPy](https://pypi.org/project/SMWiredPy/)
 
-  
 
 *Supported device versions  >= v1.0.9 for manual v1.0.3*
 
@@ -54,6 +53,35 @@ The communication protocol used in Wired devices is as below. The data receiving
 
 ![Figure 1 : Communication protocol](./images/smcom_wired_protocol-en.svg)
 
+
+
+- ------
+
+  Start byte (0xFB) [0:7]
+
+- Data length (1-byte) [0:7]
+
+- Address field (1-byte) [0:7]
+
+  - Transmitter address (4-bit) [4:7]
+  - Receiver address (4-bit) [0:3]
+
+- Message identifier field (1-byte) [0:7]
+
+  - Message index (6-bit) [2:7]
+  - Message type (2-bit) [0:1]
+
+- Payload (0 - 255 bytes)
+
+- CRC field (2 bytes)
+
+  - CRC-H (8-bit) [8:15]
+  - CRC-L (8-bit) [0:7]
+
+- End byte (0xBF) [0:7]
+
+------
+
 The data size area is represented by one byte. Therefore, the data size can be a maximum of 255.
 
 The address field must be one byte in total, 4-bit receiver and 4-bit transmitter. As Wired devices can be found more than once in a network, a command can only be sent to the desired device by specifying the address of that device in the address field. If the recipient address is 15 (0x0F) in the message packet that is sent, all devices on the network can receive the message. The address that is kept by the device is a numerical value assigned afterwards and it may be changed on demand. The device starts listening to address 14 (0x0E) every time it is initialized.
@@ -78,10 +106,16 @@ Table 2: Status variable in messages
 | --- | --- |
 | Failure | 0x00 |
 | Success | 0x01 |
-| Time out | 0x02 |
+| Timeout | 0x02 |
 | Data | 0x03 |
 | Wrong message type | 0x04 |
-| Corrupted packet | 0x05 |
+| No measurement | 0x05 |
+| Invalid measurement | 0x06 |
+| Flash erase error | 0x07 |
+| Flash write error | 0x08 |
+| Flash read error | 0x09 |
+| No memory | 0x10 |
+| Accelerometer error | 0x11 |
 
 ### 3.0 Reading the device version (0x0A)
 
@@ -518,8 +552,8 @@ Table 35: Representation of a measurement data as a byte array
 
 | X1 | X1 | Y1 | Y1 | Z1 | Z1 |
 | --- | --- | --- | --- | --- | --- |
-| X[7:0] | X[15:8]| Y[7:0] | Y[15:8] | Z[7:0] | Z[15:8]
-| 1 byte | 1 byte | 1 byte | 1byte | 1 byte | 1 byte
+| X[7:0] | X[15:8]| Y[7:0] | Y[15:8] | Z[7:0] | Z[15:8] |
+| 1 byte | 1 byte | 1 byte | 1byte | 1 byte | 1 byte |
 
 Each instance is represented as Little Endian in the figure above.
 
@@ -562,31 +596,70 @@ Table 39: Telemetry Message format sent to read the all telemetry
 | --- |
 | 0 byte |
 
-Table 40: Expected message format for the response
-
-- For versions <= v1.0.8
+Table 40: Expected message format for the response. *For versions* <= **1.0.8**
 
 |Message status | TEMPERATURE | SAMPLING RATE | CLEARANCE-[X,Y,Z]| CREST-[X,Y,Z] | GRMS-[X,Y,Z] | KURTOSIS-[X,Y,Z] | SKEWNESS-[X,Y,Z] | VRMS-[X,Y,Z] | PEAK-[X,Y,Z] | SUM-[X,Y,Z] |
 | --- | --- | --- | ---| --- | --- | --- | --- | --- | --- | --- |
 | 1 byte | 2 bytes(_Little Endian_) | 4 bytes (_Little Endian_) | double | double | double | double | double | double | double | double |
 
-- For versions >=1.0.9 , <= 1.0.12
+Table 41: Expected message format for the response. *For versions* >=**1.0.9**, <= **1.0.12**
 
 | Message status | TEMPERATURE              | SAMPLING RATE             | CLEARANCE-[X,Y,Z] | CREST-[X,Y,Z] | GRMS-[X,Y,Z] | KURTOSIS-[X,Y,Z] | SKEWNESS-[X,Y,Z] | VRMS-[X,Y,Z] | PEAK-[X,Y,Z] | SUM-[X,Y,Z] |
 | -------------- | ------------------------ | ------------------------- | ----------------- | ------------- | ------------ | ---------------- | ---------------- | ------------ | ------------ | ----------- |
 | 1 byte         | 2 bytes(_Little Endian_) | 4 bytes (_Little Endian_) | double            | double        | double       | double           | double           | double       | double       | double      |
 
-- For versions >= v1.0.13
-
+Table 41: Expected message format for the response. *For versions* <= **1.0.13**
 | Message status | TEMPERATURE              | SAMPLING RATE             | CLEARANCE-[X,Y,Z] | CREST-[X,Y,Z] | GRMS-[X,Y,Z] | KURTOSIS-[X,Y,Z] | SKEWNESS-[X,Y,Z] | VRMS-[X,Y,Z] | PEAK-[X,Y,Z] | SUM-[X,Y,Z] | PEAK_TO_PEAK [X,Y,Z] |
 | -------------- | ------------------------ | ------------------------- | ----------------- | ------------- | ------------ | ---------------- | ---------------- | ------------ | ------------ | ----------- | -------------------- |
 | 1 byte         | 2 bytes(_Little Endian_) | 4 bytes (_Little Endian_) | double            | double        | double       | double           | double           | double       | double       | double      | double               |
 
-
-
 - Message status indicates the read operation status
 - Temperature value must be divided by 100.0 to convert it to float value
 - All double telemetry data satisfy the IEEE-754 double format and [X,Y,Z] represents double array
+
+### 3.12 Reading the VRMS value (0x17)
+
+Table 42: Message format sent to read the vrms
+
+| Null message |
+| --- |
+| 0 byte |
+
+Table 43: Expected message format to read the vrms
+
+| VRMS-X | VRMS-Y | VRMS-Z |
+| --- | --- | --- |
+| 8 byte (IEEE-754 double) | 8 byte (IEEE-754 double) | 8 byte (IEEE-754 double) |
+
+
+### 3.13 Reading the PEAK values (0x18)
+
+Table 44: Message format sent to read the peak
+
+| Null message |
+| --- |
+| 0 byte |
+
+Table 45: Expected message format to read the peak
+
+| Peak-X | Peak-Y | Peak-Z |
+| --- | --- | --- |
+| 8 byte (IEEE-754 double) | 8 byte (IEEE-754 double) | 8 byte (IEEE-754 double) |
+
+
+### 3.14 Reading the SUM values (0x19)
+
+Table 46: Message format sent to read the sum of accelerometer data
+
+| Null message |
+| --- |
+| 0 byte |
+
+Table 47: Expected message format to read the sum
+
+| Sum-X | Sum-Y | Sum-Z |
+| --- | --- | --- |
+| 8 byte (IEEE-754 double) | 8 byte (IEEE-754 double) | 8 byte (IEEE-754 double) |
 
 
 
