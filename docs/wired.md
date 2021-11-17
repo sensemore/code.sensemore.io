@@ -596,35 +596,38 @@ Table 39: Telemetry Message format sent to read the all telemetry
 | 0 byte |
 
 Table 40: Expected message format for the response. *For versions <= 1.0.8*
+| Message status | TEMPERATURE              | SAMPLING RATE             | TELEMETRIES [X,Y,Z]                                          |
+| -------------- | ------------------------ | ------------------------- | ------------------------------------------------------------ |
+| 1 byte         | 2 bytes(_Little Endian_) | 4 bytes (_Little Endian_) | 120 bytes (IEEE-754 double)<br />CLEARANCE<br />CREST<br />GRMS<br />KURTOSIS<br />SKEWNESS|
 
-|Message status | TEMPERATURE | SAMPLING RATE | CLEARANCE-[X,Y,Z]| CREST-[X,Y,Z] | GRMS-[X,Y,Z] | KURTOSIS-[X,Y,Z] | SKEWNESS-[X,Y,Z] | VRMS-[X,Y,Z] | PEAK-[X,Y,Z] | SUM-[X,Y,Z] |
-| --- | --- | --- | ---| --- | --- | --- | --- | --- | --- | --- |
-| 1 byte | 2 bytes(_Little Endian_) | 4 bytes (_Little Endian_) | double | double | double | double | double | double | double | double |
+
+
 
 Table 41: Expected message format for the response. *For versions >=1.0.9, <= 1.0.12*
+| Message status | TEMPERATURE              | SAMPLING RATE             | TELEMETRIES [X,Y,Z]                                          |
+| -------------- | ------------------------ | ------------------------- | ------------------------------------------------------------ |
+| 1 byte         | 2 bytes(_Little Endian_) | 4 bytes (_Little Endian_) | 192 bytes (IEEE-754 double)<br />CLEARANCE<br />CREST<br />GRMS<br />KURTOSIS<br />SKEWNESS<br />VRMS<br />PEAK<br />SUM<br /> |
 
-| Message status | TEMPERATURE              | SAMPLING RATE             | CLEARANCE-[X,Y,Z] | CREST-[X,Y,Z] | GRMS-[X,Y,Z] | KURTOSIS-[X,Y,Z] | SKEWNESS-[X,Y,Z] | VRMS-[X,Y,Z] | PEAK-[X,Y,Z] | SUM-[X,Y,Z] |
-| -------------- | ------------------------ | ------------------------- | ----------------- | ------------- | ------------ | ---------------- | ---------------- | ------------ | ------------ | ----------- |
-| 1 byte         | 2 bytes(_Little Endian_) | 4 bytes (_Little Endian_) | double            | double        | double       | double           | double           | double       | double       | double      |
 
-Table 41: Expected message format for the response. *For versions <= 1.0.13*
-| Message status | TEMPERATURE              | SAMPLING RATE             | CLEARANCE-[X,Y,Z] | CREST-[X,Y,Z] | GRMS-[X,Y,Z] | KURTOSIS-[X,Y,Z] | SKEWNESS-[X,Y,Z] | VRMS-[X,Y,Z] | PEAK-[X,Y,Z] | SUM-[X,Y,Z] | PEAK_TO_PEAK [X,Y,Z] |
-| -------------- | ------------------------ | ------------------------- | ----------------- | ------------- | ------------ | ---------------- | ---------------- | ------------ | ------------ | ----------- | -------------------- |
-| 1 byte         | 2 bytes(_Little Endian_) | 4 bytes (_Little Endian_) | double            | double        | double       | double           | double           | double       | double       | double      | double               |
+Table 42: Expected message format for the response. *For versions >= 1.0.13*
+| Message status | TEMPERATURE              | SAMPLING RATE             | TELEMETRIES [X,Y,Z]                                          |
+| -------------- | ------------------------ | ------------------------- | ------------------------------------------------------------ |
+| 1 byte         | 2 bytes(_Little Endian_) | 4 bytes (_Little Endian_) | 216 bytes (IEEE-754 double)<br />CLEARANCE<br />CREST<br />GRMS<br />KURTOSIS<br />SKEWNESS<br />VRMS<br />PEAK<br />SUM<br />PEAK_TO_PEAK |
 
 - Message status indicates the read operation status
 - Temperature value must be divided by 100.0 to convert it to float value
-- All double telemetry data satisfy the IEEE-754 double format and [X,Y,Z] represents double array
+- All double telemetry data satisfy the IEEE-754 double format and they are all in x,y,z format  (Each telemetry takes 24-bytes space)
+  - For example the first 8-bytes of telemetries is CLEARANCE-X, the second is CLEARANCE-Y and so on.
 
 ### 3.12 Reading the VRMS value (0x17)
 
-Table 42: Message format sent to read the vrms
+Table 43: Message format sent to read the vrms
 
 | Null message |
 | --- |
 | 0 byte |
 
-Table 43: Expected message format to read the vrms
+Table 44: Expected message format to read the vrms
 
 | VRMS-X | VRMS-Y | VRMS-Z |
 | --- | --- | --- |
@@ -633,13 +636,13 @@ Table 43: Expected message format to read the vrms
 
 ### 3.13 Reading the PEAK values (0x18)
 
-Table 44: Message format sent to read the peak
+Table 45: Message format sent to read the peak
 
 | Null message |
 | --- |
 | 0 byte |
 
-Table 45: Expected message format to read the peak
+Table 46: Expected message format to read the peak
 
 | Peak-X | Peak-Y | Peak-Z |
 | --- | --- | --- |
@@ -648,13 +651,13 @@ Table 45: Expected message format to read the peak
 
 ### 3.14 Reading the SUM values (0x19)
 
-Table 46: Message format sent to read the sum of accelerometer data
+Table 47: Message format sent to read the sum of accelerometer data
 
 | Null message |
 | --- |
 | 0 byte |
 
-Table 47: Expected message format to read the sum
+Table 48: Expected message format to read the sum
 
 | Sum-X | Sum-Y | Sum-Z |
 | --- | --- | --- |
