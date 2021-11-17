@@ -596,28 +596,50 @@ Table 39: Telemetry Message format sent to read the all telemetry
 | 0 byte |
 
 Table 40: Expected message format for the response. *For versions <= 1.0.8*
-| Message status | TEMPERATURE              | SAMPLING RATE             | TELEMETRIES [X,Y,Z]                                          |
-| -------------- | ------------------------ | ------------------------- | ------------------------------------------------------------ |
-| 1 byte         | 2 bytes(_Little Endian_) | 4 bytes (_Little Endian_) | 120 bytes (IEEE-754 double)<br />CLEARANCE<br />CREST<br />GRMS<br />KURTOSIS<br />SKEWNESS|
+
+| Message status | TEMPERATURE              | SAMPLING RATE             | TELEMETRIES [X,Y,Z]         |
+| -------------- | ------------------------ | ------------------------- | --------------------------- |
+| 1 byte         | 2 bytes(_Little Endian_) | 4 bytes (_Little Endian_) | 120 bytes (IEEE-754 double) |
 
 
 
 
 Table 41: Expected message format for the response. *For versions >=1.0.9, <= 1.0.12*
-| Message status | TEMPERATURE              | SAMPLING RATE             | TELEMETRIES [X,Y,Z]                                          |
-| -------------- | ------------------------ | ------------------------- | ------------------------------------------------------------ |
-| 1 byte         | 2 bytes(_Little Endian_) | 4 bytes (_Little Endian_) | 192 bytes (IEEE-754 double)<br />CLEARANCE<br />CREST<br />GRMS<br />KURTOSIS<br />SKEWNESS<br />VRMS<br />PEAK<br />SUM<br /> |
+
+| Message status | TEMPERATURE              | SAMPLING RATE             | TELEMETRIES [X,Y,Z]         |
+| -------------- | ------------------------ | ------------------------- | --------------------------- |
+| 1 byte         | 2 bytes(_Little Endian_) | 4 bytes (_Little Endian_) | 192 bytes (IEEE-754 double) |
 
 
 Table 42: Expected message format for the response. *For versions >= 1.0.13*
-| Message status | TEMPERATURE              | SAMPLING RATE             | TELEMETRIES [X,Y,Z]                                          |
-| -------------- | ------------------------ | ------------------------- | ------------------------------------------------------------ |
-| 1 byte         | 2 bytes(_Little Endian_) | 4 bytes (_Little Endian_) | 216 bytes (IEEE-754 double)<br />CLEARANCE<br />CREST<br />GRMS<br />KURTOSIS<br />SKEWNESS<br />VRMS<br />PEAK<br />SUM<br />PEAK_TO_PEAK |
+
+| Message status | TEMPERATURE              | SAMPLING RATE             | TELEMETRIES [X,Y,Z]         |
+| -------------- | ------------------------ | ------------------------- | --------------------------- |
+| 1 byte         | 2 bytes(_Little Endian_) | 4 bytes (_Little Endian_) | 216 bytes (IEEE-754 double) |
+
+- Telemetry array order:
+
+  - CLEARANCE
+  - CREST
+  - GRMS
+  - KURTOSIS
+  - SKEWNESS
+
+  - VRMS (*added in version 1.0.9*)
+  - PEAK (*added in version 1.0.9*)
+  - SUM (*added in version 1.0.9*)
+
+  - PEAK_TO_PEAK (*added in version 1.0.13*)
 
 - Message status indicates the read operation status
+
 - Temperature value must be divided by 100.0 to convert it to float value
+
 - All double telemetry data satisfy the IEEE-754 double format and they are all in x,y,z format  (Each telemetry takes 24-bytes space)
+  
   - For example the first 8-bytes of telemetries is CLEARANCE-X, the second is CLEARANCE-Y and so on.
+  
+  
 
 ### 3.12 Reading the VRMS value (0x17)
 
