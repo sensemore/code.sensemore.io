@@ -1,5 +1,6 @@
 - [Android API](android_api.md)
 - [Wired Docs](wired.md)
+- [BLE Integration](ble_Integration.md)
 - [MQTT Integration](mqtt_integration.md)
 - Tools
   -  [Vibration Calculator](vibration_calculator.md)
