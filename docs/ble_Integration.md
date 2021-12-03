@@ -15,7 +15,7 @@
 	- [Reading Battery Level](#reading-battery-level)
 	- [Reading Temperature](#reading-temperature)
 	- [Reading Calibrated Sampling Rate](#reading-calibrated-sampling-rate)
-	- [Sleep](#sleep)
+- [Sleep](#sleep)
 
 Sensemore Infinity is a vibration and temperature sensor which communicates with BLE protocol.
 You can interact with Sensemore Infinity by using  following BLE protocol details.
@@ -305,7 +305,7 @@ You can use following java code to parse bytes[2] to int16
  
  Sensemore Infinity calculates calibrated sampling rate on the fly, after each measurement you should ask for last calibrated sampling rate and use it for further calculations.
 
-## Sleep
+# Sleep
  - **Operation** Write Characteristic
  - **Characteristic** 2c15e29a-0630-420f-a409-ad569b943068"
  - **Datatype** uint32
