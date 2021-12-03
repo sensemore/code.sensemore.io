@@ -15,6 +15,7 @@
 	- [Reading Battery Level](#reading-battery-level)
 	- [Reading Temperature](#reading-temperature)
 	- [Reading Calibrated Sampling Rate](#reading-calibrated-sampling-rate)
+	- [Sleep](#sleep)
 
 Sensemore Infinity is a vibration and temperature sensor which communicates with BLE protocol.
 You can interact with Sensemore Infinity by using  following BLE protocol details.
@@ -304,3 +305,35 @@ You can use following java code to parse bytes[2] to int16
  
  Sensemore Infinity calculates calibrated sampling rate on the fly, after each measurement you should ask for last calibrated sampling rate and use it for further calculations.
 
+## Sleep
+ - **Operation** Write Characteristic
+ - **Characteristic** 2c15e29a-0630-420f-a409-ad569b943068"
+ - **Datatype** uint32
+ - **Unit** Seconds
+The Sensemore Infinity battery offers up to a week of battery life without being put to sleep under normal conditions. For long-lasting use, the Sensemore Infinity device can be put to sleep when it is not taking measurements, and the battery life can be increased up to 6 months.
+
+For t he sake of the optimisation sleep durations should be power of two. If you use different value it ceil value to the next power of two.
+
+
+You can find valid values imn the tables below
+
+<table>
+
+</tr><td>Seconds</td><td>		Minutes</td><td>	Hours</td></tr>
+</tr><td>4</td><td>		0.066666666666667</td><td>	0.001111111111111</td></tr>
+</tr><td>8</td><td>		0.133333333333333</td><td>	0.002222222222222</td></tr>
+</tr><td>16</td><td>		0.266666666666667</td><td>	0.004444444444444</td></tr>
+</tr><td>32</td><td>		0.533333333333333</td><td>	0.008888888888889</td></tr>
+</tr><td>64</td><td>		1.06666666666667</td><td>	0.017777777777778</td></tr>
+</tr><td>128</td><td>		2.13333333333333</td><td>	0.035555555555556</td></tr>
+</tr><td>256</td><td>		4.26666666666667</td><td>	0.071111111111111</td></tr>
+</tr><td>512</td><td>		8.53333333333333</td><td>	0.142222222222222</td></tr>
+</tr><td>1024</td><td>	17.0666666666667</td><td>	0.284444444444444</td></tr>
+</tr><td>2048</td><td>	34.1333333333333</td><td>	0.568888888888889</td></tr>
+</tr><td>4096</td><td>	68.2666666666667</td><td>	1.13777777777778</td></tr>
+</tr><td>8192</td><td>	136.533333333333</td><td>	2.27555555555556</td></tr>
+</tr><td>16384</td><td>	273.066666666667</td><td>	4.55111111111111</td></tr>
+</tr><td>32768</td><td>	546.133333333333</td><td>	9.10222222222222</td></tr>
+</tr><td>65536</td><td>	1092.26666666667</td><td>	18.2044444444444</td></tr>
+</tr><td>131072</td><td>	2184.53333333333</td><td>	36.4088888888889</td></tr>
+</table>
