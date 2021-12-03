@@ -310,6 +310,7 @@ You can use following java code to parse bytes[2] to int16
  - **Characteristic** 2c15e29a-0630-420f-a409-ad569b943068"
  - **Datatype** uint32
  - **Unit** Seconds
+ - 
 The Sensemore Infinity battery offers up to a week of battery life without being put to sleep under normal conditions. For long-lasting use, the Sensemore Infinity device can be put to sleep when it is not taking measurements, and the battery life can be increased up to 6 months.
 
 For t he sake of the optimisation sleep durations should be power of two. If you use different value it ceil value to the next power of two.
