@@ -15,6 +15,7 @@
 		- [İvme Ölçer Aralık Düzelmesi](#i̇vme-ölçer-aralık-düzelmesi)
 		- [Örnek](#örnek)
 	- [Sensör Yazılım Güncelleme(OTA)](#sensör-yazılım-güncellemeota)
+	- [Sleep](#Sleep)
 	- [TLS](#tls)
 		- [Mosquitto yapılandırması](#mosquitto-yapılandırması)
 		- [Sertifika Üretimi](#sertifika-üretimi)
@@ -662,7 +663,156 @@ Senseway
 
 Yazılım güncelleme sırasında uç sensörde görünen led sekanslarına <a href="#/tr/wired?id=_1-wired-cihaz-durumları-ve-led-göstergesi">Wired dökümantasyonundan.</a> 'dan ulaşabilirsiniz.
 
+## Sleep
 
+Sensemore BLE cihazları batarya ile çalışır. Uç sensörlerin çalışma sürelerini en üst düzeye çıkarmak, pil tüketimini azaltmak ve kullanım ömrünü artırmak için uyku moduna alınabilirler. Cihazların pili, cihaz modeline ve ölçüm stratejisine bağlı olarak 6 aydan 2 yıla kadar dayanabilir
+
+Cihazları belirli saniyeler boyunca uyku moduna geçirmek için aşağıdaki yapılandırmayı kullanabilirsiniz.
+
+<table>
+<tr>
+<th>Aktör</th>
+<th>Topic</th>
+<th>Payload Tipi</th>
+<th>Payload Şema</th>
+<th>Örnek</th>
+</tr>
+<tr>
+<td>
+Kullanıcı
+</td>
+
+<td><b>prod/gateway/&lt;SensewayID&gt;/device/&lt;DeviceMac&gt;/sleep</b></td>
+<td>sayı</td>
+<td>
+<i>saniye cinsinden uyku süresi</i>
+</td>
+<td>
+2048
+</td>
+</tr>
+
+</table>
+
+> Dikkat: Uyku süreleri 2'nin kuvveti olacak şekilde verilmelidir. Örn: 1024, 2048, 4096
+
+Örnek  değerler
+
+<table>
+<tr>
+
+<th>
+Değer
+</th>
+<th>
+Açıklama
+</th>
+</tr>
+
+
+<tr>
+<th>
+64
+</th>
+<th>
+~1 dakika
+</th>
+</tr>
+
+<tr>
+<th>
+128
+</th>
+<th>
+~2 dakika
+</th>
+</tr>
+
+<tr>
+<th>
+256
+</th>
+<th>
+~4 dakika
+</th>
+</tr>
+
+<tr>
+<th>
+512
+</th>
+<th>
+~7.5 dakika
+</th>
+</tr>
+
+<tr>
+<th>
+1024
+</th>
+<th>
+~15 dakika
+</th>
+</tr>
+
+<tr>
+<th>
+2048
+</th>
+<th>
+~30 dakika
+</th>
+</tr>
+<tr>
+<th>
+4096
+</th>
+<th>
+~1 saat
+</th>
+</tr>
+
+<tr>
+<th>
+8192
+</th>
+<th>
+~2 saat
+</th>
+</tr>
+
+
+<tr>
+<th>
+16384
+</th>
+<th>
+~4.5 saat
+</th>
+</tr>
+
+
+<tr>
+<th>
+32768
+</th>
+<th>
+~9 saat
+</th>
+</tr>
+
+
+<tr>
+<th>
+65536
+</th>
+<th>
+~18 saat
+</th>
+</tr>
+</table>
+
+Device will disconnect after recieving sleep command and sleeps for given duration. After sleep complete device restart with a fresh session.
 ## TLS 
 Senseway cihazları güvenli bir mqtt bağlantısı için TLS uygulamaktadırlar. Eğer mqtt broker'ınızı kendiniz yönetiyorsanız, broker'ın TLS yapılandırmasının yapılması ve ilgili sertifikaların üretilmesi gerekmektedir.
 ### Mosquitto yapılandırması

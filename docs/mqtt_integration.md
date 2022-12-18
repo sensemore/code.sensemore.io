@@ -1,60 +1,64 @@
-- [Senseway MQTT Integration](#senseway-mqtt-integration)
-	- [Accessing Web Configuration Page](#accessing-web-configuration-page)
-	- [MQTT Broker and Certificates](#mqtt-broker-and-certificates)
-	- [NTP](#ntp)
-	- [Operations](#operations)
-		- [Scan](#scan)
-		- [Requesting Senseway Version](#requesting-senseway-version)
-		- [Requesting Version for Endnode](#requesting-version-for-endnode)
-	- [Measurement](#measurement)
-		- [Measurement Configuration](#measurement-configuration)
-		- [Topics](#topics)
-		- [Chunk ordering and interpretation](#chunk-ordering-and-interpretation)
-		- [Post Processing](#post-processing)
-		- [Byte To Int](#byte-to-int)
-		- [Accelerometer Range Correction](#accelerometer-range-correction)
-		- [Example](#example)
-	- [Device Firmware Update(OTA)](#device-firmware-updateota)
-	- [TLS](#tls)
-		- [Mosquitto Configuration](#mosquitto-configuration)
-		- [Certificate Generation](#certificate-generation)
-			- [CA Generation](#ca-generation)
-			- [Server Certificate Generation](#server-certificate-generation)
-			- [Client Certificate Generation](#client-certificate-generation)
-	- [Tips](#tips)
+-   [Senseway MQTT Integration](#senseway-mqtt-integration)
+    -   [Accessing Web Configuration Page](#accessing-web-configuration-page)
+    -   [MQTT Broker and Certificates](#mqtt-broker-and-certificates)
+    -   [NTP](#ntp)
+    -   [Operations](#operations)
+        -   [Scan](#scan)
+        -   [Requesting Senseway Version](#requesting-senseway-version)
+        -   [Requesting Version for Endnode](#requesting-version-for-endnode)
+    -   [Measurement](#measurement)
+        -   [Measurement Configuration](#measurement-configuration)
+        -   [Topics](#topics)
+        -   [Chunk ordering and interpretation](#chunk-ordering-and-interpretation)
+        -   [Post Processing](#post-processing)
+        -   [Byte To Int](#byte-to-int)
+        -   [Accelerometer Range Correction](#accelerometer-range-correction)
+        -   [Example](#example)
+    -   [Device Firmware Update(OTA)](#device-firmware-updateota)
+    -   [Sleep](#Sleep)
+    -   [TLS](#tls)
+        -   [Mosquitto Configuration](#mosquitto-configuration)
+        -   [Certificate Generation](#certificate-generation)
+            -   [CA Generation](#ca-generation)
+            -   [Server Certificate Generation](#server-certificate-generation)
+            -   [Client Certificate Generation](#client-certificate-generation)
+    -   [Tips](#tips)
 
 # Senseway MQTT Integration
 
 <img width="50" style="line-height:10px" src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"></img> Example Python project can be found at [Sensemore Python Mqtt Integration](https://github.com/sensemore/sensemore-python-mqtt-client)
 
-
 ## Accessing Web Configuration Page
-Shortly after the Senseway is plugged in, it opens a wifi acces point network with **Senseway-CA&colon;B8&colon;XX&colon;XX&colon;XX&colon;XX** SSID'. Use default password to connect AP network, Open your browser and navigate to  adress [http:\\\\192.168.4.1 ](http:\\192.168.4.1)
+
+Shortly after the Senseway is plugged in, it opens a wifi acces point network with **Senseway-CA&colon;B8&colon;XX&colon;XX&colon;XX&colon;XX** SSID'. Use default password to connect AP network, Open your browser and navigate to adress [http:\\\\192.168.4.1 ](http:\192.168.4.1)
 
 ## MQTT Broker and Certificates
+
 Senseway needs MQTT / TLS configuration. The MQTT Broker Server to be used must support TLS and have the required certificates for the senseway.
-- MQTT endpoint (_mqtts: //my-mqtt-broker.server: 8883_)
-- CA (CA certificate)
-- Client Cert (a created and signed certificate from CA)
-- Client Key (private key of the certificate generated through the CA)
+
+-   MQTT endpoint (_mqtts: //my-mqtt-broker.server: 8883_)
+-   CA (CA certificate)
+-   Client Cert (a created and signed certificate from CA)
+-   Client Key (private key of the certificate generated through the CA)
 
 Required certificates and endpoint information are defined in 'Advance> MQTT' via the Senseway configuration page. Senseway uses these certificates for the future MQTT connections.
 
 Details
 https://www.hivemq.com/blog/mqtt-security-fundamentals-tls-ssl/
 
-
 ## NTP
-_Default: http://pool.ntp.org/_ 
-Time information is also used in the measurement messages sent by Senseway. Time synchronization is needed for this. For OnPremise installations, the time server can be defined from  `Advance > NTP`.
 
+_Default: http://pool.ntp.org/_
+Time information is also used in the measurement messages sent by Senseway. Time synchronization is needed for this. For OnPremise installations, the time server can be defined from `Advance > NTP`.
 
 ## Operations
+
 It explains which topics to use when communicating with Senseway and how messages should be interpreted.
 
-`Aktör` sends  `Payload` with  `PayloadType` format to `Topic` 
+`Aktör` sends `Payload` with `PayloadType` format to `Topic`
 
 ### Scan
+
 Senseway periodically initiates a scan for connected devices. Scan results are published periodically on MQTT. (~ 1min)
 
 <table>
@@ -77,15 +81,15 @@ Senseway
 
 ```json
 {
-	"<DEVICE-MAC>":{
-	"type":"<DEVICE_TYPE>",
-	"rssi":"<RSSI>",
-	"status":"<STATUS>"
+	"<DEVICE-MAC>": {
+		"type": "<DEVICE_TYPE>",
+		"rssi": "<RSSI>",
+		"status": "<STATUS>"
 	},
-	"<DEVICE-MAC2>":{
-	"type":"<DEVICE_TYPE>",
-	"rssi":"<RSSI>",
-	"status":"<STATUS>"
+	"<DEVICE-MAC2>": {
+		"type": "<DEVICE_TYPE>",
+		"rssi": "<RSSI>",
+		"status": "<STATUS>"
 	}
 }
 ```
@@ -159,8 +163,7 @@ text
 </tr>
 </table>
 
-
-### Requesting Version for Endnode 
+### Requesting Version for Endnode
 
 <table>
 <tr>
@@ -224,9 +227,11 @@ text
 </table>
 
 ## Measurement
+
 The measurement process starts with sending a configuration to the end device, then the measurement reading process begins. Measurement reading process is done with chunks. The subscriber user is required to interpret and parse the measurement reading packets in the correct order.
 
 ### Measurement Configuration
+
 <table>
 <tr>
 <th>
@@ -283,7 +288,6 @@ measurement identier
 </td>
 </tr>
 </table>
-
 
 <table>
 
@@ -380,17 +384,16 @@ json
 
 ```json
 {
-    "STAT": {
-        "MEASUREMENT_START_TIME": "<Hour: Minute: Second: Day: Month: Year>",
-        "CALIBRATED_SAMPLINGRATE": "<calibratedSamplingRate>"
-    },
-    "TELEMETRY": [
-        {
-            "NAME": "<TELEMETRY>",
-            "VALUE": "<VALUE>"
-        }
-    ]
-      
+	"STAT": {
+		"MEASUREMENT_START_TIME": "<Hour: Minute: Second: Day: Month: Year>",
+		"CALIBRATED_SAMPLINGRATE": "<calibratedSamplingRate>"
+	},
+	"TELEMETRY": [
+		{
+			"NAME": "<TELEMETRY>",
+			"VALUE": "<VALUE>"
+		}
+	]
 }
 ```
 
@@ -399,74 +402,79 @@ json
 
 ```json
 {
-    "STAT": {
-        "MEASUREMENT_START_TIME": "12:36:10:22:00:2021",
-        "CALIBRATED_SAMPLINGRATE": 876
-    },
-    "TELEMETRY": [
-        {
-            "NAME": "TEMPERATURE",
-            "VALUE": 29.98
-        }
-    ]
+	"STAT": {
+		"MEASUREMENT_START_TIME": "12:36:10:22:00:2021",
+		"CALIBRATED_SAMPLINGRATE": 876
+	},
+	"TELEMETRY": [
+		{
+			"NAME": "TEMPERATURE",
+			"VALUE": 29.98
+		}
+	]
 }
 ```
-	
+
 </td>
 </tr>
 </table>
 
 ### Chunk ordering and interpretation
+
 The measurements are divided into chunks and sent binary, chunkIndex is an index that counts down to 0. For example, we wanted a measurement of 10000 samples. We would see the following messages on MQTT.
+
 > prod/gateway/CA&colon;B8&colon;28&colon;00&colon;00&colon;08/device/CA&colon;B8&colon;31&colon;00&colon;00&colon;1A/measure/098765432109876543214321 <br>
 > 1,5,10000
 
 > prod/gateway/CA&colon;B8&colon;28&colon;00&colon;00&colon;08/device/CA&colon;B8&colon;31&colon;00&colon;00&colon;1A/measure/098765432109876543214321/accepted<br>
 
->prod/device/CA&colon;B8&colon;31&colon;00&colon;00&colon;1A/measure/098765432109876543214321/chunk/2<br>
-> a0 43 46 04 b7 fc f1 43	03 04 b1 fc 94 43 04 04
+> prod/device/CA&colon;B8&colon;31&colon;00&colon;00&colon;1A/measure/098765432109876543214321/chunk/2<br>
+> a0 43 46 04 b7 fc f1 43 03 04 b1 fc 94 43 04 04
 
->prod/device/CA&colon;B8&colon;31&colon;00&colon;00&colon;1A/measure/098765432109876543214321/chunk/1<br>
-> 21 04 99 fc f0 43 35 04	d5 fc a2 43 41 04 c6 fc
+> prod/device/CA&colon;B8&colon;31&colon;00&colon;00&colon;1A/measure/098765432109876543214321/chunk/1<br>
+> 21 04 99 fc f0 43 35 04 d5 fc a2 43 41 04 c6 fc
 
->prod/device/CA&colon;B8&colon;31&colon;00&colon;00&colon;1A/measure/098765432109876543214321/chunk/0<br>
-> b1 fc a8 43 60 04 a8 fc	a9 43 2c 04 c3 fc b2 43
+> prod/device/CA&colon;B8&colon;31&colon;00&colon;00&colon;1A/measure/098765432109876543214321/chunk/0<br>
+> b1 fc a8 43 60 04 a8 fc a9 43 2c 04 c3 fc b2 43
 
->prod/gateway/CA&colon;B8&colon;28&colon;00&colon;00&colon;08/device/CA&colon;B8&colon;31&colon;00&colon;00&colon;1A/measure/098765432109876543214321/done<br>
-> 
+> prod/gateway/CA&colon;B8&colon;28&colon;00&colon;00&colon;08/device/CA&colon;B8&colon;31&colon;00&colon;00&colon;1A/measure/098765432109876543214321/done<br>
+
 ```json
 {
-    "STAT": {
-        "MEASUREMENT_START_TIME": "12:36:10:22:00:2021",
-        "CALIBRATED_SAMPLINGRATE": 876
-    },
-    "TELEMETRY": [
-        {
-        "NAME": "TEMPERATURE",
-        "VALUE": 29.98
-        }
-    ]
+	"STAT": {
+		"MEASUREMENT_START_TIME": "12:36:10:22:00:2021",
+		"CALIBRATED_SAMPLINGRATE": 876
+	},
+	"TELEMETRY": [
+		{
+			"NAME": "TEMPERATURE",
+			"VALUE": 29.98
+		}
+	]
 }
 ```
 
 ### Post Processing
+
 In the example above, there are 3 chunk in total, the chunk index value starts from 2 and counts to 0.
 When all chunks are sent, we get the message / done with json payload. This gives us the information that chunks are ready to be interpreted.
+
 ### Byte To Int
+
 The recorded chunk files are sorted according to chunkIndex from large to small, and all content is combined.
 The aggregated content contains uint16_t little endian data. It should be interpreted correctly and cast to int values.
 
 You could wind javascript example below
 
 ```javascript
-  let ordered_chunks = [chunk2,chunk1,chunk0]
-  let buffer = Buffer.concat(ordered_chunks);
-  let data = new Int16Array(Uint8Array.from(buffer).buffer);
+let ordered_chunks = [chunk2, chunk1, chunk0];
+let buffer = Buffer.concat(ordered_chunks);
+let data = new Int16Array(Uint8Array.from(buffer).buffer);
 ```
 
 ### Accelerometer Range Correction
-Int values must be multiplied by the correction coefficient. This changes according to the accelerometer range and is as follows. `range * 2/2 ^ 16`
 
+Int values must be multiplied by the correction coefficient. This changes according to the accelerometer range and is as follows. `range * 2/2 ^ 16`
 
 <table>
 	<tr>
@@ -499,8 +507,8 @@ Int values must be multiplied by the correction coefficient. This changes accord
 ### Example
 
 Let's take a measurement of 8 samples with the 2G accelerometer range.
-8 -> 8 * 3 = 24 total samples
-Each sample is represented by int16 -> 2 * 24 -> 48 bytes
+8 -> 8 _ 3 = 24 total samples
+Each sample is represented by int16 -> 2 _ 24 -> 48 bytes
 
 <table>
 <tr>
@@ -602,12 +610,8 @@ Z
 
 <br>
 
-
-
-
-
-
 ## Device Firmware Update(OTA)
+
 Sensemore end node devices accept firmware update over http. In order to start firmware update on end-node device, valid binary link sent to firmware update topic.
 
 <table>
@@ -667,13 +671,166 @@ Senseway
 
 Senseway downloads the binary from given url and start firmware update for particular device.
 
-Firmware updates led sequence of wired end nodes shown in the <a href="#/wired?id=_1wired-device-statuses-and-led-indicator">Wired documentation.</a> 
+Firmware updates led sequence of wired end nodes shown in the <a href="#/wired?id=_1wired-device-statuses-and-led-indicator">Wired documentation.</a>
+
+## Sleep
+
+Sensemore BLE endnodes works with battery. In order to maximize operation times of end sensors, they can be put in sleep to decrease battery consumptions and increase lifetime. Devices battery could live from 6 months to 2 years depending on the device model, measurement strategy
+
+You can use below configuration to put devices into sleep mode for given seconds.
+
+<table>
+<tr>
+<th>Actor</th>
+<th>Topic</th>
+<th>Payload Type</th>
+<th>Payload Schema</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+User
+</td>
+
+<td><b>prod/gateway/&lt;SensewayID&gt;/device/&lt;DeviceMac&gt;/sleep</b></td>
+<td>number</td>
+<td>
+<i>sleep duration in seconds</i>
+</td>
+<td>
+2048
+</td>
+</tr>
+
+</table>
+
+> Caution: Sleep duration should be given power of 2 like 1024, 2048, 4096
+
+Example values
+
+<table>
+<tr>
+
+<th>
+Value
+</th>
+<th>
+Explanation
+</th>
+</tr>
 
 
-## TLS 
+<tr>
+<th>
+64
+</th>
+<th>
+~1 minutes
+</th>
+</tr>
+
+<tr>
+<th>
+128
+</th>
+<th>
+~2 minutes
+</th>
+</tr>
+
+<tr>
+<th>
+256
+</th>
+<th>
+~4 minutes
+</th>
+</tr>
+
+<tr>
+<th>
+512
+</th>
+<th>
+~7.5 minutes
+</th>
+</tr>
+
+<tr>
+<th>
+1024
+</th>
+<th>
+~15 minutes
+</th>
+</tr>
+
+<tr>
+<th>
+2048
+</th>
+<th>
+~30 minutes
+</th>
+</tr>
+<tr>
+<th>
+4096
+</th>
+<th>
+~1 hour
+</th>
+</tr>
+
+<tr>
+<th>
+8192
+</th>
+<th>
+~2 hours
+</th>
+</tr>
+
+
+<tr>
+<th>
+16384
+</th>
+<th>
+~4.5 hours
+</th>
+</tr>
+
+
+<tr>
+<th>
+32768
+</th>
+<th>
+~9 hours
+</th>
+</tr>
+
+
+<tr>
+<th>
+65536
+</th>
+<th>
+~18 hours
+</th>
+</tr>
+</table>
+
+Device will disconnect after recieving sleep command and sleeps for given duration. After sleep complete device restart with a fresh session.
+
+## TLS
+
 Senseway devices implement TLS for a secure mqtt connection. If you manage your mqtt broker yourself, it is necessary to configure the broker's TLS and generate the required certificates.
+
 ### Mosquitto Configuration
-Referance: 
+
+Referance:
 http://www.steves-internet-guide.com/mosquitto-tls/
 https://mosquitto.org/man/mosquitto-conf-5.html
 
@@ -686,17 +843,21 @@ keyfile C:\mosquitto\certs\server.key
 certfile C:\mosquitto\certs\server.crt
 tls_version tlsv1.2
 ```
+
 ### Certificate Generation
+
 Referance:
 http://www.steves-internet-guide.com/creating-and-using-client-certificates-with-mqtt-and-mosquitto/
-Requirement: `openssl` 
+Requirement: `openssl`
 
-#### CA Generation 
-ca.key: `openssl genrsa -des3 -out ca.key 2048` 
+#### CA Generation
 
-ca.crt:  `openssl req -new -x509 -days 1826 -key ca.key -out ca.crt`
+ca.key: `openssl genrsa -des3 -out ca.key 2048`
+
+ca.crt: `openssl req -new -x509 -days 1826 -key ca.key -out ca.crt`
 
 #### Server Certificate Generation
+
 server.key `openssl genrsa -out server.key 2048`
 
 server.csr ` openssl req -new -out server.csr -key server.key`
@@ -705,12 +866,12 @@ server.csr ` openssl req -new -out server.csr -key server.key`
 
 Normally, for certificate generation, the CRS is sent to the CA and the CA signs the CRS and generates a valid certificate. In this example, we can generate the certificate because we are the CA.
 
-server.crt `openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out server.crt -days 3600` 
+server.crt `openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out server.crt -days 3600`
 
 Now `ca.crt`,`server.crt` and `server.key` can be used to configure mosquitto service with TLS support.
 
-
 #### Client Certificate Generation
+
 client.key `openssl genrsa -out client.key 2048`
 
 client.csr `openssl req -new -out client.csr -key client.key`
@@ -721,14 +882,14 @@ client.crt `openssl x509 -req -in client.csr -CA ca.crt -CAkey ca.key -CAcreates
 
 Now, MQTT clients (Senseway) can establish a secure connection to the mqtt server using `ca.crt`,` client.crt` and `client.key`.
 
-
 ## Tips
-- If you are using mosquitto as a broker, you can view detailed logs by launching the application in verbose mode to solve potential problems.
 
-- Configuration page or open the laptop to the desktop computer offers a more robust link.
+-   If you are using mosquitto as a broker, you can view detailed logs by launching the application in verbose mode to solve potential problems.
 
-- If you can manage the Wifi network, defining a static ip for the senseway can prevent DHCP-related problems that may occur in the future. (Weak modems, device networking problems).
+-   Configuration page or open the laptop to the desktop computer offers a more robust link.
 
-- Storing measurement signal data in any database may cause various difficulties due to the data shape, it will be convenient to save directly in the file system.
+-   If you can manage the Wifi network, defining a static ip for the senseway can prevent DHCP-related problems that may occur in the future. (Weak modems, device networking problems).
 
-- You should check beforehand that your wifi network is healthy and that you have access to mqtt servers.
+-   Storing measurement signal data in any database may cause various difficulties due to the data shape, it will be convenient to save directly in the file system.
+
+-   You should check beforehand that your wifi network is healthy and that you have access to mqtt servers.
