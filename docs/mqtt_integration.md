@@ -260,10 +260,10 @@ accelerometerRangeIndex
 samplingRateIndex
 </td>
 <td>
-5<br> 6<br>7<br> 8<br> 9<br>
+5<br> 6<br>7<br> 8<br> 9<br> 10 <br>
 </td>
 <td>
-~800Hz<br>~1600Hz<br>~3200Hz<br>~6400Hz<br>~12800Hz
+~800Hz<br>~1600Hz<br>~3200Hz<br>~6400Hz<br>~12800Hz <br> ~25600Hz
 </td>
 </tr>
 <tr>

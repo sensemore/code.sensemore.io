@@ -74,6 +74,10 @@ There are three types of configuration
 		<td>9</td>
 		<td>~12800Hz</td>
 	</tr>
+	<tr>
+		<td>10</td>
+		<td>~25600Hz</td>
+	</tr>
     
 </table>
 
