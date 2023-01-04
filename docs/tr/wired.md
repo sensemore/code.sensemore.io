@@ -451,13 +451,13 @@ Figür 3: RS485 kablo bağlantıları (kapalı uçlu kablolar için)
 
 Tablo 41: Siyah koruma içinde kablo renkleri ve bağlantıları (açık uçlu kablolar için)
 
-| Renk | Kablo ismi |
-| --- | --- |
-| Kalın siyah (makaronlu) | GND (Shield) |
-| İnce siyah | VCC (5-36V) |
-| Beyaz | A |
-| Kırmızı | B |
 
+| Kablo ismi | RS485 kablo rengi | Sensör kablo rengi |
+| --- | --- |  --- |
+| GND | Kahverengi | Siyah |
+| VCC (5-36V) | Kırmızı | Beyaz |
+| A | Yeşil | Yeşik |
+| B | Sarı | Sarı |
 
 
 

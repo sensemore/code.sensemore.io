@@ -723,11 +723,12 @@ Figure 3: RS485 cable pinout (for closed ended cables)
 
 Table 41: Cable colors and connections inside the black shield (for open ended cables)
 
-| Color | Cable name |
-| --- | --- |
-| Thick black (tubular) | GND (Shield) |
-| Thin black | VCC (5-36V) |
-| White | A |
-| Red | B |
 
+
+| Cable name | RS485 cable colors | Sensor cable colors |
+| --- | --- |  --- |
+| GND (Shield) | Brown | Black |
+| VCC (5-36V) | Red | White |
+| A | Green | Green |
+| B | Yellow | Yellow |
 
