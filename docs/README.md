@@ -5,6 +5,7 @@
 - [Wired Docs](wired.md)
 - [BLE Integration](ble_Integration.md)
 - [SMWired Python](SMWiredPy.md)
+- [Wired PRO Docs](wired_pro.md)
 - [MQTT Integration](mqtt_integration.md)
 - Tools
   -  [Vibration Calculator](vibration_calculator.md)

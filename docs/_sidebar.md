@@ -1,5 +1,6 @@
 - [Android API](android_api.md)
 - [Wired Docs](wired.md)
+- [Wired PRO Docs](wired_pro.md)
 - [BLE Integration](ble_Integration.md)
 - [SMWired Python](SMWiredPy.md)
 - [MQTT Integration](mqtt_integration.md)
