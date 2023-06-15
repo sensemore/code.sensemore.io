@@ -4,5 +4,6 @@
 - [BLE Integration](ble_Integration.md)
 - [SMWired Python](SMWiredPy.md)
 - [MQTT Integration](mqtt_integration.md)
+- [Duck Docs](duck.md)
 - Tools
   -  [Vibration Calculator](vibration_calculator.md)
