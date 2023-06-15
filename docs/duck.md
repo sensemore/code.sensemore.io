@@ -213,7 +213,7 @@ sampleSize
 100 - 1,000,000 
 </td>
 <td>
-Indicates how many samples will be taken for each axis. End devices make triaxial measurements. For example, a measurement with 1000 samples produces a total of 3000 samples.
+
 </td>
 </tr>
 <tr>
