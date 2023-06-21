@@ -241,6 +241,28 @@ Indicates which channels are enabled
 </tr>
 <tr>
 <td>
+gain
+</td>
+<td>
+1
+</td>
+<td>
+Indicates gain
+</td>
+</tr>
+<tr>
+<td>
+boost
+</td>
+<td>
+3
+</td>
+<td>
+Indicates boost
+</td>
+</tr>
+<tr>
+<td>
 objectId
 </td>
 <td>
@@ -284,7 +306,9 @@ text
 	"baseSamplingFrequency": 6400,
 	"external": false,
 	"sampleSize": 1000,
-	"channels": [1,2,3]
+	"channels": [1,2,3],
+	"gain" : 1,
+	"boost" : 3
 }
 ```
 </td>
@@ -389,7 +413,9 @@ The measurements are divided into chunks and sent binary, chunkIndex is an index
     "baseSamplingFrequency": 6400,
     "external": false,
     "sampleSize": 1000,
-    "channels": [1,2,3]
+    "channels": [1,2,3],
+	"gain" : 1,
+	"boost" : 3
 }
 
 > prod/gateway/CA&colon;B8&colon;28&colon;00&colon;00&colon;08/device/CA&colon;B8&colon;31&colon;00&colon;00&colon;1A/measure/098765432109876543214321/accepted<br>
