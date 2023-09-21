@@ -445,7 +445,7 @@ Figür 2 : 1 bayt veri için örnek CRC kodu
 
 Kablo bağlantıları ve renk kodları
 
-![Figure 3: RS485 kablo bağlantıları](./images/wired_rs485_cable.svg)
+![Figure 3: RS485 kablo bağlantıları](./images/cable.webp)
 
 Figür 3: RS485 kablo bağlantıları (kapalı uçlu kablolar için)
 

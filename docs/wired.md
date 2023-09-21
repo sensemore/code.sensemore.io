@@ -716,7 +716,7 @@ Figure 2: The CRC sample code for one byte of data.
 Cable connections and the color codes
 
 
-![Figure 3: RS485 cable connections](./images/wired_rs485_cable.svg)
+![Figure 3: RS485 cable connections](./images/cable.webp)
 
 Figure 3: RS485 cable pinout (for closed ended cables)
 
