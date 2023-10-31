@@ -725,10 +725,45 @@ Table 41: Cable colors and connections inside the black shield (for open ended c
 
 
 
-| Cable name | RS485 cable colors | Sensor cable colors |
-| --- | --- |  --- |
-| GND (Shield) | Brown | Black |
-| VCC (5-36V) | Red | White |
-| A | Green | Green |
-| B | Yellow | Yellow |
+<table>
+<thead >
+<tr>
+<th>NO</th>
+<th>Cable name</th>
+<th>combination #1</th>
+<th>combination #2</th>
+<th>combination #3</th>
+</tr>
+</thead>
+<tbody style="font-size:20px;text-shadow:  0px -1px 0px #000000, 1px 0px 0px #000000, 0px 1px 0px #000000, -1px 0px 0px #000000;">
+<tr>
+<td><b>1</b></td>
+<td>A</td>
+<td><span style="color:#11ff11">Green </span></td>
+<td><span style="color:#11ff11">Green </span></td>
+<td><span style="color:#11ff11">Green </span></td>
+</tr>
+<tr>
+<td><b>2</b></td>
+<td>B</td>
+<td><span style="color:yellow">Yellow </span></td>
+<td><span style="color:yellow">Yellow </span></td>
+<td><span style="color:yellow">Yellow </span></td>
+</tr>
+<tr>
+<td><b>3</b></td>
+<td>GND (Shield)</td>
+<td><span style="color:brown">Brown </span></td>
+<td><span style="color:black">Black </span></td>
+<td><span style="color:brown">Brown </span></td>
+</tr>
+<tr>
+<td><b>4</b></td>
+<td>VCC (5-36V)</td>
+<td><span style="color:red">Red </span></td>
+<td><span style="color:white">White </span></td>
+<td><span style="color:white">White </span></td>
+</tr>
+</tbody>
+</table>
 
