@@ -310,7 +310,7 @@ You can use following java code to parse bytes[2] to int16
 
 # Sleep
  - **Operation** Write Characteristic
- - **Characteristic** 2c15e29a-0630-420f-a409-ad569b943068"
+ - **Characteristic** f3b67640-58f3-436f-a8a8-240400eed98f
  - **Datatype** uint32
  - **Unit** Seconds
  - 
