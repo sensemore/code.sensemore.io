@@ -15,6 +15,10 @@
 	- [Reading Battery Level](#reading-battery-level)
 	- [Reading Temperature](#reading-temperature)
 	- [Reading Calibrated Sampling Rate](#reading-calibrated-sampling-rate)
+- [Reading Magnetometer Data](#reading-magnetometer-data)
+	- [Sample Size and Sampling Rate](#sample-size-and-sampling-rate)
+	- [Example Calculations](#example-calculations)
+	- [Parsing Magnetometer](#parsing-magnetometer)
 - [Sleep](#sleep)
 
 Sensemore Infinity is a vibration and temperature sensor which communicates with BLE protocol.
@@ -307,6 +311,67 @@ You can use following java code to parse bytes[2] to int16
  - **Unit** Hz
  
  Sensemore Infinity calculates calibrated sampling rate on the fly, after each measurement you should ask for last calibrated sampling rate and use it for further calculations.
+
+# Reading Magnetometer Data
+- **Operation** Indication
+- **Characteristic** 1028b182-5110-4c53-b0e4-06f6999d2ede
+- **Datatype** int16 * 3 axis
+
+Magnetometer is running sync with accelerometer measurement so it doesnt require any configuration.
+You can read magnetometer data after successfull measurement any time. 
+
+## Sample Size and Sampling Rate
+
+While magnetometer is running sync with accelerometer, sample size and sampling rate is calculated accordingly.
+Following table shows the conversion rate with respect to accelerometer sampling rate.
+
+| Selected Sampling Rate | Conversion Rate |
+|---------------------------:|-----------------|
+|                        800 | 1               |
+|                       1600 | 2               |
+|                       3200 | 4               |
+|                       6400 | 8               |
+|                      12800 | 16              |
+|                      25600 | 32              |
+
+
+You can read up to 4096 sample for each axis of magnetometer. 
+
+|   MAX_MAGNETOMETER_SAMPLE_SIZE | 4096                                                      |
+|-------------------------------:|-----------------------------------------------------------|
+|   Magnetometer <br>Sample Size | MIN(Accelerometer Sample Size / Conversion Rate,4096)     |
+| Magnetometer <br>Sampling Rate | Accelerometer Calibrated Sampling  Rate / Conversion Rate |
+
+## Example Calculations 
+
+|        Accelerometer       |                          |                              |                     |  Magnetometer |             |
+|:--------------------------:|:------------------------:|:----------------------------:|---------------------|:-------------:|:-----------:|
+| Selected <br>Sampling Rate | Selected <br>Sample Size | Calibrated <br>Sampling rate | Conversion <br>Rate | Sampling Rate | Sample Size |
+|                        800 |                     1000 |                          846 |                   1 |           846 |        1000 |
+|                       1600 |                     3000 |                         1678 |                   2 |           839 |        1500 |
+|                       3200 |                     5000 |                         3342 |                   4 |           835 |        1250 |
+|                       6400 |                    10000 |                         6489 |                   8 |           811 |        1250 |
+|                      12800 |                    20000 |                        13327 |                  16 |           832 |        1250 |
+|                      25600 |                    30000 |                        26674 |                  32 |           833 |         937 |
+|                        800 |                    25000 |                          846 |                   1 |           846 |        4096 |
+|                       1600 |                    25000 |                         1678 |                   2 |           839 |        4096 |
+|                       3200 |                    25000 |                         3342 |                   4 |           835 |        4096 |
+|                       6400 |                    50000 |                         6489 |                  16 |           405 |        3125 |
+|                      12800 |                    50000 |                        13327 |                  32 |           416 |        1562 |
+|                      25600 |                    50000 |                        26674 |                  64 |           416 |         781 |
+
+
+## Parsing Magnetometer
+
+Magnetometer is also provide 3 axial values. Data parsing is also similar to accelerometer. 
+Each payload consist of three axial samples and each samples data type is int16. It has the following representation.
+
+Representation of the measurement package via accelerometer axis data:
+
+| X1 | Y1 | Z1 | X2 | Y2 | Z2 | ... | X40 | Y40 | Z40 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2byte | 2byte | 2byte | 2byte | 2byte | 2byte | ... | 2byte | 2byte | 2byte |
+
 
 # Sleep
  - **Operation** Write Characteristic
