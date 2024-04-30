@@ -134,7 +134,7 @@ Representation of the measurement package via accelerometer axis data:
 
 > Let's take a measurement of 8 samples with the 2G accelerometer range.  
 > The correction coefficient of 2G is 0.000061  
-> `8 -> 8*3(for each axis) = 24 total samples`  
+> 8 -> `8 * 3(for each axis) = 24 total samples`  
 > Each sample is represented by int16: `2 * 24 = 48 bytes`
 for the sake of simplicity we assume each ble payload is 32 bytes.
 Then you now you can close the indication after receiving 32 bytes.
@@ -148,7 +148,7 @@ Here is the ble payloads.
 | payload1 | 21 04 99 fc f0 43 35 04 d5 fc a2 43 41 04 c6 fc |
 | payload2 | a0 43 46 04 b7 fc f1 43 03 04 b1 fc 94 43 04 04 |
 
-| | |
+|||
 |--------------:|:-----------|
 | Merged Bytes |  b1 fc a8 43 60 04 a8 fc a9 43 2c 04 c3 fc b2 43 21 04 99 fc f0 43 35 04 d5 fc a2 43 41 04 c6 fc a0 43 46 04 b7 fc f1 43 03 04 b1 fc 94 43 04 04 |
 | Int16 representation | -847  17320   1120   -856  17321   1068   -829  17330 1057   -871  17392   1077   -811  17314   1089   -826 17312   1094   -841  17393   1027   -847  17300   1028 |
@@ -156,7 +156,7 @@ Here is the ble payloads.
 | X | <span style="color:red">-0.051667</span> <span style="color:red">-0.052216</span> <span style="color:red">-0.050569</span> <span style="color:red">-0.053131</span> <span style="color:red">-0.049471</span> <span style="color:red">-0.050386</span> <span style="color:red">-0.051301</span> <span style="color:red">-0.051667</span> |
 | Y | <span style="color:green">1.05652</span> <span style="color:green">1.056581</span> <span style="color:green">1.05713</span> <span style="color:green">1.060912</span> <span style="color:green">1.056154</span> <span style="color:green">1.056032</span> <span style="color:green">1.060973</span> <span style="color:green">1.0553</span> |
 | Z | <span style="color:blue">0.06832</span> <span style="color:blue">0.065148</span> <span style="color:blue">0.064477</span> <span style="color:blue">0.065697</span> <span style="color:blue">0.066429</span> <span style="color:blue">0.066734</span> <span style="color:blue">0.062647</span> <span style="color:blue">0.062708</span> |
-
+|||
 > **You can use following java code to parse bytes[2] to int16:** `((bytes[1] << 0) & 0x00ff | (bytes[0] << 8) & 0x7f00);`
 
 ### Reading Battery Level
