@@ -132,10 +132,10 @@ Representation of the measurement package via accelerometer axis data:
 
 #### Example
 
-Let's take a measurement of 8 samples with the 2G accelerometer range.  
-The correction coefficient of 2G is 0.000061  
-8 -> 8\*3(for each axis) = 24 total samples  
-Each sample is represented by int16 -> 2\*24 -> 48 bytes
+> Let's take a measurement of 8 samples with the 2G accelerometer range.  
+> The correction coefficient of 2G is 0.000061  
+> 8 -> 8*3(for each axis) = 24 total samples  
+> Each sample is represented by int16 -> 2\*24 -> 48 bytes
 for the sake of simplicity we assume each ble payload is 32 bytes.
 Then you now you can close the indication after receiving 32 bytes.
 You can parse the payloads while reading the indication also. In this examples, we assume that we collect data and store into a buffer then process it later.
