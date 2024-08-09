@@ -1,6 +1,6 @@
-# Sensemore Infinity BLE protocol usage
+# <span style="color: rgb(240,95,34)">Sensemore Infinity BLE Protocol Usage</span>
 
-- [Sensemore Infinity BLE protocol usage](#sensemore-infinity-ble-protocol-usage)
+- [Sensemore Infinity BLE Protocol Usage](#sensemore-infinity-ble-protocol-usage)
 - [Scan](#scan)
 - [Connect](#connect)
 - [Configuration](#configuration)
@@ -26,16 +26,16 @@ You can interact with Sensemore Infinity by using  following BLE protocol detail
 When you send a measurement request to the Sensemore Infinity, it measures data and stores it into internat storage,
 after that you can read data and process in your environment. Sensemore works with battery, if you want to have maximum battery life you can also sleep device for a period of time. Measurement data contains three axial accelerometer data. Data parsing will be detailed in the following sections.
 
-## Scan
+## <span style="color: rgb(240,95,34)">Scan</span>
 
 In order to connect Sensemore Infinity you should scan for BLE devices first. We try our best to keep battery life longer so
 Sensemore Infinity sends advertising packets a little less often than usual. If you cant find the device in the first scan, consider increasing scan timeout.
 
-## Connect
+## <span style="color: rgb(240,95,34)">Connect</span>
 
 Bonding is disabled in Sensemore Infinity devices.  You only need to connect to the device to take measurements. Sensemore Infinity is battery powered sensor. Staying connected for too long can cause the battery level to drop quickly. In order to increase battery life we can sleep Sensemore device. We will be discuss it the following sections.
 
-## Configuration
+## <span style="color: rgb(240,95,34)">Configuration</span>
 
 Sensemore Infinity stores configuration inside and takes measurement according to the configuration.
 
@@ -45,7 +45,7 @@ There are three types of configuration
 - Samplie Size
 - Accelerometer Range
 
-### Writing Sampling Rate
+### <span style="color: rgb(240,95,34)">Writing Sampling Rate</span>
 
 - **Operation** Write Characteristic
 - **Characteristic** 55e9c0c3-1943-42ad-8b77-d33d1dee81e8
@@ -65,7 +65,7 @@ There are three types of configuration
 | 9                   | ~12800Hz    |
 | 10                  | ~25600Hz    |
 
-### Writing Sample Size
+### <span style="color: rgb(240,95,34)">Writing Sample Size</span>
 
 - **Operation** Write Characteristic
 - **Characteristic** 2a690bfd-9b2c-4011-875c-8be2637c8f0b
@@ -78,7 +78,7 @@ There are three types of configuration
 
  You can also read this characteristic to learn which value is written before.
 
-### Writing Accelerometer Range
+### <span style="color: rgb(240,95,34)">Writing Accelerometer Range</span>
 
 - **Operation** Write Characteristic
 - **Characteristic** e6b5fbf8-00a6-4770-8888-626fb73e0ba4
@@ -95,7 +95,7 @@ There are three types of configuration
 | 3                        | 8     | 0.000244       |
 | 4                        | 16    | 0.000488       |
 
-## Measurement
+## <span style="color: rgb(240,95,34)">Measurement</span>
 
 After writing neccessary configuration values, device will be ready to take measurements.
 
@@ -104,7 +104,7 @@ Taking a measurements consist of two steps. Starting a measurement and reading t
 You do not have to configure device for each measurement.
 Sensemore Infinity will use the previous configuration values to take measurements. You can also read back the configuration values and the data anytime you want.
 
-### Starting Measurement
+### <span style="color: rgb(240,95,34)">Starting Measurement</span>
 
 - **Operation** Indication
 - **Characteristic** e6b5fbf8-00a6-4770-8888-626fb73e0ba4
@@ -112,7 +112,7 @@ Sensemore Infinity will use the previous configuration values to take measuremen
 You can start a measurement when every you want. Sensemore Infinity will be using the configuration stored inside. When you start an indication to characteristic e6b5fbf8-00a6-4770-8888-626fb73e0ba4 Sensemore Infinity first remove neccessary space in the internalflash then starts sampling the data and storing into its internal flash
 After measurement is done successfully, Sensemore Infinity sends a random byte through indication then indication can be closed safely.
 
-## Reading Measurement
+## <span style="color: rgb(240,95,34)">Reading Measurement</span>
 
 - **Operation** Indication
 - **Characteristic** 552bfd36-8a69-42d1-b6ce-e1c0ea2137ef
@@ -120,7 +120,7 @@ After measurement is done successfully, Sensemore Infinity sends a random byte t
 
 If sensor is idle you can start reading anytime you want. You can handle payloads and interpret as int16 array, after receiving all payloads you can safely close the indication.
 
-### Parsing payloads
+### <span style="color: rgb(240,95,34)">Parsing payloads</span>
 
 Each payload consist of three axial samples and each samples data type is int16. It has the following representation.
 
@@ -130,7 +130,7 @@ Representation of the measurement package via accelerometer axis data:
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 2byte | 2byte | 2byte | 2byte | 2byte | 2byte | ... | 2byte | 2byte | 2byte |
 
-#### Example
+#### <span style="color: rgb(240,95,34)">Example</span>
 
 > Let's take a measurement of 8 samples with the 2G accelerometer range.  
 > The correction coefficient of 2G is 0.000061  
@@ -158,7 +158,7 @@ You can parse the payloads while reading the indication also. In this examples, 
 |||
 > **You can use following java code to parse bytes[2] to int16:** `((bytes[1] << 0) & 0x00ff | (bytes[0] << 8) & 0x7f00);`
 
-### Reading Battery Level
+### <span style="color: rgb(240,95,34)">Reading Battery Level</span>
 
 - **Operation** Read Characteristic
 - **Characteristic** 191341a6-3640-4dd7-9705-d7d02268ba81
@@ -166,7 +166,7 @@ You can parse the payloads while reading the indication also. In this examples, 
 - **Unit** mV
  In order to calculate voltage value, you should divide the result by 1000
 
-### Reading Temperature
+### <span style="color: rgb(240,95,34)">Reading Temperature</span>
 
 - **Operation** Read Characteristic
 - **Characteristic** 14afd82c-6a1c-4eb5-ab73-ea2afc64153b
@@ -175,7 +175,7 @@ You can parse the payloads while reading the indication also. In this examples, 
 
  In order to calculate celcius value, you should divide the result by 1000
 
-### Reading Calibrated Sampling Rate
+### <span style="color: rgb(240,95,34)">Reading Calibrated Sampling Rate</span>
 
 - **Operation** Read Characteristic
 - **Characteristic** 2c15e29a-0630-420f-a409-ad569b943068"
@@ -184,7 +184,7 @@ You can parse the payloads while reading the indication also. In this examples, 
 
  Sensemore Infinity calculates calibrated sampling rate on the fly, after each measurement you should ask for last calibrated sampling rate and use it for further calculations.
 
-## Reading Magnetometer Data
+## <span style="color: rgb(240,95,34)">Reading Magnetometer Data</span>
 
 - **Operation** Indication
 - **Characteristic** 1028b182-5110-4c53-b0e4-06f6999d2ede
@@ -193,7 +193,7 @@ You can parse the payloads while reading the indication also. In this examples, 
 Magnetometer is running sync with accelerometer measurement so it doesnt require any configuration.
 You can read magnetometer data after successfull measurement any time.
 
-### Sample Size and Sampling Rate
+### <span style="color: rgb(240,95,34)">Sample Size and Sampling Rate</span>
 
 While magnetometer is running sync with accelerometer, sample size and sampling rate is calculated accordingly.
 Following table shows the conversion rate with respect to accelerometer sampling rate.
@@ -214,7 +214,7 @@ You can read up to 4096 sample for each axis of magnetometer.
 |   Magnetometer <br>Sample Size | `MIN(Accelerometer Sample Size / Conversion Rate,4096)`     |
 | Magnetometer <br>Sampling Rate | `Accelerometer Calibrated Sampling Rate / Conversion Rate` |
 
-### Example Calculations
+### <span style="color: rgb(240,95,34)">Example Calculations</span>
 
 |        Accelerometer       |                          |                              |                     |  Magnetometer |             |
 |:--------------------------:|:------------------------:|:----------------------------:|---------------------|:-------------:|:-----------:|
@@ -232,7 +232,7 @@ You can read up to 4096 sample for each axis of magnetometer.
 |                      12800 |                    50000 |                        13327 |                  32 |           416 |        1562 |
 |                      25600 |                    50000 |                        26674 |                  64 |           416 |         781 |
 
-### Parsing Magnetometer
+### <span style="color: rgb(240,95,34)">Parsing Magnetometer</span>
 
 Magnetometer is also provide 3 axial values. Data parsing is also similar to accelerometer.
 Each payload consist of three axial samples and each samples data type is int16. It has the following representation.
@@ -243,7 +243,7 @@ Representation of the measurement package via accelerometer axis data:
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 2byte | 2byte | 2byte | 2byte | 2byte | 2byte | ... | 2byte | 2byte | 2byte |
 
-## Sleep
+## <span style="color: rgb(240,95,34)">Sleep</span>
 
 - **Operation** Write Characteristic
 - **Characteristic** f3b67640-58f3-436f-a8a8-240400eed98f
