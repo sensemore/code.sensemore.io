@@ -8,34 +8,36 @@ Sensemore DUCK is a compact IoT data
 acquisition hardware to collect process
 data not only vibration, temperature, and
 pressure but also whole analog data such
-as; mass flow rate, speed, current, etc. You
-can use the sensors with configurable
-sampling frequencies according to your
-needs.
+as; mass flow rate, speed, current, etc.
+DUCK supports a maximum sampling rate of 
+6400 Hz and it intelligently adjusts the
+sampling rate based on the number of 
+enabled channels.
 Send the collected data to the cloud via
-Wi-Fi. Monitor all metrics of data on
+Wi-Fi or Ethernet. Monitor all metrics of data on
 Sensemore Platform: LAKE. Find the root
 causes of your machinery anomalies either
 manually or by using predictive analytic
 tools.
 
-Measure real-time data at less sampling frequency for digital twin applications. Synchronously collected data are correlated with your models and monitored online. After data acquisition, Sensemore Platform LAKE offers ready advanced  signal processing tools to detect early- stage machinery failures required by expert analysts or plant operators.
+Measure real-time data at lower sampling frequency for digital twin applications. Synchronously collected data are correlated with your models and monitored online. After data acquisition, Sensemore Platform LAKE offers ready advanced  signal processing tools to detect early- stage machinery failures required by expert analysts or plant operators.
 
 
 ## Accessing Web Configuration Page
 
-Shortly after the Senseway is plugged in, it opens a wifi acces point network with **Senseway-CA&colon;B8&colon;XX&colon;XX&colon;XX&colon;XX** SSID'. Use default password to connect AP network, Open your browser and navigate to adress [http:\\\\192.168.4.1 ](http:\192.168.4.1)
+Shortly after the Duck is plugged in, it broadcats a Wi-Fi acces point network with **DUCK-CA&colon;B8&colon;DA&colon;XX&colon;XX&colon;XX** SSID'. Use default password "sensemore" to connect AP network, Open your browser and navigate to adress [http:\\\\192.168.4.1 ](http:\192.168.4.1)
 
 ## MQTT Broker and Certificates
 
-Senseway needs MQTT / TLS configuration. The MQTT Broker Server to be used must support TLS and have the required certificates for the senseway.
+Duck needs MQTT / TLS configuration and supports variety of authentication mechanisms including: plaintext MQTT, MQTTs with and without password, and MQTTs with Client certificate.  
+The MQTT Broker Server to be used must support TLS  and provide the following for certificate-based connections:
 
 -   MQTT endpoint (_mqtts: //my-mqtt-broker.server: 8883_)
 -   CA (CA certificate)
 -   Client Cert (a created and signed certificate from CA)
 -   Client Key (private key of the certificate generated through the CA)
 
-Required certificates and endpoint information are defined in 'Advance> MQTT' via the Senseway configuration page. Senseway uses these certificates for the future MQTT connections.
+Required certificates and endpoint information are defined in 'Advance> MQTT' via the Duck configuration page. Duck uses these certificates for the future MQTT connections.
 
 Details
 https://www.hivemq.com/blog/mqtt-security-fundamentals-tls-ssl/
@@ -43,18 +45,18 @@ https://www.hivemq.com/blog/mqtt-security-fundamentals-tls-ssl/
 ## NTP
 
 _Default: http://pool.ntp.org/_
-Time information is also used in the measurement messages sent by Senseway. Time synchronization is needed for this. For OnPremise installations, the time server can be defined from `Advance > NTP`.
+Time information is used in the measurement messages sent by Duck, therefore time synchronization is required. For OnPremise installations, the time server can be defined from `Advance > NTP`.
 
 
 ## Operations
 
-It explains which topics to use when communicating with Senseway and how messages should be interpreted.
+This section explains which topics to use when communicating with Duck and how messages should be interpreted.
 
 `Actor` sends `Payload` with `PayloadType` format to `Topic`
 
-### Scan
+### Information
 
-Senseway periodically initiates a scan for connected devices. Scan results are published periodically on MQTT. (~ 1min)
+When Duck first wakes up, it publishes an status message to with basic information about the device.
 
 <table>
 <tr>
@@ -66,26 +68,34 @@ Senseway periodically initiates a scan for connected devices. Scan results are p
 </tr>
 <tr>
 <td>
-Senseway
+Duck
 </td>
 
-<td><b>prod/gateway/&lt;DeviceMac&gt;/scanDevice</b></td>
+<td><b>sensemore/&lt;DeviceMac&gt;/info/accepted</b></td>
 
-<td>json</td>
+<td>JSON</td>
 <td>
 
 ```json
 {
-	"<DEVICE-MAC>": {
-		"type": "<DEVICE_TYPE>",
-		"rssi": "<RSSI>",
-		"status": "<STATUS>"
-	},
-	"<DEVICE-MAC2>": {
-		"type": "<DEVICE_TYPE>",
-		"rssi": "<RSSI>",
-		"status": "<STATUS>"
-	}
+  "Product": "Duck",
+  "Current Running Application": "<DUCK_VERSION>",
+  "Version": "<FIRMWARE_VERSION>",
+  "Compile Date": "<FIRMWARE_COMPILE_DATE>",
+  "Compile Time": "<FIRMWARE_COMPILE_TIME>",
+  "ESP-IDF Version": "<ESPRESSIF_IDF_VERSION>",
+  "Network Mode": "<SELECTED_NETWORK_ADAPTOR>",
+  "RSSI": <RECEIVED_SIGNAL_STRENTGH_INDICATOR>,
+  "Local IP": "<ASSIGNED_LOCAL_IP>",
+  "Network MAC": "<NETWORK_MAC_ADDRESS>",
+  "Last Reset Reason": "<RESET_REASON>",
+  "Runtime MS": <TIME_SINCE_LAST_RESET>,
+  "Memory Info": {
+    "Total Free Bytes": <STORAGE_CAPACITY>,
+    "Total Allocated Bytes": <USABLE_STORAGE>,
+    "Min Free Bytes": <MIN_FREE_BTYES>,
+    "Largest Free Bytes": <LARGEST_FREE_BYTES>
+  }
 }
 ```
 
@@ -94,17 +104,24 @@ Senseway
 
 ```json
 {
-	"CA:B8:31:00:00:1A":{
-	"type":"WIRED",
-	"rssi":"-19",
-	"status":"Ready"
-	},
-	{
-	"CA:B8:31:00:00:20":{
-	"type":"WIRED",
-	"rssi":"-19",
-	"status":"Measuring"
-	},
+  "Product": "Duck",
+  "Current Running Application": "Duck-3.0.0",
+  "Version": "3.0.0",
+  "Compile Date": "Jan 8 2018",
+  "Compile Time": "12:00:00",
+  "ESP-IDF Version": "v5.1.2",
+  "Network Mode": "WIFI",
+  "RSSI": -56,
+  "Local IP": "192.168.1.153",
+  "Network MAC": "00:00:00:00:00:00",
+  "Last Reset Reason": "POWERON",
+  "Runtime MS": 3244190,
+  "Memory Info": {
+    "Total Free Bytes": 4084904,
+    "Total Allocated Bytes": 384008,
+    "Min Free Bytes": 4038248,
+    "Largest Free Bytes": 3997696
+  }
 }
 ```
 
@@ -112,7 +129,9 @@ Senseway
 </tr>
 </table>
 
-### Requesting Senseway Version
+### Firmware Version
+
+Duck firmware version is included in the info message.
 
 <table>
 <tr>
@@ -127,13 +146,13 @@ Senseway
 User
 </td>
 <td>
-<b> prod/gateway/&lt;DeviceMac&gt;/client/SENSEWAY/version</b>
+<b> sensemore/&lt;DeviceMac&gt;/info</b>
 </td>
 <td>
-text
+JSON
 </td>
 <td>
-<i>empty text</i>
+<i>Empty JSON</i>
 </td>
 <td>
 <i></i>
@@ -141,142 +160,96 @@ text
 </tr>
 <tr>
 	<td>
-	Senseway
+	Duck
 	</td>
 	<td>
-	<b> prod/gateway/&lt;DeviceMac&gt;/client/SENSEWAY/version/accepted</b>
+	<b> sensemore/&lt;DeviceMac&gt;/info/accepted</b>
 	</td>
 	<td>
-	text
+	JSON
 	</td>
 	<td>
-	<i>version text</i>
+	<i>Info JSON</i>
 	</td>
 	<td>
-	1.1.0
+	"Version": "3.0.0"
 	</td>
 </tr>
 </table>
 
+### Sensor Configuration
 
-
-## Measurement and Configuration
-
-The measurement process starts with sending a configuration to the end device, then the measurement reading process begins. Measurement reading process is done with chunks. The subscriber user is required to interpret and parse the measurement reading packets in the correct order.
-
-
-## Measurement
-
-The measurement process starts with sending a configuration to the end device, then the measurement reading process begins. Measurement reading process is done with chunks. The subscriber user is required to interpret and parse the measurement reading packets in the correct order.
-
-### Measurement Configuration
+Duck's sensor configuration can be viewed or changed over MQTT with the following topics.
 
 <table>
 <tr>
-<th>
-Parameters
-</th>
-<th>
-Valid values
-</th>
-<th>
-Explanation
-</th>
+<th>Actor</th>
+<th>Topic</th>
+<th>Payload Type</th>
+<th>Payload Schema</th>
+<th>Example</th>
 </tr>
 <tr>
 <td>
-samplingCoefficient
+User
 </td>
 <td>
-1(reserved, must use only 1)
+<b> sensemore/&lt;DeviceMac&gt;/config/get</b>
 </td>
 <td>
-1
-</td>
-</tr>
-<tr>
-<td>
-baseSamplingFrequency
+JSON
 </td>
 <td>
-800,1600,3200,6400,12800,25600
+<i>Empty JSON</i>
 </td>
 <td>
-~800Hz<br>~1600Hz<br>~3200Hz<br>~6400Hz<br>~12800Hz <br> ~25600Hz
+<i></i>
 </td>
 </tr>
 <tr>
-<td>
-sampleSize
-</td>
-<td>
-100 - 1,000,000 
-</td>
-<td>
-
-</td>
+	<td>
+	Duck
+	</td>
+	<td>
+	<b> sensemore/&lt;DeviceMac&gt;/config/get/accepted</b>
+	</td>
+	<td>
+	JSON
+	</td>
+	<td>
+	<i>Config JSON</i>
+	</td>
+	<td>
+	{
+  "heartbeat_interval_min": 98,
+  "sensor_groups": [
+    {
+      "sensor_group_code": "fe1e2714-5ac0-404c-9eb1-20f3a1d2a214",
+      "sensors": [
+        {
+          "sensor": "accelerometer",
+          "channels": [
+            0
+          ],
+          "channel_codes": [
+            "accelerometer_x"
+          ],
+          "min_max_voltage": [
+            -5,
+            5
+          ],
+          "min_max_value": [
+            -1000,
+            1000
+          ],
+          "trigger_differancel_rate": 2
+        }
+      ]
+    }
+  ]
+}
+	</td>
 </tr>
-<tr>
-<tr>
-<td>
-external
-</td>
-<td>
-true,false
-</td>
-<td>
-Indicates using external voltage source
-</td>
-</tr>
-<tr>
-<td>
-channels
-</td>
-<td>
-[0,1,2,3,4,5,6,7]
-</td>
-<td>
-Indicates which channels are enabled
-</td>
-</tr>
-<tr>
-<td>
-gain
-</td>
-<td>
-1
-</td>
-<td>
-Indicates gain
-</td>
-</tr>
-<tr>
-<td>
-boost
-</td>
-<td>
-3
-</td>
-<td>
-Indicates boost
-</td>
-</tr>
-<tr>
-<td>
-objectId
-</td>
-<td>
-https://docs.mongodb.com/manual/reference/method/ObjectId/</td>
-<td>
-measurement identier
-</td>
-</tr>
-</table>
-
-<table>
-
-### Topics
-
 </table>
 
 <table>
@@ -292,222 +265,190 @@ measurement identier
 User
 </td>
 <td>
-<b> prod/gateway/&lt;SensewayID&gt;/device/&lt;DeviceMac&gt;/measure/&lt;objectId&gt;</b>
+<b> sensemore/&lt;DeviceMac&gt;/config/set</b>
 </td>
 <td>
-text
+JSON
 </td>
-
 <td>
-
-```JSON
+<i>Config JSON</i>
+</td>
+<td>
+<i>
 {
-	"samplingCoefficient": 1,
-	"baseSamplingFrequency": 6400,
-	"external": false,
-	"sampleSize": 1000,
-	"channels": [1,2,3],
-	"gain" : 1,
-	"boost" : 3
+  "heartbeat_interval_min": 15,
+  "sensor_groups": [
+    {
+      "sensor_group_code": "fe1e2714-5ac0-404c-9eb1-20f3a1d2a214",
+      "sensors": [
+        {
+          "sensor": "accelerometer",
+          "channels": [
+            0
+          ],
+          "channel_codes": [
+            "accelerometer_x"
+          ],
+          "min_max_voltage": [
+            -5,
+            5
+          ],
+          "min_max_value": [
+            -1000,
+            1000
+          ],
+          "trigger_differancel_rate": 2
+        }
+      ]
+    }
+  ]
 }
-```
+</i>
 </td>
 </tr>
 <tr>
 	<td>
-	Senseway
+	Duck
 	</td>
 	<td>
-	<b>   prod/gateway/&lt;SensewayID&gt;/device/&lt;DeviceMac&gt;/measure/&lt;objectId&gt;/accepted</b>
+	<b> sensemore/&lt;DeviceMac&gt;/config/set/accepted</b>
 	</td>
 	<td>
-	text
+	JSON
 	</td>
 	<td>
-	<i>empty text</i>
+	<i>Status JSON</i>
 	</td>
 	<td>
-	</td>
-</tr>
-<tr>
-	<td>
-	Senseway
-	</td>
-	<td>
-	<b> prod/gateway/&lt;SensewayID&gt;/device/&lt;DeviceMac&gt;/measure/&lt;objectId&gt;/rejected</b>
-	</td>
-	<td>
-	text
-	</td>
-	<td>
-	<i>error message</i>
-	</td>
-	<td>
-	NO_DEVICE
-	</td>
-</tr>
-<tr>
-	<td>
-	Senseway
-	</td>
-	<td>
-	<b> prod/device/&lt;DeviceMac&gt;/measure/&lt;objectId&gt;/chunk/&lt;chunkIndex&gt;</b>
-	</td>
-	<td>
-	binary
-	</td>
-	<td>
-	<i>Binary chunk message</i>
-	</td>
-	<td>
-	a0 43 46 04 b7 fc f1 43 03 04 b1 fc 94 43 04 04
-	</td>
-</tr>
-<tr>
-<td>
-Senseway
-</td>
-<td>
-<b> prod/gateway/&lt;SensewayID&gt;/device/&lt;DeviceMac&gt;/measure/&lt;objectId&gt;/done</b>
-</td>
-<td>
-json
-</td>
-<td>
-
-```json
-{
-	"STAT": {
-		"MEASUREMENT_START_TIME": "<Hour: Minute: Second: Day: Month: Year>",
-		"CALIBRATED_SAMPLINGRATE": "<calibratedSamplingRate>",
-		"CHUNK_COUNT":10
-	},
-}
-```
-
-</td>
-<td>
-
-```json
-{
-	"STAT": {
-		"MEASUREMENT_START_TIME": "12:36:10:22:00:2021",
-		"CALIBRATED_SAMPLINGRATE": 6400,
-		"CHUNK_COUNT":10
-	},
-	
-}
-```
-
-</td>
-</tr>
-</table>
-
-### Chunk ordering and interpretation
-
-The measurements are divided into chunks and sent binary, chunkIndex is an index that counts down to 0. For example, we wanted a measurement of 10000 samples. We would see the following messages on MQTT.
-
-> prod/gateway/CA&colon;B8&colon;28&colon;00&colon;00&colon;08/device/CA&colon;B8&colon;31&colon;00&colon;00&colon;1A/measure/098765432109876543214321 <br>
-> {
-    "samplingCoefficient": 1,
-    "baseSamplingFrequency": 6400,
-    "external": false,
-    "sampleSize": 1000,
-    "channels": [1,2,3],
-	"gain" : 1,
-	"boost" : 3
-}
-
-> prod/gateway/CA&colon;B8&colon;28&colon;00&colon;00&colon;08/device/CA&colon;B8&colon;31&colon;00&colon;00&colon;1A/measure/098765432109876543214321/accepted<br>
-
-> prod/device/CA&colon;B8&colon;31&colon;00&colon;00&colon;1A/measure/098765432109876543214321/chunk/2<br>
-> a0 43 46 04 b7 fc f1 43 03 04 b1 fc 94 43 04 04
-
-> prod/device/CA&colon;B8&colon;31&colon;00&colon;00&colon;1A/measure/098765432109876543214321/chunk/1<br>
-> 21 04 99 fc f0 43 35 04 d5 fc a2 43 41 04 c6 fc
-
-> prod/device/CA&colon;B8&colon;31&colon;00&colon;00&colon;1A/measure/098765432109876543214321/chunk/0<br>
-> b1 fc a8 43 60 04 a8 fc a9 43 2c 04 c3 fc b2 43
-
-> prod/gateway/CA&colon;B8&colon;28&colon;00&colon;00&colon;08/device/CA&colon;B8&colon;31&colon;00&colon;00&colon;1A/measure/098765432109876543214321/done<br>
-
-```json
-{
-	"STAT": {
-		"MEASUREMENT_START_TIME": "12:36:10:22:00:2021",
-		"CALIBRATED_SAMPLINGRATE": 6400,
-		"CHUNK_COUNT":10
-	},
-}
-```
-
-### Post Processing
-
-The signal data from the device is uploaded in the form of chunks. Once the chunks are combined, the raw data needs to be merged. Each sample is interpreted as an unsigned 32-bit value. The sample format is shown below.
-
-<table>
-<tr>
-<td colspan=3 textalign="center">
-32 bit
-</td>
-<tr>
-<td>
-Channel(4bit)
-</td>
-<td>
-Sign(4bit)
-</td>
-<td>
-Data(24bit)
-</td>
-</tr>
-</table>
-
-Channel:integer
-Sign: Eğer 0'dan farklı ise negatif, 0 ise pozitif
-
-#### Parsing Data
-
-Each data should be parsed and normalized according to ADC min-max values.
-Following example show data parsing for each data
-
-```javsacript
-//helper function
-function adc_conversion_helper(x, in_min, in_max, vref) {
-    let out_min = -2 * vref;
-    let out_max = 2 * vref;
-    if (x < in_min) x = in_min;
-    if (x > in_max) x = in_max;
-    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-}
-
-const ADC_IN_MIN = -16777216;
-const ADC_IN_MAX = 16777215;
-let values = []
-for(let i=0; i<data.length; i++){
-	let x = data[i];
-	let channel_id = ((x >> 28) & 0x0f);
-	let isNegative = (((x >> 24) & 0x0f)) != 0;
-	let adc_data = (x & 0xffffff);
-
-	if (isNegative) {
-		adc_data = adc_data + ADC_IN_MIN;
+	{
+	"status": "OK, device will be restarted"
 	}
+	</td>
+</tr>
+</table>
 
-	//convert adc data to voltage using voltage reference
-	let voltageReference = isExternal ? 2.5 : 2.4; 
+### Measurement
 
-	adc_data = 4 * adc_conversion_helper(adc_data, ADC_IN_MIN, ADC_IN_MAX, voltageReference);
-	
-	values.push([channel_id,adc_data])
+Duck device is designed for high-performance data acquisition with multiple ways to trigger measurements. It continuously collects data and evaluates conditions for publishing measurements based on the following mechanisms:  
+**1.	Heartbeat:**
+If no measurement has been published within a time period exceeding the configured heartbeat value, Duck automatically publishes a measurement.  
+**2.	Trigger Difference:**
+Duck publishes a measurement when the difference between the current and previous measurements exceeds the configured percentage threshold. The Trigger Difference can be adjusted in the device’s configuration settings.  
+**3.	Sensemore Lake:**
+Users can send manual measurement requests through the Sensemore Lake platform.  
+**4.	MQTT:**
+Manual measurement requests can also be sent via MQTT. Details about the MQTT topics are provided in down below.
+
+<table>
+<tr>
+<th>Actor</th>
+<th>Topic</th>
+<th>Payload Type</th>
+<th>Payload Schema</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+User
+</td>
+<td>
+<b> sensemore/&lt;DeviceMac&gt;/device/&lt;DeviceMac&gt;/measure/&lt;MEASUREMENT_UUID&gt;</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>Empty JSON</i>
+</td>
+<td>
+<i></i>
+</td>
+</tr>
+<tr>
+	<td>
+	Duck
+	</td>
+	<td>
+	<b> sensemore/&lt;DeviceMac&gt;/device/&lt;DeviceMac&gt;/measure/&lt;MEASUREMENT_UUID&gt;/accepted<b>
+	</td>
+	<td>
+	JSON
+	</td>
+	<td>
+	<i>Status JSON</i>
+	</td>
+	<td>
+	{
+		"status": "initiated"
+	}	
+	</td>
+	<tr>
+	<td>
+	Duck
+	</td>
+	<td>
+	<b> sensemore/&lt;DeviceMac&gt;/device/&lt;DeviceMac&gt;/measure/&lt;MEASUREMENT_UUID&gt;/metadata<b>
+	</td>
+	<td>
+	JSON
+	</td>
+	<td>
+	<i>Metadata JSON</i>
+	</td>
+	<td>
+	{
+  "measurement_uid": "f86e2b10-6475-42ed-95ab-b37fe24ca888",
+  "calibrated_sampling_rate": 6403,
+  "sampling_rate": 6403,
+  "unixtimestamp": "1734094422",
+  "device-mac": "CA:B8:DA:DE:AD:00",
+  "version": "3.0.0",
+  "reason": "measurement_request",
+  "channel0_rms": 1.504085898399353,
+  "channel1_rms": -1,
+  "channel2_rms": -1,
+  "channel3_rms": -1,
+  "channel4_rms": -1,
+  "channel5_rms": -1,
+  "channel6_rms": -1,
+  "channel7_rms": -1,
+  "config": {
+    "heartbeat_interval_min": 98,
+    "sensor_groups": [
+      {
+        "sensor_group_code": "fe1e2714-5ac0-404c-9eb1-20f3a1d2a214",
+        "sensors": [
+          {
+            "sensor": "accelerometer",
+            "channels": [
+              0
+            ],
+            "channel_codes": [
+              "accelerometer_x"
+            ],
+            "min_max_voltage": [
+              -5,
+              5
+            ],
+            "min_max_value": [
+              -1000,
+              1000
+            ],
+            "trigger_differancel_rate": 2
+          }
+        ]
+      }
+    ]
+  }
 }
+	</td>
+</tr>
+</tr>
+</table>
 
-```
+## Firmware Update Over the Air (OTA)
 
-
-## Device Firmware Update(OTA)
-
-Sensemore end node devices accept firmware update over http. In order to start firmware update on end-node device, valid binary link sent to firmware update topic.
+Sensemore devices accept firmware update over HTTP. In order to start firmware update on the device, valid binary link sent to firmware update topic.
 
 <table>
 <tr>
@@ -522,55 +463,67 @@ Sensemore end node devices accept firmware update over http. In order to start f
 User
 </td>
 
-<td><b>lake/gateway/&lt;DeviceMac&gt;/device/&lt;DeviceMac&gt;/ota</b></td>
-<td>string</td>
+<td><b>sensemore/&lt;DeviceMac&gt;/ota</b></td>
+<td>JSON</td>
 <td>
 <i>http url</i>
 </td>
 <td>
-http://ftp.mydomain.com/Wired1.0.10.gbl
+{
+  "url" : "http://link.mydomain.com/Duck.bin"  
+}
 </td>
 </tr>
 <tr>
 <td>
-Senseway
+Duck
 </td>
 
-<td><b>lake/gateway/&lt;DeviceMac&gt;/device/&lt;DeviceMac&gt;/ota/accepted</b></td>
-<td><i>empty</i></td>
-<td><i>empty</i></td>
-<td></td>
+<td><b>sensemore/&lt;DeviceMac&gt;/ota/accepted</b></td>
+<td><i>JSON</i></td>
+<td><i>Status JSON</i></td>
+<td>
+{
+  "status": "OTA accepted"
+}
+</td>
 </tr>
 <tr>
 <td>
-Senseway
+Duck
 </td>
 
-<td><b>lake/gateway/&lt;DeviceMac&gt;/device/&lt;DeviceMac&gt;/ota/rejected</b></td>
-<td><i>Error Code</i></td>
-<td><i>NO_DEVICE</i></td>
-<td></td>
+<td><b>sensemore/&lt;DeviceMac&gt;/ota/rejected</b></td>
+<td><i>Text</i></td>
+<td><i>Error Text</i></td>
+<td>
+Invalid payload! Url can't be null. Valid payload scheme: {
+	"url":"http://example.com"
+}
+</td>
 </tr>
 <tr>
 <td>
-Senseway
+Duck
 </td>
-<td><b>lake/gateway/&lt;DeviceMac&gt;/device/&lt;DeviceMac&gt;/ota/done</b></td>
-<td><i>empty</i></td>
-<td><i>empty</i></td>
-<td></td>
+<td><b>lake/gateway/&lt;DeviceMac&gt;/restart</b></td>
+<td><i>JSON</i></td>
+<td><i>Status JSON</i></td>
+<td>
+{
+  "status": "Restarting device due to OTA"
+}
+</td>
 </tr>
 </table>
 
 > Caution: A binary url should be `http` not ~`https`~
 
-Senseway downloads the binary from given url and start firmware update for particular device.
-
-Firmware updates led sequence of wired end nodes shown in the <a href="#/wired?id=_1wired-device-statuses-and-led-indicator">Wired documentation.</a>
+Duck downloads the binary from given url and start firmware update.
 
 ## TLS
 
-Senseway devices implement TLS for a secure mqtt connection. If you manage your mqtt broker yourself, it is necessary to configure the broker's TLS and generate the required certificates.
+Duck devices implement TLS for a secure mqtt connection. If you manage your mqtt broker yourself, it is necessary to configure the broker's TLS and generate the required certificates.
 
 ### Mosquitto Configuration
 
@@ -624,7 +577,7 @@ client.csr `openssl req -new -out client.csr -key client.key`
 
 client.crt `openssl x509 -req -in client.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out client.crt -days 360`
 
-Now, MQTT clients (Senseway) can establish a secure connection to the mqtt server using `ca.crt`,` client.crt` and `client.key`.
+Now, MQTT clients (Duck) can establish a secure connection to the mqtt server using `ca.crt`,` client.crt` and `client.key`.
 
 ## Tips
 
@@ -632,7 +585,7 @@ Now, MQTT clients (Senseway) can establish a secure connection to the mqtt serve
 
 -   Configuration page or open the laptop to the desktop computer offers a more robust link.
 
--   If you can manage the Wifi network, defining a static ip for the senseway can prevent DHCP-related problems that may occur in the future. (Weak modems, device networking problems).
+-   If you can manage the Wifi network, defining a static ip for the Duck can prevent DHCP-related problems that may occur in the future. (Weak modems, device networking problems).
 
 -   Storing measurement signal data in any database may cause various difficulties due to the data shape, it will be convenient to save directly in the file system.
 
