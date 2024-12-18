@@ -1,8 +1,6 @@
-<h1>Sensemore DUCK </h1>
+# <span style="color: rgb(240,95,34)">Duck Integration Document</span>
 <img src="images/Sensemore_product_duck.gif"/>
 
-
-<h2>Introduction</h2>
 
 Sensemore DUCK is a compact IoT data
 acquisition hardware to collect process
@@ -23,12 +21,20 @@ tools.
 Measure real-time data at lower sampling frequency for digital twin applications. Synchronously collected data are correlated with your models and monitored online. After data acquisition, Sensemore Platform LAKE offers ready advanced  signal processing tools to detect early- stage machinery failures required by expert analysts or plant operators.
 
 
-## Accessing Web Configuration Page
+### <span style="color: rgb(240,95,34)">Accessing Configuration Page</span>
 
-Shortly after the Duck is plugged in, it broadcats a Wi-Fi acces point network with **DUCK-CA&colon;B8&colon;DA&colon;XX&colon;XX&colon;XX** SSID'. Use default password "sensemore" to connect AP network, Open your browser and navigate to adress [http:\\\\192.168.4.1 ](http:\192.168.4.1)
+Shortly after the Duck is plugged in, it broadcats a Wi-Fi acces point network with **DUCK-CA&colon;B8&colon;DA&colon;XX&colon;XX&colon;XX** SSID'. Use default password "sensemore" to connect to the AP. Your device will launch configuration page in captive portal. If your device does not automatically launch captive portal, navigate to [http:\\\\192.168.4.1 ](http:\192.168.4.1) in your default browser. 
 
-## MQTT Broker and Certificates
+## <span style="color: rgb(240,95,34)">Connectivity</span>
 
+### <span style="color: rgb(240,95,34)">Wi-Fi & Ethernet</span>
+Duck supports both Wi-Fi and Ethernet for network connections. By default, the network adapter is set to Wi-Fi, but this can be modified in the “Connectivity Settings” section of the Configuration page
+
+### <span style="color: rgb(240,95,34)">NTP</span>
+Time information is also used in the measurement messages sent by Duck. Time synchronization is needed for this. For OnPremise installations, the time server can be defined from `Advance > NTP`.  
+_Default: <http://pool.ntp.org/>_
+
+### <span style="color: rgb(240,95,34)">MQTT</span>
 Duck needs MQTT / TLS configuration and supports variety of authentication mechanisms including: plaintext MQTT, MQTTs with and without password, and MQTTs with Client certificate.  
 The MQTT Broker Server to be used must support TLS  and provide the following for certificate-based connections:
 
@@ -37,26 +43,24 @@ The MQTT Broker Server to be used must support TLS  and provide the following fo
 -   Client Cert (a created and signed certificate from CA)
 -   Client Key (private key of the certificate generated through the CA)
 
-Required certificates and endpoint information are defined in 'Advance> MQTT' via the Duck configuration page. Duck uses these certificates for the future MQTT connections.
+Required certificates and endpoint information are defined at 'Advanced > MQTT' in the Duck web portal. Duck uses these certificates for the future MQTT connections.
 
 Details
 https://www.hivemq.com/blog/mqtt-security-fundamentals-tls-ssl/
 
-## NTP
-
-_Default: http://pool.ntp.org/_
-Time information is used in the measurement messages sent by Duck, therefore time synchronization is required. For OnPremise installations, the time server can be defined from `Advance > NTP`.
+### <span style="color: rgb(240,95,34)">HTTP</span>
+HTTP here..
 
 
-## Operations
+## <span style="color: rgb(240,95,34)">MQTT Integration</span>
 
-This section explains which topics to use when communicating with Duck and how messages should be interpreted.
+This section explains which topics to use when communicating with Duck over MQTT and how messages should be interpreted.
 
-`Actor` sends `Payload` with `PayloadType` format to `Topic`
+`Aktör` sends `Payload` with `PayloadType` format to `Topic`
 
-### Information
+### <span style="color: rgb(240,95,34)">Information</span>
 
-When Duck first wakes up, it publishes an status message to with basic information about the device.
+When Duck powers on, it publishes a status message containing basic device information including Firmware Verion. This status message can also be retrieved using the following topic:
 
 <table>
 <tr>
@@ -124,14 +128,13 @@ Duck
   }
 }
 ```
-
 </td>
 </tr>
 </table>
 
-### Firmware Version
+### <span style="color: rgb(240,95,34)">Firmware Update Over the Air (OTA)</span>
 
-Duck firmware version is included in the info message.
+Sensemore devices accept firmware update over HTTP. In order to start firmware update on the device, valid binary link sent to firmware update topic. Senseway downloads the binary from given url and start firmware update.
 
 <table>
 <tr>
@@ -145,35 +148,67 @@ Duck firmware version is included in the info message.
 <td>
 User
 </td>
+
+<td><b>sensemore/&lt;DeviceMac&gt;/ota</b></td>
+<td>JSON</td>
 <td>
-<b> sensemore/&lt;DeviceMac&gt;/info</b>
+<i>http url</i>
 </td>
 <td>
-JSON
-</td>
-<td>
-<i>Empty JSON</i>
-</td>
-<td>
-<i></i>
+
+```json
+{
+  "url" : "http://link.mydomain.com/Duck.bin"  
+}
+```
 </td>
 </tr>
 <tr>
-	<td>
-	Duck
-	</td>
-	<td>
-	<b> sensemore/&lt;DeviceMac&gt;/info/accepted</b>
-	</td>
-	<td>
-	JSON
-	</td>
-	<td>
-	<i>Info JSON</i>
-	</td>
-	<td>
-	"Version": "3.0.0"
-	</td>
+<td>
+Senseway
+</td>
+
+<td><b>sensemore/&lt;DeviceMac&gt;/ota/accepted</b></td>
+<td><i>JSON</i></td>
+<td><i>Status JSON</i></td>
+<td>
+
+```json
+{
+  "status": "OTA accepted"
+}
+```
+</td>
+</tr>
+<tr>
+<td>
+Senseway
+</td>
+
+<td><b>sensemore/&lt;DeviceMac&gt;/ota/rejected</b></td>
+<td><i>Text</i></td>
+<td><i>Error Text</i></td>
+<td>
+Invalid payload! Url can't be null. Valid payload scheme: {
+	"url":"http://link.mydomain.com/Senseway.bin"
+}
+</td>
+</tr>
+<tr>
+<td>
+Senseway
+</td>
+<td><b>sensemore/&lt;DeviceMac&gt;/restart</b></td>
+<td><i>JSON</i></td>
+<td><i>Status JSON</i></td>
+<td>
+
+```json
+{
+  "status": "Restarting device due to OTA"
+}
+```
+</td>
 </tr>
 </table>
 
@@ -445,149 +480,3 @@ JSON
 </tr>
 </tr>
 </table>
-
-## Firmware Update Over the Air (OTA)
-
-Sensemore devices accept firmware update over HTTP. In order to start firmware update on the device, valid binary link sent to firmware update topic.
-
-<table>
-<tr>
-<th>Actor</th>
-<th>Topic</th>
-<th>Payload Type</th>
-<th>Payload Schema</th>
-<th>Example</th>
-</tr>
-<tr>
-<td>
-User
-</td>
-
-<td><b>sensemore/&lt;DeviceMac&gt;/ota</b></td>
-<td>JSON</td>
-<td>
-<i>http url</i>
-</td>
-<td>
-{
-  "url" : "http://link.mydomain.com/Duck.bin"  
-}
-</td>
-</tr>
-<tr>
-<td>
-Duck
-</td>
-
-<td><b>sensemore/&lt;DeviceMac&gt;/ota/accepted</b></td>
-<td><i>JSON</i></td>
-<td><i>Status JSON</i></td>
-<td>
-{
-  "status": "OTA accepted"
-}
-</td>
-</tr>
-<tr>
-<td>
-Duck
-</td>
-
-<td><b>sensemore/&lt;DeviceMac&gt;/ota/rejected</b></td>
-<td><i>Text</i></td>
-<td><i>Error Text</i></td>
-<td>
-Invalid payload! Url can't be null. Valid payload scheme: {
-	"url":"http://example.com"
-}
-</td>
-</tr>
-<tr>
-<td>
-Duck
-</td>
-<td><b>lake/gateway/&lt;DeviceMac&gt;/restart</b></td>
-<td><i>JSON</i></td>
-<td><i>Status JSON</i></td>
-<td>
-{
-  "status": "Restarting device due to OTA"
-}
-</td>
-</tr>
-</table>
-
-> Caution: A binary url should be `http` not ~`https`~
-
-Duck downloads the binary from given url and start firmware update.
-
-## TLS
-
-Duck devices implement TLS for a secure mqtt connection. If you manage your mqtt broker yourself, it is necessary to configure the broker's TLS and generate the required certificates.
-
-### Mosquitto Configuration
-
-Referance:
-http://www.steves-internet-guide.com/mosquitto-tls/
-https://mosquitto.org/man/mosquitto-conf-5.html
-
-Example configuration of ` mosquitto.conf`
-
-```
-port 8883
-cafile C:\mosquitto\certs\ca.crt
-keyfile C:\mosquitto\certs\server.key
-certfile C:\mosquitto\certs\server.crt
-tls_version tlsv1.2
-```
-
-### Certificate Generation
-
-Referance:
-http://www.steves-internet-guide.com/creating-and-using-client-certificates-with-mqtt-and-mosquitto/
-Requirement: `openssl`
-
-#### CA Generation
-
-ca.key: `openssl genrsa -des3 -out ca.key 2048`
-
-ca.crt: `openssl req -new -x509 -days 1826 -key ca.key -out ca.crt`
-
-#### Server Certificate Generation
-
-server.key `openssl genrsa -out server.key 2048`
-
-server.csr ` openssl req -new -out server.csr -key server.key`
-
-> While generating a Certificate Signing Request (CSR), you should write the domain name of your broker server in the "common name" field in the form filled in. If your server does not have a domain name, you must type in the IP address directly.
-
-Normally, for certificate generation, the CRS is sent to the CA and the CA signs the CRS and generates a valid certificate. In this example, we can generate the certificate because we are the CA.
-
-server.crt `openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out server.crt -days 3600`
-
-Now `ca.crt`,`server.crt` and `server.key` can be used to configure mosquitto service with TLS support.
-
-#### Client Certificate Generation
-
-client.key `openssl genrsa -out client.key 2048`
-
-client.csr `openssl req -new -out client.csr -key client.key`
-
-> While generating a Certificate Signing Request (CSR), you should write the domain name of your broker server in the "common name" field in the form filled in. If your server does not have a domain name, you must type in the IP address directly.
-
-client.crt `openssl x509 -req -in client.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out client.crt -days 360`
-
-Now, MQTT clients (Duck) can establish a secure connection to the mqtt server using `ca.crt`,` client.crt` and `client.key`.
-
-## Tips
-
--   If you are using mosquitto as a broker, you can view detailed logs by launching the application in verbose mode to solve potential problems.
-
--   Configuration page or open the laptop to the desktop computer offers a more robust link.
-
--   If you can manage the Wifi network, defining a static ip for the Duck can prevent DHCP-related problems that may occur in the future. (Weak modems, device networking problems).
-
--   Storing measurement signal data in any database may cause various difficulties due to the data shape, it will be convenient to save directly in the file system.
-
--   You should check beforehand that your wifi network is healthy and that you have access to mqtt servers.
-
