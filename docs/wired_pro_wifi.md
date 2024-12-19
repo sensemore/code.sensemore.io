@@ -1,15 +1,21 @@
 # <span style="color: rgb(240,95,34)">Wired Pro Wi-Fi Integration Documentation</span>  
 
-:exclamation::exclamation: Wired Pro has 2 operational modes
+### <span style="color: rgb(240,95,34)">Wired Pro Operational Modes</span>
+
+:exclamation: Wired Pro is a versatile IoT data acquisition device with two distinct operational modes:  
+**1. RS485 mode:**  
+In this mode, Wired Pro connects to Senseway (or other gateways) via an RS485 cable. It is controlled by the gateway and operates as a 3-axis accelerometer, magnetometer, and temperature sensor. For more details, refer to the [Senseway Integration Documentation](senseway_system_integration.md).  
+**2. Wi-Fi mode:**  
+In Wi-Fi mode, Wired Pro functions as its own gateway, managing its sensors independently. This documentation focuses on the Wi-Fi mode.
 
 <img src="images/Sensemore_product_wiredpro.gif"/>  
 
-Wired Pro wired pro wired pro
-
-Before starting to speak about Wired Pro system integration, configure your Wired Pro's MQTT, NTP and HTTP settings. 
+Wired Pro Wi-Fi is a combined gateway and sensor array capable of capturing 3-axis accelerometer, magnetic field, and temperature readings. It can process measurements, apply measurement strategies, and upload data to the cloud. Powered by a 5-36V DC input, Wired Pro Wi-Fi operates without the need for charging.
 
 Chekout Wired Pro data sheet _<http://sensemore.io/>_  
 Chekout Wired Pro installation guide _<http://sensemore.io/>_
+
+Before starting to speak about Wired Pro system integration, configure your Wired Pro's MQTT, NTP and HTTP settings. 
 
 ### <span style="color: rgb(240,95,34)">Accessing Configuration Page</span>
 

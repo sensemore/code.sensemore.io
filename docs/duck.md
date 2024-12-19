@@ -8,11 +8,10 @@ data not only vibration, temperature, and
 pressure but also whole analog data such
 as; mass flow rate, speed, current, etc.
 
-Before starting to speak about Duck system integration, configure your Duck's MQTT, NTP and HTTP settings. 
-
 Chekout Duck data sheet _<http://sensemore.io/>_  
 Chekout Duck installation guide _<http://sensemore.io/>_
 
+Before starting to speak about Duck system integration, configure your Duck's MQTT, NTP and HTTP settings. 
 
 ## <span style="color: rgb(240,95,34)">Connectivity</span>
 

@@ -1,12 +1,12 @@
 # <span style="color: rgb(240,95,34)">Senseway Integration Document</span>
 <img src="images/Sensemore_product_senseway.gif"/>  
 
-Senseway is a gateway for Wired Pro, Infinity, Infinity Pro and Nomad sensors. Senseway handles networking, measurement scheduling, sleep, firmware update and more for Sensemore sensors.
-
-Before starting to speak about Senseway system integration, configure your Senseway's MQTT, NTP and HTTP settings. 
+Senseway is a gateway for Wired Pro, Infinity, Infinity Pro and Nomad sensors. Senseway handles networking, measurement scheduling, sleep, firmware update and more for Sensemore sensors.  
 
 Chekout Senseway data sheet _<http://sensemore.io/>_  
 Chekout Senseway installation guide _<http://sensemore.io/>_
+
+Before starting to speak about Senseway system integration, configure your Senseway's MQTT, NTP and HTTP settings. 
 
 ### <span style="color: rgb(240,95,34)">Accessing Configuration Page</span>
 
