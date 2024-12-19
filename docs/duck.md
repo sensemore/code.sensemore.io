@@ -2,36 +2,25 @@
 <img src="images/Sensemore_product_duck.gif"/>
 
 
-Sensemore DUCK is a compact IoT data
+Sensemore Duck is a compact IoT data
 acquisition hardware to collect process
 data not only vibration, temperature, and
 pressure but also whole analog data such
 as; mass flow rate, speed, current, etc.
-DUCK supports a maximum sampling rate of 
-6400 Hz and it intelligently adjusts the
-sampling rate based on the number of 
-enabled channels.
-Send the collected data to the cloud via
-Wi-Fi or Ethernet. Monitor all metrics of data on
-Sensemore Platform: LAKE. Find the root
-causes of your machinery anomalies either
-manually or by using predictive analytic
-tools.
 
-Measure real-time data at lower sampling frequency for digital twin applications. Synchronously collected data are correlated with your models and monitored online. After data acquisition, Sensemore Platform LAKE offers ready advanced  signal processing tools to detect early- stage machinery failures required by expert analysts or plant operators.
+Before starting to speak about Duck system integration, configure your Duck's MQTT, NTP and HTTP settings. 
 
+Chekout Duck data sheet _<http://sensemore.io/>_  
+Chekout Duck installation guide _<http://sensemore.io/>_
 
-### <span style="color: rgb(240,95,34)">Accessing Configuration Page</span>
-
-Shortly after the Duck is plugged in, it broadcats a Wi-Fi acces point network with **DUCK-CA&colon;B8&colon;DA&colon;XX&colon;XX&colon;XX** SSID'. Use default password "sensemore" to connect to the AP. Your device will launch configuration page in captive portal. If your device does not automatically launch captive portal, navigate to [http:\\\\192.168.4.1 ](http:\192.168.4.1) in your default browser. 
 
 ## <span style="color: rgb(240,95,34)">Connectivity</span>
 
 ### <span style="color: rgb(240,95,34)">Wi-Fi & Ethernet</span>
-Duck supports both Wi-Fi and Ethernet for network connections. By default, the network adapter is set to Wi-Fi, but this can be modified in the “Connectivity Settings” section of the Configuration page
+Duck supports both Wi-Fi and Ethernet for network connections. By default, the network adapter is set to Wi-Fi, but this can be modified in the Settings of the Configuration page `Settings > Connectivity`.
 
 ### <span style="color: rgb(240,95,34)">NTP</span>
-Time information is also used in the measurement messages sent by Duck. Time synchronization is needed for this. For OnPremise installations, the time server can be defined from `Advance > NTP`.  
+Time information is also used in the measurement messages sent by Duck. Time synchronization is needed for this. For OnPremise or private installations, default NTP server can be modified in Duck Configuration page `Settings > NTP`.  
 _Default: <http://pool.ntp.org/>_
 
 ### <span style="color: rgb(240,95,34)">MQTT</span>
@@ -43,7 +32,7 @@ The MQTT Broker Server to be used must support TLS  and provide the following fo
 -   Client Cert (a created and signed certificate from CA)
 -   Client Key (private key of the certificate generated through the CA)
 
-Required certificates and endpoint information are defined at 'Advanced > MQTT' in the Duck web portal. Duck uses these certificates for the future MQTT connections.
+Required certificates and endpoint information are defined at `Settings > MQTT` in the Duck configuration page. Duck uses these certificates for the future MQTT connections.
 
 Details
 https://www.hivemq.com/blog/mqtt-security-fundamentals-tls-ssl/
@@ -51,16 +40,113 @@ https://www.hivemq.com/blog/mqtt-security-fundamentals-tls-ssl/
 ### <span style="color: rgb(240,95,34)">HTTP</span>
 HTTP here..
 
+## <span style="color: rgb(240,95,34)">Duck Sensor Configuration</span>
+
+Duck is compatible with industry standard **4-20mA** sensors. Duck sensor configuration consists of sensor groups. Each group is indented to monitor a
+single point on an equipment.  
+- Multiple sensors can be grouped in a single sensor group to monitor different
+characteristics of a point such as temperature and humidity or acceleration and magnetic
+field.  
+- One sensor can be configured with one or multiple input channels depending on sensor's
+functionality. For example, distance sensor is configured with a single input channel
+whereas 3-axis acceleration sensor is configured with 3 input channels for x, y z axes.
+
+<table>
+<tr>
+<th>Device Config</th>
+<th>Explaniation</th>
+</tr>
+<tr>
+<td>
+
+```json
+
+{
+  "heartbeat_interval_min": 15,
+  "sensor_groups": [
+    {
+      "sensor_group_code": "fe1e2714-5ac0-404c-9eb1-20f3a1d2a214",
+      "sensors": [
+        {
+          "sensor": "accelerometer",
+          "channels": [
+            0,
+            1,
+            2
+          ],
+          "channel_codes": [
+            "accelerometer_x",
+            "accelerometer_y",
+            "accelerometer_z"
+          ],
+          "min_max_voltage": [
+            -5,
+            5
+          ],
+          "min_max_value": [
+            -1000,
+            1000
+          ],
+          "trigger_differancel_rate": 2
+        }
+      ]
+    }
+  ]
+}
+```
+
+</td>
+<td>
+
+```json
+
+{
+  "heartbeat_interval_min": 15,
+  "sensor_groups": [
+    {
+      "sensor_group_code": "fe1e2714-5ac0-404c-9eb1-20f3a1d2a214",
+      "sensors": [
+        {
+          "sensor": "accelerometer",
+          "channels": [
+            0,
+            1,
+            2
+          ],
+          "channel_codes": [
+            "accelerometer_x",
+            "accelerometer_y",
+            "accelerometer_z"
+          ],
+          "min_max_voltage": [
+            -5,
+            5
+          ],
+          "min_max_value": [
+            -1000,
+            1000
+          ],
+          "trigger_differancel_rate": 2
+        }
+      ]
+    }
+  ]
+}
+```
+</td>
+<td>
+</tr>
+</table>
 
 ## <span style="color: rgb(240,95,34)">MQTT Integration</span>
 
 This section explains which topics to use when communicating with Duck over MQTT and how messages should be interpreted.
 
-`Aktör` sends `Payload` with `PayloadType` format to `Topic`
+`Actor` sends `Payload` with `PayloadType` format to `Topic`
 
 ### <span style="color: rgb(240,95,34)">Information</span>
 
-When Duck powers on, it publishes a status message containing basic device information including Firmware Verion. This status message can also be retrieved using the following topic:
+When Duck powers on, it publishes a status message containing basic device information including **Firmware Verion**. This status message can also be retrieved using the following topic:
 
 <table>
 <tr>
@@ -72,10 +158,27 @@ When Duck powers on, it publishes a status message containing basic device infor
 </tr>
 <tr>
 <td>
+User
+</td>
+<td>
+<b> sensemore/&lt;DuckMac&gt;/info</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>Empty JSON</i>
+</td>
+<td>
+<i></i>
+</td>
+</tr>
+<tr>
+<td>
 Duck
 </td>
 
-<td><b>sensemore/&lt;DeviceMac&gt;/info/accepted</b></td>
+<td><b>sensemore/&lt;DuckMac&gt;/info/accepted</b></td>
 
 <td>JSON</td>
 <td>
@@ -102,7 +205,6 @@ Duck
   }
 }
 ```
-
 </td>
 <td>
 
@@ -134,7 +236,7 @@ Duck
 
 ### <span style="color: rgb(240,95,34)">Firmware Update Over the Air (OTA)</span>
 
-Sensemore devices accept firmware update over HTTP. In order to start firmware update on the device, valid binary link sent to firmware update topic. Senseway downloads the binary from given url and start firmware update.
+Sensemore devices accept firmware update over HTTP. In order to start firmware update on the device, valid binary link sent to firmware update topic. Duck downloads the binary from given url and start firmware update.
 
 <table>
 <tr>
@@ -149,7 +251,7 @@ Sensemore devices accept firmware update over HTTP. In order to start firmware u
 User
 </td>
 
-<td><b>sensemore/&lt;DeviceMac&gt;/ota</b></td>
+<td><b>sensemore/&lt;DuckMac&gt;/ota</b></td>
 <td>JSON</td>
 <td>
 <i>http url</i>
@@ -165,10 +267,10 @@ User
 </tr>
 <tr>
 <td>
-Senseway
+Duck
 </td>
 
-<td><b>sensemore/&lt;DeviceMac&gt;/ota/accepted</b></td>
+<td><b>sensemore/&lt;DuckMac&gt;/ota/accepted</b></td>
 <td><i>JSON</i></td>
 <td><i>Status JSON</i></td>
 <td>
@@ -182,23 +284,23 @@ Senseway
 </tr>
 <tr>
 <td>
-Senseway
+Duck
 </td>
 
-<td><b>sensemore/&lt;DeviceMac&gt;/ota/rejected</b></td>
+<td><b>sensemore/&lt;DuckMac&gt;/ota/rejected</b></td>
 <td><i>Text</i></td>
 <td><i>Error Text</i></td>
 <td>
 Invalid payload! Url can't be null. Valid payload scheme: {
-	"url":"http://link.mydomain.com/Senseway.bin"
+	"url":"http://link.mydomain.com/Duck.bin"
 }
 </td>
 </tr>
 <tr>
 <td>
-Senseway
+Duck
 </td>
-<td><b>sensemore/&lt;DeviceMac&gt;/restart</b></td>
+<td><b>sensemore/&lt;DuckMac&gt;/restart</b></td>
 <td><i>JSON</i></td>
 <td><i>Status JSON</i></td>
 <td>
@@ -212,7 +314,38 @@ Senseway
 </tr>
 </table>
 
-### Sensor Configuration
+### <span style="color: rgb(240,95,34)">Restart</span>
+
+Duck can be restarted using the following topic.
+
+<table>
+<tr>
+<th>Actor</th>
+<th>Topic</th>
+<th>Payload Type</th>
+<th>Payload Schema</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+User
+</td>
+<td>
+<b> sensemore/&lt;DuckMac&gt;/restart</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>Empty JSON</i>
+</td>
+<td>
+<i></i>
+</td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">Sensor Configuration</span>
 
 Duck's sensor configuration can be viewed or changed over MQTT with the following topics.
 
@@ -229,7 +362,7 @@ Duck's sensor configuration can be viewed or changed over MQTT with the followin
 User
 </td>
 <td>
-<b> sensemore/&lt;DeviceMac&gt;/config/get</b>
+<b> sensemore/&lt;DuckMac&gt;/config/get</b>
 </td>
 <td>
 JSON
@@ -246,7 +379,7 @@ JSON
 	Duck
 	</td>
 	<td>
-	<b> sensemore/&lt;DeviceMac&gt;/config/get/accepted</b>
+	<b> sensemore/&lt;DuckMac&gt;/config/get/accepted</b>
 	</td>
 	<td>
 	JSON
@@ -287,6 +420,8 @@ JSON
 </tr>
 </table>
 
+:exclamation: Changing Duck's sensor configuration will cause Duck to restart
+
 <table>
 <tr>
 <th>Actor</th>
@@ -300,7 +435,7 @@ JSON
 User
 </td>
 <td>
-<b> sensemore/&lt;DeviceMac&gt;/config/set</b>
+<b> sensemore/&lt;DuckMac&gt;/config/set</b>
 </td>
 <td>
 JSON
@@ -346,7 +481,7 @@ JSON
 	Duck
 	</td>
 	<td>
-	<b> sensemore/&lt;DeviceMac&gt;/config/set/accepted</b>
+	<b> sensemore/&lt;DuckMac&gt;/config/set/accepted</b>
 	</td>
 	<td>
 	JSON
@@ -362,7 +497,7 @@ JSON
 </tr>
 </table>
 
-### Measurement
+### <span style="color: rgb(240,95,34)">Measuremnt</span>
 
 Duck device is designed for high-performance data acquisition with multiple ways to trigger measurements. It continuously collects data and evaluates conditions for publishing measurements based on the following mechanisms:  
 **1.	Heartbeat:**
@@ -387,7 +522,7 @@ Manual measurement requests can also be sent via MQTT. Details about the MQTT to
 User
 </td>
 <td>
-<b> sensemore/&lt;DeviceMac&gt;/device/&lt;DeviceMac&gt;/measure/&lt;MEASUREMENT_UUID&gt;</b>
+<b> sensemore/&lt;DuckMac&gt;/device/&lt;DuckMac&gt;/measure/&lt;MEASUREMENT_UUID&gt;</b>
 </td>
 <td>
 JSON
@@ -404,7 +539,7 @@ JSON
 	Duck
 	</td>
 	<td>
-	<b> sensemore/&lt;DeviceMac&gt;/device/&lt;DeviceMac&gt;/measure/&lt;MEASUREMENT_UUID&gt;/accepted<b>
+	<b> sensemore/&lt;DuckMac&gt;/device/&lt;DuckMac&gt;/measure/&lt;MEASUREMENT_UUID&gt;/accepted<b>
 	</td>
 	<td>
 	JSON
@@ -422,7 +557,7 @@ JSON
 	Duck
 	</td>
 	<td>
-	<b> sensemore/&lt;DeviceMac&gt;/device/&lt;DeviceMac&gt;/measure/&lt;MEASUREMENT_UUID&gt;/metadata<b>
+	<b> sensemore/&lt;DuckMac&gt;/device/&lt;DuckMac&gt;/measure/&lt;MEASUREMENT_UUID&gt;/metadata<b>
 	</td>
 	<td>
 	JSON

@@ -2,14 +2,15 @@
 
 Senseway is a gateway for Wired Pro, Infinity, Infinity Pro and Nomad sensors. Senseway handles networking, measurement scheduling, sleep, firmware update and more for Sensemore sensors.
 
-Before starting to speak about Senseway System integration, configure your Senseway's MQTT, NTP and HTTP settings. 
+Before starting to speak about Senseway system integration, configure your Senseway's MQTT, NTP and HTTP settings. 
 
 Chekout Senseway data sheet _<http://sensemore.io/>_  
 Chekout Senseway installation guide _<http://sensemore.io/>_
 
 ### <span style="color: rgb(240,95,34)">Accessing Configuration Page</span>
 
-Shortly after the Senseway is plugged in, it broadcats a Wi-Fi acces point network with **SENSEWAY-CA&colon;B8&colon;50&colon;XX&colon;XX&colon;XX** SSID'. Use default password "sensemore" to connect to the AP. Your device will launch configuration page in captive portal. If your device does not automatically launch captive portal, navigate to [http:\\\\192.168.4.1 ](http:\192.168.4.1) in your default browser. 
+Shortly after the Senseway is plugged in, it broadcats a Wi-Fi acces point network with **SENSEWAY-CA&colon;B8&colon;50&colon;XX&colon;XX&colon;XX** SSID'. Use default password "sensemore" to connect to the AP. Your device will launch configuration page in captive portal. If your device does not automatically launch captive portal, navigate to [http:\\\\192.168.4.1 ](http:\192.168.4.1) in your default browser.  
+Once Senseway is connected to a network via Wi-Fi or Ethernet, its configuration page can be accessed through its local IP address from the same network. The local IP address is displayed on the home tab of the configuration page and is also shown in the MQTT information message.
 
 ## <span style="color: rgb(240,95,34)">Connectivity</span>
 
@@ -105,7 +106,6 @@ Senseway
   }
 }
 ```
-
 </td>
 <td>
 
@@ -129,9 +129,7 @@ Senseway
     "Min Free Bytes": 4024696,
     "Largest Free Bytes": 3997696
   }
-
 ```
-
 </td>
 </tr>
 </table>
@@ -667,7 +665,7 @@ User
 
 ```json
   {
-    "url": "http://link.mydomain.com/EndNode.bin"
+    "url": "http://link.mydomain.com/Device.bin"
   }
   ```
 </td>
