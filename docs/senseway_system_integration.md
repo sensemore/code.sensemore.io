@@ -2,7 +2,10 @@
 
 Senseway is a gateway for Wired Pro, Infinity, Infinity Pro and Nomad sensors. Senseway handles networking, measurement scheduling, sleep, firmware update and more for Sensemore sensors.
 
-Before starting to speak about Senseway System integration, to configure your Senseway's MQTT, NTP and HTTP settings refer to the "Senseway Configuration Manual" that came with your Senseway.
+Before starting to speak about Senseway System integration, configure your Senseway's MQTT, NTP and HTTP settings. 
+
+Chekout Senseway data sheet _<http://sensemore.io/>_  
+Chekout Senseway installation guide _<http://sensemore.io/>_
 
 ### <span style="color: rgb(240,95,34)">Accessing Configuration Page</span>
 
@@ -11,10 +14,10 @@ Shortly after the Senseway is plugged in, it broadcats a Wi-Fi acces point netwo
 ## <span style="color: rgb(240,95,34)">Connectivity</span>
 
 ### <span style="color: rgb(240,95,34)">Wi-Fi & Ethernet</span>
-Senseway supports both Wi-Fi and Ethernet for network connections. By default, the network adapter is set to Wi-Fi, but this can be modified in the “Connectivity Settings” section of the Configuration page
+Senseway supports both Wi-Fi and Ethernet for network connections. By default, the network adapter is set to Wi-Fi, but this can be modified in the Settings of the Configuration page `Settings > Connectivity`.
 
 ### <span style="color: rgb(240,95,34)">NTP</span>
-Time information is also used in the measurement messages sent by Senseway. Time synchronization is needed for this. For OnPremise installations, the time server can be defined from `Advance > NTP`.  
+Time information is also used in the measurement messages sent by Senseway. Time synchronization is needed for this. For OnPremise or private installations, default NTP server can be modified in Senseway Configuration page `Settings > NTP`.  
 _Default: <http://pool.ntp.org/>_
 
 ### <span style="color: rgb(240,95,34)">MQTT</span>
@@ -26,7 +29,7 @@ The MQTT Broker Server to be used must support TLS  and provide the following fo
 -   Client Cert (a created and signed certificate from CA)
 -   Client Key (private key of the certificate generated through the CA)
 
-Required certificates and endpoint information are defined at 'Advanced > MQTT' in the Senseway web portal. Senseway uses these certificates for the future MQTT connections.
+Required certificates and endpoint information are defined at `Settings > MQTT` in the Senseway configuration page. Senseway uses these certificates for the future MQTT connections.
 
 Details
 https://www.hivemq.com/blog/mqtt-security-fundamentals-tls-ssl/
@@ -39,7 +42,7 @@ HTTP here..
 
 This section explains which topics to use when communicating with Senseway over MQTT and how messages should be interpreted.
 
-`Aktör` sends `Payload` with `PayloadType` format to `Topic`
+`Actor` sends `Payload` with `PayloadType` format to `Topic`
 
 ### <span style="color: rgb(240,95,34)">Information</span>
 
@@ -58,7 +61,7 @@ When Senseway powers on, it publishes a status message containing basic device i
 User
 </td>
 <td>
-<b> sensemore/&lt;DeviceMac&gt;/info</b>
+<b> sensemore/&lt;GatewayMac&gt;/info</b>
 </td>
 <td>
 JSON
@@ -75,7 +78,7 @@ JSON
 Senseway
 </td>
 
-<td><b>sensemore/&lt;DeviceMac&gt;/info/accepted</b></td>
+<td><b>sensemore/&lt;GatewayMac&gt;/info/accepted</b></td>
 
 <td>JSON</td>
 <td>
@@ -150,7 +153,7 @@ Sensemore devices accept firmware update over HTTP. In order to start firmware u
 User
 </td>
 
-<td><b>sensemore/&lt;DeviceMac&gt;/ota</b></td>
+<td><b>sensemore/&lt;GatewayMac&gt;/ota</b></td>
 <td>JSON</td>
 <td>
 <i>http url</i>
@@ -169,7 +172,7 @@ User
 Senseway
 </td>
 
-<td><b>sensemore/&lt;DeviceMac&gt;/ota/accepted</b></td>
+<td><b>sensemore/&lt;GatewayMac&gt;/ota/accepted</b></td>
 <td><i>JSON</i></td>
 <td><i>Status JSON</i></td>
 <td>
@@ -186,7 +189,7 @@ Senseway
 Senseway
 </td>
 
-<td><b>sensemore/&lt;DeviceMac&gt;/ota/rejected</b></td>
+<td><b>sensemore/&lt;GatewayMac&gt;/ota/rejected</b></td>
 <td><i>Text</i></td>
 <td><i>Error Text</i></td>
 <td>
@@ -199,7 +202,7 @@ Invalid payload! Url can't be null. Valid payload scheme: {
 <td>
 Senseway
 </td>
-<td><b>sensemore/&lt;DeviceMac&gt;/restart</b></td>
+<td><b>sensemore/&lt;GatewayMac&gt;/restart</b></td>
 <td><i>JSON</i></td>
 <td><i>Status JSON</i></td>
 <td>
@@ -210,6 +213,269 @@ Senseway
 }
 ```
 </td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">Restart</span>
+
+Senseway can be restarted using the following topic.
+
+<table>
+<tr>
+<th>Actor</th>
+<th>Topic</th>
+<th>Payload Type</th>
+<th>Payload Schema</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+User
+</td>
+<td>
+<b> sensemore/&lt;GatewayMac&gt;/restart</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>Empty JSON</i>
+</td>
+<td>
+<i></i>
+</td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">Measurement Upload URL</span>
+
+Senseway manages measurement uploads for attached devices, publishing metadata over MQTT 
+and transmitting signal binaries via HTTP.
+The default binary upload URL is _<https://core.sensemore.io/measurement/>_, 
+however, the URL can be retrieved or modified using the following topic.
+
+<table>
+<tr>
+<th>Actor</th>
+<th>Topic</th>
+<th>Payload Type</th>
+<th>Payload Schema</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+User
+</td>
+<td>
+<b> sensemore/&lt;GatewayMac&gt;/binaryurl/get</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>Empty JSON</i>
+</td>
+<td>
+<i></i>
+</td>
+</tr>
+<tr>
+ <td>
+ Senseway
+ </td>
+ <td>
+ <b> sensemore/&lt;GatewayMac&gt;/binaryurl/get/accepted</b>
+ </td>
+ <td>
+ JOSN
+ </td>
+ <td>
+ <i>Binary URL JSON</i>
+ </td>
+ <td>
+
+ ```json
+{
+  "binaryurl": "https://core.sensemore.io/measurement"
+}
+```
+ </td>
+</tr>
+</table>
+
+<table>
+<tr>
+<th>Actor</th>
+<th>Topic</th>
+<th>Payload Type</th>
+<th>Payload Schema</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+User
+</td>
+<td>
+<b> sensemore/&lt;GatewayMac&gt;/binaryurl/set</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>Binary URL JSON</i>
+</td>
+<td>
+<i>
+
+```json
+{
+  "binaryurl": "https://core.sensemore.io/measurement"
+}
+```
+</i>
+</td>
+</tr>
+<tr>
+ <td>
+ Senseway
+ </td>
+ <td>
+ <b> sensemore/&lt;GatewayMac&gt;/binaryurl/set/accepted</b>
+ </td>
+ <td>
+ JOSN
+ </td>
+ <td>
+ <i>Status JSON</i>
+ </td>
+ <td>
+
+ ```json
+{
+  "status": "Set Binary url accepted",
+  "binaryurl": "https://core.sensemore.io/measurement"
+}
+```
+ </td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">Senseway - Wired Pro Communication Speed</span>
+
+Senseway communicates with Wired Pro over RS485, which has a theoretical range of up to one kilometer. 
+This allows Senseway and Wired Pro to be placed up to 1 km apart and connected via an RS485 cable. 
+As the distance between them increases, the baudrate must be lowered to increase reliability. 
+Baudrate refers to the number of bits transmitted per second. 
+At shorter distances, increasing the baudrate can increase communication speed between Senseway and Wired Pro. 
+The baudrate can be viewed or modified via MQTT using the following topic.
+
+:warning: When connecting multiple Wired Pros to the same Senseway, a bus topology must be used, ensuring no parallel lines are present.
+
+<table>
+<tr>
+<th>Actor</th>
+<th>Topic</th>
+<th>Payload Type</th>
+<th>Payload Schema</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+User
+</td>
+<td>
+<b> sensemore/&lt;GatewayMac&gt;/baudrate/get</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>Empty JSON</i>
+</td>
+<td>
+<i></i>
+</td>
+</tr>
+<tr>
+ <td>
+ Senseway
+ </td>
+ <td>
+ <b> sensemore/&lt;GatewayMac&gt;/baudrate/get/accepted</b>
+ </td>
+ <td>
+ JOSN
+ </td>
+ <td>
+ <i>Baudrate JSON</i>
+ </td>
+ <td>
+
+ ```json
+{
+  "baudrate": 921600
+}
+```
+ </td>
+</tr>
+</table>
+
+**Valid badurate values:** 115200, 460800, 921600, 1000000
+
+<table>
+<tr>
+<th>Actor</th>
+<th>Topic</th>
+<th>Payload Type</th>
+<th>Payload Schema</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+User
+</td>
+<td>
+<b> sensemore/&lt;GatewayMac&gt;/baudrate/set</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>Baudrate JSON</i>
+</td>
+<td>
+<i>
+
+```json
+{
+  "baudrate": 921600
+}
+```
+</i>
+</td>
+</tr>
+<tr>
+ <td>
+ Senseway
+ </td>
+ <td>
+ <b> sensemore/&lt;GatewayMac&gt;/baudrate/set/accepted</b>
+ </td>
+ <td>
+ JOSN
+ </td>
+ <td>
+ <i>Status JSON</i>
+ </td>
+ <td>
+
+ ```json
+{
+  "status": "Set baud rate accepted",
+  "baudrate": 921600
+}
+```
+ </td>
 </tr>
 </table>
 
@@ -230,7 +496,7 @@ The list of devices attached to Senseway, along with their measurement configura
 User
 </td>
 <td>
-<b> sensemore/&lt;DeviceMac&gt;/device-list/get</b>
+<b> sensemore/&lt;GatewayMac&gt;/device-list/get</b>
 </td>
 <td>
 JSON
@@ -247,7 +513,7 @@ JSON
  Senseway
  </td>
  <td>
- <b> sensemore/&lt;DeviceMac&gt;/device-list/get/accepted</b>
+ <b> sensemore/&lt;GatewayMac&gt;/device-list/get/accepted</b>
  </td>
  <td>
  JOSN
@@ -262,8 +528,6 @@ JSON
   "devices": [
     {
       "mac": "CA:B8:41:XX:XX:XX",
-      "status": "connected",
-      "version": "3.0.0",
       "device_config": {
         "rs485_resistor_enabled": false,
         "trigger_enabled": false,
@@ -276,9 +540,6 @@ JSON
     },
     {
       "mac": "CA:B8:30:XX:XX:XX",
-      "status": "scanned",
-      "rssi": -78,
-      "version": "3.0.0",
       "device_config": {
         "rs485_resistor_enabled": false,
         "trigger_enabled": false,
@@ -313,7 +574,7 @@ Senseway evaluates the connection status of each assigned sensor upon receiving 
 User
 </td>
 <td>
-<b> sensemore/&lt;DeviceMac&gt;/devices/get</b>
+<b> sensemore/&lt;GatewayMac&gt;/devices/get</b>
 </td>
 <td>
 JSON
@@ -330,7 +591,7 @@ JSON
  Senseway
  </td>
  <td>
- <b> sensemore/&lt;DeviceMac&gt;/devices/get/accepted</b>
+ <b> sensemore/&lt;GatewayMac&gt;/devices/get/accepted</b>
  </td>
  <td>
  JOSN
@@ -344,7 +605,7 @@ JSON
 {
   "devices": [
     {
-      "mac": "CA:B8:41:00:01:1F",
+      "mac": "CA:B8:41:XX:XX:XX",
       "status": "connected",
       "version": "2.1.14",
       "device_config": {
@@ -358,10 +619,10 @@ JSON
       }
     },
     {
-      "mac": "CA:B8:30:00:00:28",
+      "mac": "CA:B8:30:XX:XX:XX",
       "status": "scanned",
       "rssi": -58,
-      "version": "255.255.255",
+      "version": "3.0,0",
       "device_config": {
         "rs485_resistor_enabled": false,
         "trigger_enabled": false,
@@ -381,7 +642,8 @@ JSON
 
 ### <span style="color: rgb(240,95,34)">Device Firmware Update Over The Air (OTA)</span>
 
-Sensemore end node devices accept firmware update over http. In order to start firmware update on end-node device, valid binary link sent to firmware update topic.
+Sensemore end node devices accept firmware update over HTTP. In order to start firmware update on end-node device, valid binary link sent to firmware update topic. 
+Senseway downloads the binary from given url and start firmware update for particular device.
 
 <table>
 <tr>
@@ -396,7 +658,7 @@ Sensemore end node devices accept firmware update over http. In order to start f
 User
 </td>
 
-<td><b>sensemore/&lt;DeviceMac&gt;/device/&lt;EndNodeMac&gt;/ota</b></td>
+<td><b>sensemore/&lt;GatewayMac&gt;/device/&lt;DeviceMac&gt;/ota</b></td>
 <td>JSON</td>
 <td>
 <i>http url</i>
@@ -415,7 +677,7 @@ User
 Senseway
 </td>
 
-<td><b>sensemore/&lt;DeviceMac&gt;/device/&lt;EndNodeMac&gt;/ota/accepted</b></td>
+<td><b>sensemore/&lt;GatewayMac&gt;/device/&lt;DeviceMac&gt;/ota/accepted</b></td>
 <td><i>JSON</i></td>
 <td><i>Status JSON</i></td>
 <td>
@@ -432,7 +694,7 @@ Senseway
 Senseway
 </td>
 
-<td><b>sensemore/&lt;DeviceMac&gt;/device/&lt;EndNodeMac&gt;/ota/rejected</b></td>
+<td><b>sensemore/&lt;GatewayMac&gt;/device/&lt;DeviceMac&gt;/ota/rejected</b></td>
 <td><i>Text</i></td>
 <td><i>Error Text</i></td>
 <td>
@@ -445,17 +707,12 @@ Invalid payload! Url can't be null. Valid payload scheme: {
 <td>
 Senseway
 </td>
-<td><b>sensemore/&lt;DeviceMac&gt;/device/&lt;EndNodeMac&gt;/ota/done</b></td>
+<td><b>sensemore/&lt;GatewayMac&gt;/device/&lt;DeviceMac&gt;/ota/done</b></td>
 <td><i>JSON</i></td>
 <td><i>Status JSON</i></td>
 <td></td>
 </tr>
 </table>
-
-Senseway downloads the binary from given url and start firmware update for particular device.
-
-Firmware updates led sequence of wired end nodes shown in the <a href="#/wired?id=_1wired-device-statuses-and-led-indicator">Wired documentation.</a>
-
 
 ### <span style="color: rgb(240,95,34)">Device Add & Remove</span>
 
@@ -474,7 +731,7 @@ Senseway's sensor configuration can be viewed or modifyed over MQTT with the fol
 User
 </td>
 <td>
-<b> sensemore/&lt;DeviceMac&gt;/device/add</b>
+<b> sensemore/&lt;GatewayMac&gt;/device/add</b>
 </td>
 <td>
 JSON
@@ -498,7 +755,7 @@ JSON
  Senseway
  </td>
  <td>
- <b> sensemore/&lt;DeviceMac&gt;/device/add/accepted</b>
+ <b> sensemore/&lt;GatewayMac&gt;/device/add/accepted</b>
  </td>
  <td>
  JOSN
@@ -530,7 +787,7 @@ JSON
 User
 </td>
 <td>
-<b> sensemore/&lt;DeviceMac&gt;/device/remove</b>
+<b> sensemore/&lt;GatewayMac&gt;/device/remove</b>
 </td>
 <td>
 JSON
@@ -554,7 +811,7 @@ JSON
  Senseway
  </td>
  <td>
- <b> sensemore/&lt;DeviceMac&gt;/device/remove/accepted</b>
+ <b> sensemore/&lt;GatewayMac&gt;/device/remove/accepted</b>
  </td>
  <td>
  JOSN
@@ -623,6 +880,9 @@ Senseway is compatible with both wired sensors (Wired Pro) and wireless sensors 
 <td>
 </tr>
 </table>
+:warning: When multiple Wired Pros are connected to the same Senseway, 
+only the termination resistor of the Wired Pro farthest from the Senseway should be enabled. 
+Enabling termination resistors on multiple Wired Pros connected to the same Senseway may permanently damage your devices.
 
 The configuration of a specific device can be retrieved using the following topic.
 
@@ -639,7 +899,7 @@ The configuration of a specific device can be retrieved using the following topi
 User
 </td>
 <td>
-<b> sensemore/&lt;DeviceMac&gt;/device/&lt;EndNodeMac&gt;/config/get</b>
+<b> sensemore/&lt;GatewayMac&gt;/device/&lt;DeviceMac&gt;/config/get</b>
 </td>
 <td>
 JSON
@@ -656,7 +916,7 @@ JSON
  Senseway
  </td>
  <td>
- <b> sensemore/&lt;DeviceMac&gt;/device/&lt;EndNodeMac&gt;/config/get/accepted</b>
+ <b> sensemore/&lt;GatewayMac&gt;/device/&lt;DeviceMac&gt;/config/get/accepted</b>
  </td>
  <td>
  JOSN
@@ -699,7 +959,7 @@ The configuration of a specific device can be modified using the following topic
 User
 </td>
 <td>
-<b> sensemore/&lt;DeviceMac&gt;/device/&lt;EndNodeMac&gt;/config/set</b>
+<b> sensemore/&lt;GatewayMac&gt;/device/&lt;DeviceMac&gt;/config/set</b>
 </td>
 <td>
 JSON
@@ -733,7 +993,7 @@ JSON
  Senseway
  </td>
  <td>
- <b> sensemore/&lt;DeviceMac&gt;/device/&lt;EndNodeMac&gt;/config/set/accepted</b>
+ <b> sensemore/&lt;GatewayMac&gt;/device/&lt;DeviceMac&gt;/config/set/accepted</b>
  </td>
  <td>
  JOSN
@@ -782,7 +1042,7 @@ Senseway initiates automatic measurement using the scheduling feature. It also a
 User
 </td>
 <td>
-<b> sensemore/&lt;DeviceMac&gt;/device/&lt;EndNodeMac&gt;/measure/&lt;MeasuremnetUUID&gt;</b>
+<b> sensemore/&lt;GatewayMac&gt;/device/&lt;DeviceMac&gt;/measure/&lt;MeasuremnetUUID&gt;</b>
 </td>
 <td>
 JSON
@@ -799,7 +1059,7 @@ JSON
  Senseway
  </td>
  <td>
- <b> sensemore/&lt;DeviceMac&gt;/device/&lt;EndNodeMac&gt;/measure/&lt;MeasuremnetUUID&gt;/accepted</b>
+ <b> sensemore/&lt;GatewayMac&gt;/device/&lt;DeviceMac&gt;/measure/&lt;MeasuremnetUUID&gt;/accepted</b>
  </td>
  <td>
  JOSN
@@ -822,7 +1082,7 @@ JSON
  Senseway
  </td>
  <td>
- <b> sensemore/&lt;DeviceMac&gt;/device/&lt;EndNodeMac&gt;/measure/&lt;MeasuremnetUUID&gt;/done</b>
+ <b> sensemore/&lt;GatewayMac&gt;/device/&lt;DeviceMac&gt;/measure/&lt;MeasuremnetUUID&gt;/done</b>
  </td>
  <td>
  JOSN
@@ -845,7 +1105,7 @@ JSON
  Senseway
  </td>
  <td>
- <b> sensemore/&lt;DeviceMac&gt;/device/&lt;EndNodeMac&gt;/measure/&lt;MeasuremnetUUID&gt;/metadatas</b>
+ <b> sensemore/&lt;GatewayMac&gt;/device/&lt;DeviceMac&gt;/measure/&lt;MeasuremnetUUID&gt;/metadatas</b>
  </td>
  <td>
  JOSN
