@@ -1,7 +1,4 @@
-- [Android API](tr/android_api.md)
-- [Wired Dökümanı](tr/wired.md)
-- [BLE Entegrasyonu](tr/ble_Integration.md)
-- [MQTT Entegrasyonu](tr/mqtt_integration.md)
-- [SMWired Python](tr/SMWiredPy.md)
-- Araçlar
-  -  [Titreşim Hesaplayıcı](tr/vibration_calculator.md)
+- [Senseway Entegrasyon Belgesi](tr/senseway_system_integration_tr.md)
+- [Wired Pro Wi-Fi Entegrasyon Belgesi](tr/wired_pro_wifi_tr.md)
+- [Duck Entegrasyon Belgesi](tr/duck_tr.md)
+- [Infinity Android API Belgesi](tr/android_api.md)
