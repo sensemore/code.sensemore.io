@@ -12,8 +12,8 @@ In Wi-Fi mode, Wired Pro functions as its own gateway, managing its sensors inde
 
 Wired Pro Wi-Fi is a combined gateway and sensor array capable of capturing 3-axis accelerometer, magnetic field, and temperature readings. It can process measurements, apply measurement strategies, and upload data to the cloud. Powered by a 5-36V DC input, Wired Pro Wi-Fi operates without the need for charging.
 
-Chekout Wired Pro data sheet _<http://sensemore.io/>_  
-Chekout Wired Pro installation guide _<http://sensemore.io/>_
+Chekout Wired Pro Wi-Fi data sheet _<http://sensemore.io/>_  
+Chekout Wired Pro Wi-Fi installation guide _<http://sensemore.io/>_
 
 Before starting to speak about Wired Pro system integration, configure your Wired Pro's MQTT, NTP and HTTP settings. 
 
@@ -453,7 +453,7 @@ JSON
 
 ### <span style="color: rgb(240,95,34)">Measurement</span>
 
-Wired Pro initiates automatic measurement using the scheduling feature. It also accepts manual measurements from the Sensemore Lake platform as well as  MQTT based on the configurations set previously. MQTT measurement topics are as follows: 
+Wired Pro initiates automatic measurement using the scheduling feature. It also accepts manual measurements from the Sensemore Lake platform as well as  MQTT based on the configurations set previously. MQTT measurement topics are as follows.
 
 <table>
 <tr>

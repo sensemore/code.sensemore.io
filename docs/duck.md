@@ -419,7 +419,7 @@ JSON
 </tr>
 </table>
 
-:exclamation: Changing Duck's sensor configuration will cause Duck to restart
+:exclamation: Changing Duck’s sensor configuration will trigger a restart of the device.
 
 <table>
 <tr>
@@ -614,3 +614,7 @@ JSON
 </tr>
 </tr>
 </table>
+
+## <span style="color: rgb(240,95,34)">HTTP Integration</span>
+
+heree.

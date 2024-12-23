@@ -1,63 +1,57 @@
 # <span style="color: rgb(240,95,34)">Wired Pro Wi-Fi Integration Documentation</span>  
 
-### <span style="color: rgb(240,95,34)">Wired Pro Operational Modes</span>
+### <span style="color: rgb(240,95,34)">Wired Pro İşlem Modları</span>
 
-:exclamation: Wired Pro is a versatile IoT data acquisition device with two distinct operational modes:  
-**1. RS485 mode:**  
-In this mode, Wired Pro connects to Senseway (or other gateways) via an RS485 cable. It is controlled by the gateway and operates as a 3-axis accelerometer, magnetometer, and temperature sensor. For more details, refer to the [Senseway Integration Documentation](senseway_system_integration.md).  
-**2. Wi-Fi mode:**  
-In Wi-Fi mode, Wired Pro functions as its own gateway, managing its sensors independently. This documentation focuses on the Wi-Fi mode.
+:exclamation: Wired Pro, iki farklı işlem moduna sahip çok yönlü bir IoT veri toplama cihazıdır.  
+**1. RS485 modu:**  
+Bu modda, Wired Pro bir RS485 kablosu aracılığıyla Senseway (veya diğer ağ geçitleri) ile bağlantı kurar. Ağ geçidi tarafından kontrol edilir ve 3 eksenli ivmeölçer, manyetometre ve sıcaklık sensörü olarak çalışır. Daha fazla detay için [Senseway Entegrasyon Belgelerine](tr/senseway_system_integration_tr.md) bakınız.  
+**2. Wi-Fi modu:**  
+Wi-Fi modunda, Wired Pro kendi başına bir ağ geçidi olarak çalışır ve sensörlerini bağımsız olarak yönetir. Bu dokümantasyon, Wi-Fi moduna odaklanmaktadır.
 
 <img src="images/Sensemore_product_wiredpro.gif"/>  
 
-Wired Pro Wi-Fi is a combined gateway and sensor array capable of capturing 3-axis accelerometer, magnetic field, and temperature readings. It can process measurements, apply measurement strategies, and upload data to the cloud. Powered by a 5-36V DC input, Wired Pro Wi-Fi operates without the need for charging.
+Wired Pro Wi-Fi, 3 eksenli ivmeölçer, manyetik alan ve sıcaklık ölçümleri alabilen bir sensör dizisi ve ağ geçididir. Ölçümleri işleyebilir, ölçüm stratejilerini uygulayabilir ve verileri buluta yükleyebilir. 5-36V DC girişle beslenen Wired Pro Wi-Fi, şarj edilmesine gerek olmadan çalışır.
 
-Chekout Wired Pro data sheet _<http://sensemore.io/>_  
-Chekout Wired Pro installation guide _<http://sensemore.io/>_
+Wired Pro Wi-Fi teknik özelliklerini inceleyin:  _<http://sensemore.io/>_  
+Wired Pro Wi-Fi kurulum rehberini inceleyin: _<http://sensemore.io/>_
 
-Before starting to speak about Wired Pro system integration, configure your Wired Pro's MQTT, NTP and HTTP settings. 
+Wired Pro Wi-Fi sistem entegrasyonuna başlamadan önce, Wired Pro Wi-Fi’inizin MQTT, NTP ve HTTP ayarlarını yapılandırın.
 
-### <span style="color: rgb(240,95,34)">Accessing Configuration Page</span>
+## <span style="color: rgb(240,95,34)">Bağlantı</span>
 
-Shortly after the Wired Pro is plugged in, it broadcats a Wi-Fi acces point network with **WiredPro-CA&colon;B8&colon;41&colon;XX&colon;XX&colon;XX** SSID'. Use default password "sensemore" to connect to the AP. Your device will launch configuration page in captive portal. If your device does not automatically launch captive portal, navigate to [http:\\\\192.168.4.1 ](http:\192.168.4.1) in your default browser.  
-Once Wired Pro is connected to a network via Wi-Fi, its configuration page can be accessed through its local IP address from the same network. The local IP address is displayed on the home tab of the configuration page and is also shown in the MQTT information message.
-
-## <span style="color: rgb(240,95,34)">Connectivity</span>
-
-### <span style="color: rgb(240,95,34)">Wi-Fi</span>
-Wired Pro supports Wi-Fi for wireless network connections.
+### <span style="color: rgb(240,95,34)">Wi-Fi </span>
+Wired Pro, kablosuz ağ bağlantıları için Wi-Fi desteği sunar.
 
 ### <span style="color: rgb(240,95,34)">NTP</span>
-Time information is also used in the measurement messages sent by Wired Pro. Time synchronization is needed for this. For OnPremise or private installations, default NTP server can be modified in Wired Pro Configuration page `Settings > NTP`.  
-_Default: <http://pool.ntp.org/>_
+Wired Pro Wi-Fi tarafından gönderilen ölçüm mesajlarında zaman bilgisi de kullanılır. Bunun için zaman senkronizasyonu gereklidir. Yerel veya özel kurulumlarda, Wired Pro Wi-Fi Konfigürasyon sayfasındaki  `Settings > NTP` bölümünden varsayılan NTP sunucusu değiştirilebilir. 
+_Varsayılan: <http://pool.ntp.org/>_
 
 ### <span style="color: rgb(240,95,34)">MQTT</span>
-Wired Pro needs MQTT / TLS configuration and supports variety of authentication mechanisms including: plaintext MQTT, MQTTs with and without password, and MQTTs with Client certificate.  
-The MQTT Broker Server to be used must support TLS  and provide the following for certificate-based connections:
+Wired Pro Wi-Fi, MQTT / TLS yapılandırmasına ihtiyaç duyar ve aşağıdakileri içeren çeşitli kimlik doğrulama mekanizmalarını destekler: düz metin MQTT, parola ile veya parolasız MQTTs ve istemci sertifikasıyla MQTTs. Kullanılacak MQTT Broker Sunucusu TLS’yi desteklemelidir ve sertifika tabanlı bağlantılar için aşağıdaki bilgileri sağlamalıdır:
 
 -   MQTT endpoint (_mqtts: //my-mqtt-broker.server: 8883_)
--   CA (CA certificate)
--   Client Cert (a created and signed certificate from CA)
--   Client Key (private key of the certificate generated through the CA)
+-   CA (CA sertifikası)
+-   İstemci Sertifikası (CA tarafından oluşturulan ve imzalanan sertifika)
+-   İstemci Anahtarı (CA tarafından oluşturulan sertifikanın özel anahtarı)
 
-Required certificates and endpoint information are defined at `Settings > MQTT` in the Wired Pro configuration page. Wired Pro uses these certificates for the future MQTT connections.
+Gerekli sertifikalar ve endpoint bilgileri, Wired Pro Wi-Fi konfigürasyon sayfasındaki `Settings > MQTT` bölümünde tanımlanır. Wired Pro Wi-Fi, gelecekteki MQTT bağlantıları için bu sertifikaları kullanır.
 
-Details
+Detaylar
 https://www.hivemq.com/blog/mqtt-security-fundamentals-tls-ssl/
 
 ### <span style="color: rgb(240,95,34)">HTTP</span>
 HTTP here..
 
 
-## <span style="color: rgb(240,95,34)">MQTT Integration</span>
+## <span style="color: rgb(240,95,34)">MQTT Entegrasyonu</span>
 
-This section explains which topics to use when communicating with Wired Pro over MQTT and how messages should be interpreted.
+Bu bölüm, Wired Pro Wi-Fi ile MQTT üzerinden iletişim kurarken kullanılacak konuları ve mesajların nasıl yorumlanacağını açıklar.
 
-`Actor` sends `Payload` with `PayloadType` format to `Topic`
+`Aktör` sends `Payload` with `PayloadType` format to `Topic`
 
-### <span style="color: rgb(240,95,34)">Information</span>
+### <span style="color: rgb(240,95,34)">Bilgi</span>
 
-When Wired Pro powers on, it publishes a status message containing basic device information including **Firmware Verion**. This status message can also be retrieved using the following topic:
+Wired Pro Wi-Fi açıldığında, cihazın temel bilgilerini içeren bir durum mesajı yayınlar. Bu mesaj, aşağıdaki konu kullanılarak da alınabilir:
 
 <table>
 <tr>
@@ -143,9 +137,9 @@ Wired Pro
 </tr>
 </table>
 
-### <span style="color: rgb(240,95,34)">Firmware Update Over the Air (OTA)</span>
+### <span style="color: rgb(240,95,34)">Havadan Yazılım Güncellemesi (OTA)</span>
 
-Sensemore devices accept firmware update over HTTP. In order to start firmware update on the device, valid binary link sent to firmware update topic. Wired Pro downloads the binary from given url and start firmware update.
+Sensemore cihazları HTTP üzerinden yazılım güncellemesini kabul eder. Cihazda yazılım güncellemesi başlatmak için, geçerli bir binary bağlantısı yazılım güncelleme konusuna gönderilir. Senseway, verilen URL’den binary dosyasını indirir ve yazılım güncellemesini başlatır.
 
 <table>
 <tr>
@@ -223,9 +217,9 @@ Wired Pro
 </tr>
 </table>
 
-### <span style="color: rgb(240,95,34)">Restart</span>
+### <span style="color: rgb(240,95,34)">Yeniden Başlatma</span>
 
-Wired Pro can be restarted using the following topic.
+Wired Pro Wi-Fi cihazını uzaktan yeniden başlatmak için aşağıdaki konu kullanılır.
 
 <table>
 <tr>
@@ -254,9 +248,9 @@ JSON
 </tr>
 </table>
 
-### <span style="color: rgb(240,95,34)">Device Configuration</span>
+### <span style="color: rgb(240,95,34)">Cihaz Yapılandırması</span>
 
-Wired Pro’s measurement strategy and configuration can be retrieved using the following topic.
+Wired Pro’nun ölçüm stratejisi ve yapılandırması, aşağıdaki konu başlığı kullanılarak alınabilir.
 
 <table>
 <tr>
@@ -320,9 +314,9 @@ JSON
 </tr>
 </table>
 
-### <span style="color: rgb(240,95,34)">Measurement Configuration</span>
+### <span style="color: rgb(240,95,34)">Ölçüm Yapılandırması</span>
 
-Wired Pro's measurement configuration can be viewed or modifyed over MQTT with the following topics. 
+Wired Pro’nun ölçüm yapılandırması, aşağıdaki konular üzerinden MQTT ile görüntülenebilir veya değiştirilebilir.
 
 <table>
 <tr>
@@ -451,9 +445,9 @@ JSON
 </tr>
 </table>
 
-### <span style="color: rgb(240,95,34)">Measurement</span>
+### <span style="color: rgb(240,95,34)">Ölçüm</span>
 
-Wired Pro initiates automatic measurement using the scheduling feature. It also accepts manual measurements from the Sensemore Lake platform as well as  MQTT based on the configurations set previously. MQTT measurement topics are as follows: 
+Wired Pro, planlama özelliğini kullanarak otomatik ölçüm başlatır. Ayrıca, daha önce yapılandırılan ayarlara göre Sensemore Lake platformu ve MQTT üzerinden manuel ölçümleri kabul eder. MQTT ölçüm konuları aşağıdaki gibidir.
 
 <table>
 <tr>
@@ -562,6 +556,6 @@ Wired Pro
 </tr>
 </table>
 
-## <span style="color: rgb(240,95,34)">HTTP Integration</span>
+## <span style="color: rgb(240,95,34)">HTTP Entegrasyonu</span>
 
 heree.

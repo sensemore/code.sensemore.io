@@ -1,12 +1,12 @@
-# 1.1. Giriş
+# <span style="color: rgb(240,95,34)">1.1. Giriş</span>
 
 SensemoreApi, geliştiricilerin kendi android uygulamalarını Sensemore ürünlerine entegre etmelerini sağlayan bir kütüphanedir. Şu anki ana ürün "Sensemore Infinity"dir. Bu kütüphaneyi kullanarak Sensemore Infinity'i rahatlıkla tarayabilir, bağlayabilir ve ölçüm yapabilirsiniz. Bu kütüphaneye sahip olmak istiyorsanız, lütfen [**hello@sensemore.io**](mailto:hello@sensemore.io) adresinden iletişime geçiniz.
 
 Ayrıca okuma kısmını atlayabilir ve API'nin temel kullanımlarını anlamak için örnek uygulamaya göz atabilirsiniz.
 
-## 1.2. Başlangıç
+## <span style="color: rgb(240,95,34)">1.2. Başlangıç</span>
 
-### 1.2.1. Gereksinimler
+### <span style="color: rgb(240,95,34)">1.2.1. Gereksinimler</span>
 
 Bu kütüphaneleri app.gradle dosyasındaki bağımlılıklarınıza dahil ettiğinizden emin olunuz:
 
@@ -19,7 +19,7 @@ implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-datafor
 implementation 'net.sf.opencsv:opencsv:2.3'//csv export
 ```
 
-### 1.2.2. API Kurulumu
+### <span style="color: rgb(240,95,34)">1.2.2. API Kurulumu</span>
 
 SensemoreApi, .aar dosyası olarak verilecektir. Bu sebeple, kütüphane boyutunu ve yönetimini temiz tutmak için yukarıdaki bağımlılıkları tanımlamanız gerekmektedir. **File > New > New Module, click "Import .JAR/.AAR Package"** modül tipine tıklayarak .aar dosyasını projenize aktarmalısınız. Daha sonra kütüphane dosyasının yolunu seçiniz.
 
@@ -28,7 +28,7 @@ Projenizi senkronize edin ve oluşturun. Son olarak, app.gradle dosyanızdaki ba
 ```gradle
 implementation project(":sensemoreapi")
 ```
-### 1.2.3. İzinler
+### <span style="color: rgb(240,95,34)">1.2.3. İzinler</span>
 
 SensemoreApi Bluetooth Düşük Enerji(BLE) kullandığından, Bluetooth ve Konumlar hizmetlerine erişim için izin istemelisiniz.
 
@@ -43,11 +43,11 @@ requestPermissions(new String[]{ Manifest.permission.BLUETOOTH, Manifest.permiss
 ```
 
 
-# 2. Kullanım
+# <span style="color: rgb(240,95,34)">2. Kullanım</span>
 
 API örneğinizi ```api = SensemoreApi.Build(this);``` olarak ayarlayınız, sonrasında hazırsınız. Hemen hemen bütün API yöntemleri, durumları işlemek için reaktif tüketicileri kullanır.
 
-### 2.0.1. Tarama
+### <span style="color: rgb(240,95,34)">2.0.1. Tarama</span>
 
 Tarama yöntemi, BLE taramasını Sensemore ürünlerinin isimlerinin filtresiyle yapmaktır. Böylelikle yalnızca Sensemore ürünlerine erişebilirsiniz. Tarama, bağlantı durumu değiştikten sonra silinir.
 
@@ -59,7 +59,7 @@ Tarama yöntemi, BLE taramasını Sensemore ürünlerinin isimlerinin filtresiyl
         });
 ```
 
-### 2.0.2. Bağlan/Bağlantıyı Kes
+### <span style="color: rgb(240,95,34)">2.0.2. Bağlan/Bağlantıyı Kes</span>
 
 Bağlanmak için geçerli bir MAC adresi ve parametre olarak durum geri çağırması (state callback) gerekir. Geçersiz MAC adresi uygulamayı bozar. Cihazla bağlantınızı kesmek için api.Disconnect() yöntemini çağırmanız yeterlidir. ```api.Disconnect()``` olayları silinecektir.
 
@@ -94,7 +94,7 @@ Bağlanmak için geçerli bir MAC adresi ve parametre olarak durum geri çağır
     };
 ```
 
-### 2.0.3. Cihaz İstatistiklerini Okuma
+### <span style="color: rgb(240,95,34)">2.0.3. Cihaz İstatistiklerini Okuma</span>
 
 Cihaz istatistikleri dört çeşit bilgiyi barındırır.
 
@@ -112,7 +112,7 @@ Cihaz istatistikleri dört çeşit bilgiyi barındırır.
                 });
 ```
 
-## 2.1. Ölçüm
+## <span style="color: rgb(240,95,34)">2.1. Ölçüm</span>
 
 İki tip ölçüm vardır, Toplu (Batch) ve Akış (Stream).
 
@@ -120,11 +120,11 @@ Toplu ölçümde cihaza ölçüm komutu gönderilir ve başarıyla tamamlandıkt
 
 Akış ölçümünde ölçüm parçaları anında geri çağırmaya aktarılır. Akış ölçümü yalnızca örnekleme oranı 800 Hz ve altı olan profiller tarafından gerçekleştirilir.
 
-### 2.1.1. Biçim İmi
+### <span style="color: rgb(240,95,34)">2.1.1. Biçim İmi</span>
 
 Ölçümlerinizi referanslarla takip etmek isteyebilirsiniz. Referansınız olarak biçim imlerini kullanın.
 
-### 2.1.2. Profil
+### <span style="color: rgb(240,95,34)">2.1.2. Profil</span>
 
 Özellikler:
 
@@ -152,7 +152,7 @@ Accelerometer accelerometerRange = Accelerometer.Range2G;
 Profile profile= new Profile(name, sampleSize, samplingRate, accelerometerRange, sensorSelection);
 ```
 
-### 2.1.3. Toplu Ölçüm
+### <span style="color: rgb(240,95,34)">2.1.3. Toplu Ölçüm</span>
 
 Toplu ölçüm alabilmek için profil tanımlanması gerekmektedir. Profili tanımladıktan sonra profili ve biçim imlerini Toplu Ölçüm yöntemine geçirmeniz yeterlidir.
 ```java
@@ -171,7 +171,7 @@ Toplu ölçüm alabilmek için profil tanımlanması gerekmektedir. Profili tan�
 
 Sensemore cihazlarını kalibre etmenize gerek yoktur. Sensemore cihazları, ölçüm sırasında kalibre edilmiş örnekleme oranlarını anında hesaplar. Başarılı ölçümden sonra, kalibre edilmiş örnekleme oranını [ReadDeviceStats](#read-device-stats) yönteminden okuyabilirsiniz.
 
-### 2.1.4. Akış Ölçümü
+### <span style="color: rgb(240,95,34)">2.1.4. Akış Ölçümü</span>
 
 Akış ölçümü alabilmek için profil tanımlanması gerekmektedir. Profili tanımladıktan sonra profili ve biçim imlerini Akış Ölçümü yöntemine geçirmeniz yeterlidir.
 
@@ -194,9 +194,9 @@ Durdurma:
 });
 ```
 
-## 2.2. Yardımcılar
+## <span style="color: rgb(240,95,34)">2.2. Yardımcılar</span>
 
-### 2.2.1. Ayrıştırıcı
+### <span style="color: rgb(240,95,34)">2.2.1. Ayrıştırıcı</span>
 Ayrıştırıcı yöntemleri aşağıda listelenmiştir
 - `measurement.ToJSON()`
 - `measurement.ParseJSON()`

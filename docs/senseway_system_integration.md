@@ -248,8 +248,7 @@ JSON
 
 ### <span style="color: rgb(240,95,34)">Measurement Upload URL</span>
 
-Senseway manages measurement uploads for attached devices, publishing metadata over MQTT 
-and transmitting signal binaries via HTTP.
+Senseway manages measurement uploads for attached devices by publishing metadata over MQTT and transmitting signal binaries via HTTP.  
 The default binary upload URL is _<https://core.sensemore.io/measurement/>_, 
 however, the URL can be retrieved or modified using the following topic.
 
@@ -943,7 +942,7 @@ JSON
 </tr>
 </table>
 
-The configuration of a specific device can be modified using the following topic
+The configuration of a specific device can be modified using the following topic.
 
 <table>
 <tr>
@@ -1026,7 +1025,7 @@ JSON
 
 ### <span style="color: rgb(240,95,34)">Measurement</span>
 
-Senseway initiates automatic measurement using the scheduling feature. It also accepts manual measurements from the Sensemore Lake platform as well as  MQTT based on the configurations set previously. MQTT measurement topics are as follows:
+Senseway initiates automatic measurement using the scheduling feature. It also accepts manual measurements from the Sensemore Lake platform as well as  MQTT based on the configurations set previously. MQTT measurement topics are as follows.
 
 <table>
 <tr>

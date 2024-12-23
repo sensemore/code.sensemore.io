@@ -1,54 +1,48 @@
-# <span style="color: rgb(240,95,34)">Senseway Integration Document</span>
+# <span style="color: rgb(240,95,34)">Senseway Entegrasyon Belgesi</span>
 <img src="images/Sensemore_product_senseway.gif"/>  
 
-Senseway is a gateway for Wired Pro, Infinity, Infinity Pro and Nomad sensors. Senseway handles networking, measurement scheduling, sleep, firmware update and more for Sensemore sensors.  
+Senseway, Wired Pro, Infinity, Infinity Pro ve Nomad sensörleri için bir ağ geçididir. Senseway, Sensemore sensörleri için ağ bağlantısı, ölçüm planlaması, uyku modu, fdonanım yazılımı güncellemesi ve daha fazlasını yönetir.
 
-Chekout Senseway data sheet _<http://sensemore.io/>_  
-Chekout Senseway installation guide _<http://sensemore.io/>_
+Senseway teknik özelliklerini inceleyin:  _<http://sensemore.io/>_  
+Senseway kurulum rehberini inceleyin: _<http://sensemore.io/>_
 
-Before starting to speak about Senseway system integration, configure your Senseway's MQTT, NTP and HTTP settings. 
+Senseway sistem entegrasyonuna başlamadan önce, Senseway’inizin MQTT, NTP ve HTTP ayarlarını yapılandırın.
 
-### <span style="color: rgb(240,95,34)">Accessing Configuration Page</span>
-
-Shortly after the Senseway is plugged in, it broadcats a Wi-Fi acces point network with **SENSEWAY-CA&colon;B8&colon;50&colon;XX&colon;XX&colon;XX** SSID'. Use default password "sensemore" to connect to the AP. Your device will launch configuration page in captive portal. If your device does not automatically launch captive portal, navigate to [http:\\\\192.168.4.1 ](http:\192.168.4.1) in your default browser.  
-Once Senseway is connected to a network via Wi-Fi or Ethernet, its configuration page can be accessed through its local IP address from the same network. The local IP address is displayed on the home tab of the configuration page and is also shown in the MQTT information message.
-
-## <span style="color: rgb(240,95,34)">Connectivity</span>
+## <span style="color: rgb(240,95,34)">Bağlantı</span>
 
 ### <span style="color: rgb(240,95,34)">Wi-Fi & Ethernet</span>
-Senseway supports both Wi-Fi and Ethernet for network connections. By default, the network adapter is set to Wi-Fi, but this can be modified in the Settings of the Configuration page `Settings > Connectivity`.
+Senseway, ağ bağlantıları için hem Wi-Fi hem de Ethernet’i destekler. Varsayılan olarak, ağ adaptörü Wi-Fi olarak ayarlanmıştır, ancak bu ayar, Konfigürasyon sayfasının `Ayarlar > Bağlantı` bölümünde değiştirilebilir.
 
 ### <span style="color: rgb(240,95,34)">NTP</span>
-Time information is also used in the measurement messages sent by Senseway. Time synchronization is needed for this. For OnPremise or private installations, default NTP server can be modified in Senseway Configuration page `Settings > NTP`.  
-_Default: <http://pool.ntp.org/>_
+Senseway tarafından gönderilen ölçüm mesajlarında zaman bilgisi de kullanılır. Bunun için zaman senkronizasyonu gereklidir. Yerel veya özel kurulumlarda, Senseway Konfigürasyon sayfasındaki  `Settings > NTP` bölümünden varsayılan NTP sunucusu değiştirilebilir.
+_Varsayılan: <http://pool.ntp.org/>_
 
 ### <span style="color: rgb(240,95,34)">MQTT</span>
-Senseway needs MQTT / TLS configuration and supports variety of authentication mechanisms including: plaintext MQTT, MQTTs with and without password, and MQTTs with Client certificate.  
-The MQTT Broker Server to be used must support TLS  and provide the following for certificate-based connections:
+Senseway, MQTT / TLS yapılandırmasına ihtiyaç duyar ve aşağıdakileri içeren çeşitli kimlik doğrulama mekanizmalarını destekler: düz metin MQTT, parola ile veya parolasız MQTTs ve istemci sertifikasıyla MQTTs. Kullanılacak MQTT Broker Sunucusu TLS’yi desteklemelidir ve sertifika tabanlı bağlantılar için aşağıdaki bilgileri sağlamalıdır:
 
 -   MQTT endpoint (_mqtts: //my-mqtt-broker.server: 8883_)
--   CA (CA certificate)
--   Client Cert (a created and signed certificate from CA)
--   Client Key (private key of the certificate generated through the CA)
+-   CA (CA sertifikası)
+-   İstemci Sertifikası (CA tarafından oluşturulan ve imzalanan sertifika)
+-   İstemci Anahtarı (CA tarafından oluşturulan sertifikanın özel anahtarı)
 
-Required certificates and endpoint information are defined at `Settings > MQTT` in the Senseway configuration page. Senseway uses these certificates for the future MQTT connections.
+Gerekli sertifikalar ve endpoint bilgileri, Senseway konfigürasyon sayfasındaki `Settings > MQTT` bölümünde tanımlanır. Senseway, gelecekteki MQTT bağlantıları için bu sertifikaları kullanır.
 
-Details
+Detaylar
 https://www.hivemq.com/blog/mqtt-security-fundamentals-tls-ssl/
 
 ### <span style="color: rgb(240,95,34)">HTTP</span>
 HTTP here..
 
 
-## <span style="color: rgb(240,95,34)">MQTT Integration</span>
+## <span style="color: rgb(240,95,34)">MQTT Entegrasyonu</span>
 
-This section explains which topics to use when communicating with Senseway over MQTT and how messages should be interpreted.
+Bu bölüm, Senseway ile MQTT üzerinden iletişim kurarken kullanılacak konuları ve mesajların nasıl yorumlanacağını açıklar.
 
-`Actor` sends `Payload` with `PayloadType` format to `Topic`
+`Aktör` sends `Payload` with `PayloadType` format to `Topic`
 
-### <span style="color: rgb(240,95,34)">Information</span>
+### <span style="color: rgb(240,95,34)">Bilgi</span>
 
-When Senseway powers on, it publishes a status message containing basic device information including **Firmware Verion**. This status message can also be retrieved using the following topic:
+Senseway açıldığında, cihazın temel bilgilerini içeren bir durum mesajı yayınlar. Bu mesaj, aşağıdaki konu kullanılarak da alınabilir:
 
 <table>
 <tr>
@@ -135,9 +129,9 @@ Senseway
 </tr>
 </table>
 
-### <span style="color: rgb(240,95,34)">Firmware Update Over the Air (OTA)</span>
+### <span style="color: rgb(240,95,34)">Havadan Yazılım Güncellemesi (OTA)</span>
 
-Sensemore devices accept firmware update over HTTP. In order to start firmware update on the device, valid binary link sent to firmware update topic. Senseway downloads the binary from given url and start firmware update.
+Sensemore cihazları HTTP üzerinden yazılım güncellemesini kabul eder. Cihazda yazılım güncellemesi başlatmak için, geçerli bir binary bağlantısı yazılım güncelleme konusuna gönderilir. Senseway, verilen URL’den binary dosyasını indirir ve yazılım güncellemesini başlatır.
 
 <table>
 <tr>
@@ -215,9 +209,9 @@ Senseway
 </tr>
 </table>
 
-### <span style="color: rgb(240,95,34)">Restart</span>
+### <span style="color: rgb(240,95,34)">Yeniden Başlatma</span>
 
-Senseway can be restarted using the following topic.
+Senseway cihazını uzaktan yeniden başlatmak için aşağıdaki konu kullanılır.
 
 <table>
 <tr>
@@ -246,12 +240,10 @@ JSON
 </tr>
 </table>
 
-### <span style="color: rgb(240,95,34)">Measurement Upload URL</span>
+### <span style="color: rgb(240,95,34)">Ölçüm Yükleme URL’si</span>
 
-Senseway manages measurement uploads for attached devices, publishing metadata over MQTT 
-and transmitting signal binaries via HTTP.
-The default binary upload URL is _<https://core.sensemore.io/measurement/>_, 
-however, the URL can be retrieved or modified using the following topic.
+Senseway, bağlı cihazların ölçüm yüklemelerini MQTT üzerinden meta veriler yayınlayarak ve sinyal biney dosyalarını HTTP aracılığıyla ileterek yönetir.  
+Varsayılan ikili yükleme URL’si _<https://core.sensemore.io/measurement/>_ şeklindedir, ancak bu URL aşağıdaki konu başlığı kullanılarak alınabilir veya değiştirilebilir.
 
 <table>
 <tr>
@@ -359,16 +351,11 @@ JSON
 </tr>
 </table>
 
-### <span style="color: rgb(240,95,34)">Senseway - Wired Pro Communication Speed</span>
+### <span style="color: rgb(240,95,34)">Senseway - Wired Pro İlestişim Hızı</span>
 
-Senseway communicates with Wired Pro over RS485, which has a theoretical range of up to one kilometer. 
-This allows Senseway and Wired Pro to be placed up to 1 km apart and connected via an RS485 cable. 
-As the distance between them increases, the baudrate must be lowered to increase reliability. 
-Baudrate refers to the number of bits transmitted per second. 
-At shorter distances, increasing the baudrate can increase communication speed between Senseway and Wired Pro. 
-The baudrate can be viewed or modified via MQTT using the following topic.
+Senseway, Wired Pro ile RS485 üzerinden iletişim kurar ve bu sistemin teorik menzili 1 kilometreye kadar ulaşabilir. Bu, Senseway ile Wired Pro’nun 1 km mesafeye kadar birbirinden uzak yerleştirilip bir RS485 kablosu ile bağlanmasını sağlar. Aralarındaki mesafe arttıkça, iletişim güvenilirliği artırmak için baudrate değeri düşürülmelidir.Baudrate, saniyede iletilen bit sayısını ifade eder. Daha kısa mesafelerde, baudrate’i artırmak Senseway ve Wired Pro arasındaki iletişim hızını yükseltebilir. Baudrate, aşağıdaki MQTT konu başlığı kullanılarak görüntülenebilir veya değiştirilebilir:
 
-:warning: When connecting multiple Wired Pros to the same Senseway, a bus topology must be used, ensuring no parallel lines are present.
+:warning: Birden fazla Wired Pro’yu aynı Senseway’e bağlarken, bir bus topolojisi kullanılmalı ve paralel hatların olmamasına dikkat edilmelidir.
 
 <table>
 <tr>
@@ -419,7 +406,7 @@ JSON
 </tr>
 </table>
 
-**Valid badurate values:** 115200, 460800, 921600, 1000000
+**Geçerli baudrate değerleri::** 115200, 460800, 921600, 1000000
 
 <table>
 <tr>
@@ -478,9 +465,9 @@ JSON
 </tr>
 </table>
 
-### <span style="color: rgb(240,95,34)">Device List</span>
+### <span style="color: rgb(240,95,34)">Cihaz Listesi</span>
 
-The list of devices attached to Senseway, along with their measurement configurations, can be retrieved using the following topic.
+Senseway’e bağlı cihazların ve bunların ölçüm yapılandırmalarının listesi, aşağıdaki konu başlığı kullanılarak alınabilir.
 
 <table>
 <tr>
@@ -556,9 +543,9 @@ JSON
 </tr>
 </table>
 
-Senseway evaluates the connection status of each assigned sensor upon receiving a scan command. It then publishes a result message that includes the **Firmware Version** of each connected device.
+Senseway, her atanan sensörün bağlantı durumunu bir tarama komutu aldığında değerlendirir. Ardından, bağlı her cihazın **Donanım Yaılımı Sürümünü** içeren bir sonuç mesajı yayınlar.  
 
-:warning: Infinity, Infinity Pro and Nomad may appear as "not scanned" if they are on sleeping schedule.
+:warning: Infinity, Infinity Pro ve Nomad, uyku programında iseler “not scanned” olarak görünebilir.
 
 <table>
 <tr>
@@ -639,10 +626,9 @@ JSON
 </tr>
 </table>
 
-### <span style="color: rgb(240,95,34)">Device Firmware Update Over The Air (OTA)</span>
+### <span style="color: rgb(240,95,34)">Havadan Cihaz Yazılım Güncellemesi (OTA)</span>
 
-Sensemore end node devices accept firmware update over HTTP. In order to start firmware update on end-node device, valid binary link sent to firmware update topic. 
-Senseway downloads the binary from given url and start firmware update for particular device.
+Sensemore uç nokta cihazları, donanım yazılım güncellemesini HTTP üzerinden kabul eder. Uç nokta cihazında donanım yazılım güncellemesi başlatmak için geçerli binary link'i, donanım yazılım güncelleme konusu üzerinden gönderilir. Senseway, verilen URL’den binary dosyasını indirir ve belirli cihaz için donanım yazılım güncellemesini başlatır.
 
 <table>
 <tr>
@@ -713,9 +699,9 @@ Senseway
 </tr>
 </table>
 
-### <span style="color: rgb(240,95,34)">Device Add & Remove</span>
+### <span style="color: rgb(240,95,34)">Cihaz Ekle & Çıkar</span>
 
-Senseway's sensor configuration can be viewed or modifyed over MQTT with the following topics. 
+Senseway’in sensör yapılandırması, aşağıdaki konular üzerinden MQTT üzerinden görüntülenebilir veya değiştirilebilir. 
 
 <table>
 <tr>
@@ -829,9 +815,9 @@ JSON
 </tr>
 </table>
 
-### <span style="color: rgb(240,95,34)">Device Measurement Configuration</span>
+### <span style="color: rgb(240,95,34)">Cihaz Ölçüm Yapılandırılması</span>
 
-Senseway is compatible with both wired sensors (Wired Pro) and wireless sensors (Infinity, Infinity Pro, Nomad). Wireless sensors typically utilize a sleep schedule feature to extend their battery life, allowing for operation of up to 2 years on a single charge.
+Senseway, hem kablolu sensörler (Wired Pro) hem de kablosuz sensörlerle (Infinity, Infinity Pro, Nomad) uyumludur. Kablosuz sensörler, genellikle batarya ömrünü uzatmak için bir uyku programı özelliği kullanır ve bu özellik, tek bir şarjla 2 yıla kadar çalışma sağlar.
 
 <table>
 <tr>
@@ -879,11 +865,10 @@ Senseway is compatible with both wired sensors (Wired Pro) and wireless sensors 
 <td>
 </tr>
 </table>
-:warning: When multiple Wired Pros are connected to the same Senseway, 
-only the termination resistor of the Wired Pro farthest from the Senseway should be enabled. 
-Enabling termination resistors on multiple Wired Pros connected to the same Senseway may permanently damage your devices.
+:warning: Birden fazla Wired Pro aynı Senseway’e bağlandığında, sadece Senseway’e en uzak olan Wired Pro’nun terminasyon direncinin etkinleştirilmesi gerekir.
+Aynı Senseway’e bağlı birden fazla Wired Pro’nun terminasyon dirençlerini etkinleştirmek, cihazlarınıza kalıcı olarak zarar verebilir.
 
-The configuration of a specific device can be retrieved using the following topic.
+Belirli bir cihazın yapılandırması, aşağıdaki konu başlığı kullanılarak alınabilir.
 
 <table>
 <tr>
@@ -943,7 +928,7 @@ JSON
 </tr>
 </table>
 
-The configuration of a specific device can be modified using the following topic
+Belirli bir cihazın yapılandırması, aşağıdaki konu başlığı kullanılarak değiştirilebilir.
 
 <table>
 <tr>
@@ -1024,9 +1009,9 @@ JSON
 </table>
 
 
-### <span style="color: rgb(240,95,34)">Measurement</span>
+### <span style="color: rgb(240,95,34)">Ölçüm</span>
 
-Senseway initiates automatic measurement using the scheduling feature. It also accepts manual measurements from the Sensemore Lake platform as well as  MQTT based on the configurations set previously. MQTT measurement topics are as follows:
+Senseway, planlama özelliğini kullanarak otomatik ölçüm başlatır. Ayrıca, daha önce yapılandırılan ayarlara göre Sensemore Lake platformu ve MQTT üzerinden manuel ölçümleri kabul eder. MQTT ölçüm konuları aşağıdaki gibidir.
 
 <table>
 <tr>
@@ -1131,6 +1116,6 @@ JSON
 </tr>
 </table>
 
-## <span style="color: rgb(240,95,34)">HTTP Integration</span>
+## <span style="color: rgb(240,95,34)">HTTP Entegrasyonu</span>
 
 heree.

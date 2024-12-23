@@ -3,18 +3,18 @@
 
 Sensemore Duck, yalnızca titreşim, sıcaklık ve basınç değil, aynı zamanda kütle akış hızı, hız, akım gibi tüm analog verileri toplamak için kompakt bir IoT veri toplama cihazıdır.
 
-Duck teknik özellikleri _<http://sensemore.io/>_  
-Duck kurulum rehberi _<http://sensemore.io/>_
+Duck teknik özelliklerini inceleyin: _<http://sensemore.io/>_  
+Duck kurulum rehberini inceleyin: _<http://sensemore.io/>_
 
 Duck sistem entegrasyonundan bahsetmeye başlamadan önce, Duck cihazınızın MQTT, NTP ve HTTP ayarlarını yapılandırın.
 
 ## <span style="color: rgb(240,95,34)">Bağlantı</span>
 
 ### <span style="color: rgb(240,95,34)">Wi-Fi & Ethernet</span>
-Duck, ağ bağlantıları için hem Wi-Fi hem de Ethernet’i destekler. Varsayılan olarak, ağ adaptörü Wi-Fi olarak ayarlanmıştır, ancak bu ayar, Konfigürasyon sayfasının `Ayarlar > Bağlantı` bölümünde değiştirilebilir..
+Duck, ağ bağlantıları için hem Wi-Fi hem de Ethernet’i destekler. Varsayılan olarak, ağ adaptörü Wi-Fi olarak ayarlanmıştır, ancak bu ayar, Konfigürasyon sayfasının `Ayarlar > Bağlantı` bölümünde değiştirilebilir.
 
 ### <span style="color: rgb(240,95,34)">NTP</span>
-Duck tarafından gönderilen ölçüm mesajlarında zaman bilgisi de kullanılır. Bunun için zaman senkronizasyonu gereklidir. Yerel veya özel kurulumlarda, Duck Konfigürasyon sayfasındaki  `Settings > NTP` bölümünden varsayılan NTP sunucusu değiştirilebilir..  
+Duck tarafından gönderilen ölçüm mesajlarında zaman bilgisi de kullanılır. Bunun için zaman senkronizasyonu gereklidir. Yerel veya özel kurulumlarda, Duck Konfigürasyon sayfasındaki  `Settings > NTP` bölümünden varsayılan NTP sunucusu değiştirilebilir.
 _Varsayılan: <http://pool.ntp.org/>_
 
 ### <span style="color: rgb(240,95,34)">MQTT</span>
@@ -302,7 +302,7 @@ Duck
 </tr>
 </table>
 
-### <span style="color: rgb(240,95,34)">Cihaz Yeniden Başlatma</span>
+### <span style="color: rgb(240,95,34)">Yeniden Başlatma</span>
 
 Duck cihazını uzaktan yeniden başlatmak için aşağıdaki konu kullanılır.
 
@@ -333,9 +333,9 @@ JSON
 </tr>
 </table>
 
-### <span style="color: rgb(240,95,34)">Sensor Configuration</span>
+### <span style="color: rgb(240,95,34)">Sensör Yapılandırması</span>
 
-Duck's sensor configuration can be viewed or changed over MQTT with the following topics.
+Duck'ın sensör yapılandırması aşağıdaki başlıklar altında MQTT üzerinden görüntülenebilir veya değiştirilebilir.
 
 <table>
 <tr>
@@ -408,7 +408,7 @@ JSON
 </tr>
 </table>
 
-:exclamation: Changing Duck's sensor configuration will cause Duck to restart
+:exclamation: Duck'ın sensör yapılandırmasını değiştirmek cihazın yeniden başlatılmasına neden olacaktır.
 
 <table>
 <tr>
@@ -487,15 +487,18 @@ JSON
 
 ### <span style="color: rgb(240,95,34)">Measuremnt</span>
 
-Duck device is designed for high-performance data acquisition with multiple ways to trigger measurements. It continuously collects data and evaluates conditions for publishing measurements based on the following mechanisms:  
-**1.	Heartbeat:**
-If no measurement has been published within a time period exceeding the configured heartbeat value, Duck automatically publishes a measurement.  
-**2.	Trigger Difference:**
-Duck publishes a measurement when the difference between the current and previous measurements exceeds the configured percentage threshold. The Trigger Difference can be adjusted in the device’s configuration settings.  
+Duck cihazı, ölçümleri tetiklemek için birden fazla yönteme sahip olup, yüksek performanslı veri toplama için tasarlanmıştır. Cihaz, verileri sürekli olarak toplar ve aşağıdaki mekanizmalara dayalı olarak ölçümleri yayınlama koşullarını değerlendirir:
+**1.	Kalp Atışı (Heartbeat):**
+Belirlenen kalp atışı değerini aşan bir süre boyunca hiçbir ölçüm yayınlanmamışsa, Duck otomatik olarak bir ölçüm yayınlar.
+
+**2.	Tetik Farkı (Trigger Difference):**
+Mevcut ve önceki ölçümler arasındaki fark, yapılandırılmış yüzde eşiğini aştığında Duck bir ölçüm yayınlar. Tetik Farkı, cihazın yapılandırma ayarlarından ayarlanabilir.
+
 **3.	Sensemore Lake:**
-Users can send manual measurement requests through the Sensemore Lake platform.  
+Kullanıcılar, Sensemore Lake platformu üzerinden manuel ölçüm isteği gönderebilir.
+
 **4.	MQTT:**
-Manual measurement requests can also be sent via MQTT. Details about the MQTT topics are provided in down below.
+Manuel ölçüm talepleri MQTT üzerinden de gönderilebilir. MQTT konuları hakkında detaylı bilgiler aşağıda verilmiştir.
 
 <table>
 <tr>
@@ -603,3 +606,7 @@ JSON
 </tr>
 </tr>
 </table>
+
+## <span style="color: rgb(240,95,34)">HTTP Entegrasyonu</span>
+
+heree.

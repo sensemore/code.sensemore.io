@@ -1,13 +1,12 @@
-
-## 1.1. Introduction
+# <span style="color: rgb(240,95,34)">1.1. Introduction</span>
 SensemoreApi is a library that helps developers to integrate their android applications to Sensemore productions."Sensemore Infinity" is the main product right now. 
 You can easily scan/connect/measure SensemoreInfinity via using this library. If you want to have the library please contact hello@sensemore.io. 
 
 You can also skip the reading part and check out example application to understand fundamental usages of this api.
 
-## 1.2. Getting Started
+## <span style="color: rgb(240,95,34)">1.2. Getting Started</span>
 
-### 1.2.1. Requirements
+### <span style="color: rgb(240,95,34)">1.2.1. Requirements</span>
 Make sure you are including these libraries to your app.gradle
 Dependencies:
 
@@ -20,7 +19,7 @@ implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-datafor
 implementation 'net.sf.opencsv:opencsv:2.3'//csv export
 ```
 
-### 1.2.2. Installing the api
+### <span style="color: rgb(240,95,34)">1.2.2. Installing the api</span>
 SensemoreaApi will be handed as .aar file and for the same reason, you should define above dependencies in order to keep the library size and management clean. 
 You should import .aar file to your project from **File > New > New Module, click "Import .JAR/.AAR Package"** module type then choose the path of library file.
 
@@ -30,7 +29,7 @@ Sync your project and build. Lastly, define the dependency in your app.gradle
 implementation project(":sensemoreapi")
 ```
 
-### 1.2.3. Permissions
+### <span style="color: rgb(240,95,34)">1.2.3. Permissions</span>
 Since the sensemoreApi uses BLE you should request permissions to access Bluetooth and Locations services.
 
 _AndroidManifest.xml_
@@ -43,12 +42,12 @@ Requesting permissions
 requestPermissions(new String[]{ Manifest.permission.BLUETOOTH, Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS);
 ```
 
-# 2. Usage
+# <span style="color: rgb(240,95,34)">2. Usage</span>
 
 Build your api instance as
 ```api = SensemoreApi.Build(this);``` then you are ready to go. Almost all api methods use reactive consumers to handle situations.
 
-### 2.0.1. Scan
+### <span style="color: rgb(240,95,34)">2.0.1. Scan</span>
 Scan method is making BLE scans with name filter of Sensemore products names so you can only connect to Sensemore products. Scan will be destroyed after connection state changes.
 ```java
  api.Search(scanResult -> {
@@ -58,7 +57,7 @@ Scan method is making BLE scans with name filter of Sensemore products names so 
         });
 ```
 
-### 2.0.2. Connect/Disconnect
+### <span style="color: rgb(240,95,34)">2.0.2. Connect/Disconnect</span>
 Connect requires valid macaddress and state callback as parameter. Invalid mac addresses will break the application. 
 In order to disconnect from device, you just need to call ```api.Disconnect()``` method. 'onDisconnect and onDisconnected' events will be consumed.
 
@@ -92,7 +91,7 @@ In order to disconnect from device, you just need to call ```api.Disconnect()```
         }
     };
 ```
-### 2.0.3. Read Device Stats
+### <span style="color: rgb(240,95,34)">2.0.3. Read Device Stats</span>
 Device stats hold four types of information 
 - Temperature, inner temperature of device
 - Battery, remaining battery voltage
@@ -107,17 +106,17 @@ Device stats hold four types of information
                     Log("Error device stats", throwable);
                 });
 ```
-## 2.1. Measurement
+## <span style="color: rgb(240,95,34)">2.1. Measurement</span>
 There are two types of measurement, Batch and Stream
 
 Batch measurement sends measurement command to the device and reads measurement data after successfully completed.
 
 Stream measurement immediately streams measurement chunks to the callback, Stream measurement is only performed  by profiles with SamplingRate 800Hz and below.
 
-### 2.1.1. Tag
+### <span style="color: rgb(240,95,34)">2.1.1. Tag</span>
 You could want to track your measurements by some reference. Use tags as your reference.
 
-### 2.1.2. Profile
+### <span style="color: rgb(240,95,34)">2.1.2. Profile</span>
 
 Properties:
 
@@ -143,7 +142,7 @@ Accelerometer accelerometerRange = Accelerometer.Range2G;
 
 Profile profile= new Profile(name, sampleSize, samplingRate, accelerometerRange, sensorSelection);
 ```
-### 2.1.3. BatchMeasurement
+### <span style="color: rgb(240,95,34)">2.1.3. BatchMeasurement</span>
 Profile needs to be given in order to take batch measurement.
 After defining a profile you just need to pass the profile and tags to the BatchMeasure method
 ```java
@@ -163,7 +162,7 @@ You do not have to calibrate sensemore devices. Sensemore devices calculate cali
 
 
 
-### 2.1.4. Stream Measurement
+### <span style="color: rgb(240,95,34)">2.1.4. Stream Measurement</span>
 Profile needs to be given in order to take batch measurement.
 After definig a profile just need to pass profile and tags to the BatchMeasure method
 
@@ -183,9 +182,9 @@ Stop:
 });
 ```
 
-## 2.2. Utils
+## <span style="color: rgb(240,95,34)">2.2. Utils</span>
 
-### 2.2.1. Parser
+### <span style="color: rgb(240,95,34)">2.2.1. Parser</span>
 Parser methods listed below
 - `measurement.ToJSON()`
 - `measurement.ParseJSON()`
