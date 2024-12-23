@@ -8,6 +8,10 @@ Senseway kurulum rehberini inceleyin: _<http://sensemore.io/>_
 
 Senseway sistem entegrasyonuna başlamadan önce, Senseway’inizin MQTT, NTP ve HTTP ayarlarını yapılandırın.
 
+### <span style="color: rgb(240,95,34)">Yapılandırma Sayfasına Erişim</span>
+Senseway takıldığında, kısa bir süre sonra **SENSEWAY-CA:50:DA:XX:XX:XX** SSID ile bir Wi-Fi erişim noktası ağı yayınlar. AP’ye bağlanmak için varsayılan şifreyi kullanın. Cihazınız, captive portalda yapılandırma sayfasına yönledricektir. Cihazınız otomatik olarak captive portalı açmazsa, varsayılan tarayıcınızda [http:\\\\192.168.4.1 ](http:\192.168.4.1) adresine gidin.  
+Senseway, Wi-Fi veya Ethernet üzerinden bir ağa bağlandıktan sonra, yapılandırma sayfasına aynı ağdan cihazın yerel IP adresiyle erişilebilir. Yerel IP adresi, yapılandırma sayfasının ana sekmesinde görüntülenir ve ayrıca MQTT bilgi mesajında gösterilir.
+
 ## <span style="color: rgb(240,95,34)">Bağlantı</span>
 
 ### <span style="color: rgb(240,95,34)">Wi-Fi & Ethernet</span>

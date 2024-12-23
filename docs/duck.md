@@ -13,6 +13,11 @@ Chekout Duck installation guide _<http://sensemore.io/>_
 
 Before starting to speak about Duck system integration, configure your Duck's MQTT, NTP and HTTP settings. 
 
+### <span style="color: rgb(240,95,34)">Accessing Configuration Page</span>
+
+Shortly after the Duck is plugged in, it broadcats a Wi-Fi acces point network with **DUCK-CA&colon;B8&colon;DA&colon;XX&colon;XX&colon;XX** SSID'. Use default password to connect to the AP. Your device will launch configuration page in captive portal. If your device does not automatically launch captive portal, navigate to [http:\\\\192.168.4.1 ](http:\192.168.4.1) in your default browser.  
+Once Duck is connected to a network via Wi-Fi or Ethernet, its configuration page can be accessed through its local IP address from the same network. The local IP address is displayed on the home tab of the configuration page and is also shown in the MQTT information message.
+
 ## <span style="color: rgb(240,95,34)">Connectivity</span>
 
 ### <span style="color: rgb(240,95,34)">Wi-Fi & Ethernet</span>

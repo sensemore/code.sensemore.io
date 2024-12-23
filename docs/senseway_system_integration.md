@@ -10,7 +10,7 @@ Before starting to speak about Senseway system integration, configure your Sense
 
 ### <span style="color: rgb(240,95,34)">Accessing Configuration Page</span>
 
-Shortly after the Senseway is plugged in, it broadcats a Wi-Fi acces point network with **SENSEWAY-CA&colon;B8&colon;50&colon;XX&colon;XX&colon;XX** SSID'. Use default password "sensemore" to connect to the AP. Your device will launch configuration page in captive portal. If your device does not automatically launch captive portal, navigate to [http:\\\\192.168.4.1 ](http:\192.168.4.1) in your default browser.  
+Shortly after the Senseway is plugged in, it broadcats a Wi-Fi acces point network with **SENSEWAY-CA&colon;B8&colon;50&colon;XX&colon;XX&colon;XX** SSID'. Use default password to connect to the AP. Your device will launch configuration page in captive portal. If your device does not automatically launch captive portal, navigate to [http:\\\\192.168.4.1 ](http:\192.168.4.1) in your default browser.  
 Once Senseway is connected to a network via Wi-Fi or Ethernet, its configuration page can be accessed through its local IP address from the same network. The local IP address is displayed on the home tab of the configuration page and is also shown in the MQTT information message.
 
 ## <span style="color: rgb(240,95,34)">Connectivity</span>
