@@ -1,12 +1,13 @@
 # <span style="color: rgb(240,95,34)">Senseway Integration Document</span>
-<img src="images/Sensemore_product_senseway.gif"/>  
 
-Senseway is a gateway for Wired Pro, Infinity, Infinity Pro and Nomad sensors. Senseway handles networking, measurement scheduling, sleep, firmware update and more for Sensemore sensors.  
+<img src="images/Sensemore_product_senseway.gif"/>
+
+Senseway is a gateway for Wired Pro, Infinity, Infinity Pro and Nomad sensors. Senseway handles networking, measurement scheduling, sleep, firmware update and more for Sensemore sensors.
 
 Chekout Senseway data sheet _<http://sensemore.io/>_  
 Chekout Senseway installation guide _<http://sensemore.io/>_
 
-Before starting to speak about Senseway system integration, configure your Senseway's MQTT, NTP and HTTP settings. 
+Before starting to speak about Senseway system integration, configure your Senseway's MQTT, NTP and HTTP settings.
 
 ### <span style="color: rgb(240,95,34)">Accessing Configuration Page</span>
 
@@ -16,20 +17,23 @@ Once Senseway is connected to a network via Wi-Fi or Ethernet, its configuration
 ## <span style="color: rgb(240,95,34)">Connectivity</span>
 
 ### <span style="color: rgb(240,95,34)">Wi-Fi & Ethernet</span>
+
 Senseway supports both Wi-Fi and Ethernet for network connections. By default, the network adapter is set to Wi-Fi, but this can be modified in the Settings of the Configuration page `Settings > Connectivity`.
 
 ### <span style="color: rgb(240,95,34)">NTP</span>
+
 Time information is also used in the measurement messages sent by Senseway. Time synchronization is needed for this. For OnPremise or private installations, default NTP server can be modified in Senseway Configuration page `Settings > NTP`.  
 _Default: <http://pool.ntp.org/>_
 
 ### <span style="color: rgb(240,95,34)">MQTT</span>
-Senseway needs MQTT / TLS configuration and supports variety of authentication mechanisms including: plaintext MQTT, MQTTs with and without password, and MQTTs with Client certificate.  
-The MQTT Broker Server to be used must support TLS  and provide the following for certificate-based connections:
 
--   MQTT endpoint (_mqtts: //my-mqtt-broker.server: 8883_)
--   CA (CA certificate)
--   Client Cert (a created and signed certificate from CA)
--   Client Key (private key of the certificate generated through the CA)
+Senseway needs MQTT / TLS configuration and supports variety of authentication mechanisms including: plaintext MQTT, MQTTs with and without password, and MQTTs with Client certificate.  
+The MQTT Broker Server to be used must support TLS and provide the following for certificate-based connections:
+
+- MQTT endpoint (_mqtts: //my-mqtt-broker.server: 8883_)
+- CA (CA certificate)
+- Client Cert (a created and signed certificate from CA)
+- Client Key (private key of the certificate generated through the CA)
 
 Required certificates and endpoint information are defined at `Settings > MQTT` in the Senseway configuration page. Senseway uses these certificates for the future MQTT connections.
 
@@ -37,8 +41,8 @@ Details
 https://www.hivemq.com/blog/mqtt-security-fundamentals-tls-ssl/
 
 ### <span style="color: rgb(240,95,34)">HTTP</span>
-HTTP here..
 
+HTTP here..
 
 ## <span style="color: rgb(240,95,34)">MQTT Integration</span>
 
@@ -107,6 +111,7 @@ Senseway
   }
 }
 ```
+
 </td>
 <td>
 
@@ -131,6 +136,7 @@ Senseway
     "Largest Free Bytes": 3997696
   }
 ```
+
 </td>
 </tr>
 </table>
@@ -161,9 +167,10 @@ User
 
 ```json
 {
-  "url" : "http://link.mydomain.com/Senseway.bin"  
+  "url": "http://link.mydomain.com/Senseway.bin"
 }
 ```
+
 </td>
 </tr>
 <tr>
@@ -181,6 +188,7 @@ Senseway
   "status": "OTA accepted"
 }
 ```
+
 </td>
 </tr>
 <tr>
@@ -211,6 +219,7 @@ Senseway
   "status": "Restarting device due to OTA"
 }
 ```
+
 </td>
 </tr>
 </table>
@@ -249,7 +258,7 @@ JSON
 ### <span style="color: rgb(240,95,34)">Measurement Upload URL</span>
 
 Senseway manages measurement uploads for attached devices by publishing metadata over MQTT and transmitting signal binaries via HTTP.  
-The default binary upload URL is _<https://core.sensemore.io/measurement/>_, 
+The default binary upload URL is _<https://core.sensemore.io/measurement/>_,
 however, the URL can be retrieved or modified using the following topic.
 
 <table>
@@ -292,11 +301,12 @@ JSON
  </td>
  <td>
 
- ```json
+```json
 {
   "binaryurl": "https://core.sensemore.io/measurement"
 }
 ```
+
  </td>
 </tr>
 </table>
@@ -330,6 +340,7 @@ JSON
   "binaryurl": "https://core.sensemore.io/measurement"
 }
 ```
+
 </i>
 </td>
 </tr>
@@ -348,23 +359,24 @@ JSON
  </td>
  <td>
 
- ```json
+```json
 {
   "status": "Set Binary url accepted",
   "binaryurl": "https://core.sensemore.io/measurement"
 }
 ```
+
  </td>
 </tr>
 </table>
 
 ### <span style="color: rgb(240,95,34)">Senseway - Wired Pro Communication Speed</span>
 
-Senseway communicates with Wired Pro over RS485, which has a theoretical range of up to one kilometer. 
-This allows Senseway and Wired Pro to be placed up to 1 km apart and connected via an RS485 cable. 
-As the distance between them increases, the baudrate must be lowered to increase reliability. 
-Baudrate refers to the number of bits transmitted per second. 
-At shorter distances, increasing the baudrate can increase communication speed between Senseway and Wired Pro. 
+Senseway communicates with Wired Pro over RS485, which has a theoretical range of up to one kilometer.
+This allows Senseway and Wired Pro to be placed up to 1 km apart and connected via an RS485 cable.
+As the distance between them increases, the baudrate must be lowered to increase reliability.
+Baudrate refers to the number of bits transmitted per second.
+At shorter distances, increasing the baudrate can increase communication speed between Senseway and Wired Pro.
 The baudrate can be viewed or modified via MQTT using the following topic.
 
 :warning: When connecting multiple Wired Pros to the same Senseway, a bus topology must be used, ensuring no parallel lines are present.
@@ -409,11 +421,12 @@ JSON
  </td>
  <td>
 
- ```json
+```json
 {
   "baudrate": 921600
 }
 ```
+
  </td>
 </tr>
 </table>
@@ -449,6 +462,7 @@ JSON
   "baudrate": 921600
 }
 ```
+
 </i>
 </td>
 </tr>
@@ -467,12 +481,13 @@ JSON
  </td>
  <td>
 
- ```json
+```json
 {
   "status": "Set baud rate accepted",
   "baudrate": 921600
 }
 ```
+
  </td>
 </tr>
 </table>
@@ -521,7 +536,7 @@ JSON
  </td>
  <td>
 
- ```json
+```json
 {
   "devices": [
     {
@@ -551,6 +566,7 @@ JSON
   ]
 }
 ```
+
  </td>
 </tr>
 </table>
@@ -599,7 +615,7 @@ JSON
  </td>
  <td>
 
- ```json
+```json
 {
   "devices": [
     {
@@ -634,13 +650,14 @@ JSON
   ]
 }
 ```
+
  </td>
 </tr>
 </table>
 
 ### <span style="color: rgb(240,95,34)">Device Firmware Update Over The Air (OTA)</span>
 
-Sensemore end node devices accept firmware update over HTTP. In order to start firmware update on end-node device, valid binary link sent to firmware update topic. 
+Sensemore end node devices accept firmware update over HTTP. In order to start firmware update on end-node device, valid binary link sent to firmware update topic.
 Senseway downloads the binary from given url and start firmware update for particular device.
 
 <table>
@@ -664,10 +681,11 @@ User
 <td>
 
 ```json
-  {
-    "url": "http://link.mydomain.com/Device.bin"
-  }
-  ```
+{
+  "url": "http://link.mydomain.com/Device.bin"
+}
+```
+
 </td>
 </tr>
 <tr>
@@ -685,6 +703,7 @@ Senseway
   "status": "OTA accepted"
 }
 ```
+
 </td>
 </tr>
 <tr>
@@ -714,7 +733,7 @@ Senseway
 
 ### <span style="color: rgb(240,95,34)">Device Add & Remove</span>
 
-Senseway's sensor configuration can be viewed or modifyed over MQTT with the following topics. 
+Senseway's sensor configuration can be viewed or modifyed over MQTT with the following topics.
 
 <table>
 <tr>
@@ -742,9 +761,10 @@ JSON
 
 ```json
 {
-  "mac" : "CA:B8:XX:XX:XX:XX"
+  "mac": "CA:B8:XX:XX:XX:XX"
 }
 ```
+
 </i>
 </td>
 </tr>
@@ -763,11 +783,12 @@ JSON
  </td>
  <td>
 
- ```json
+```json
 {
   "status": "Device added"
 }
 ```
+
  </td>
 </tr>
 </table>
@@ -798,9 +819,10 @@ JSON
 
 ```json
 {
-  "mac" : "CA:B8:XX:XX:XX:XX"
+  "mac": "CA:B8:XX:XX:XX:XX"
 }
 ```
+
 </i>
 </td>
 </tr>
@@ -819,11 +841,12 @@ JSON
  </td>
  <td>
 
- ```json
+```json
 {
   "status": "Device removed"
 }
 ```
+
  </td>
 </tr>
 </table>
@@ -841,7 +864,6 @@ Senseway is compatible with both wired sensors (Wired Pro) and wireless sensors 
 <td>
 
 ```json
-
 {
   "device_mac": "CA:B8:XX:XX:XX:XX",
   "device_config": {
@@ -874,6 +896,7 @@ Senseway is compatible with both wired sensors (Wired Pro) and wireless sensors 
   }
 }
 ```
+
 </td>
 <td>
 </tr>
@@ -924,7 +947,7 @@ JSON
  </td>
  <td>
 
- ```json
+```json
 {
   "device_mac": "CA:B8:XX:XX:XX:XX",
   "device_config": {
@@ -938,6 +961,7 @@ JSON
   }
 }
 ```
+
  </td>
 </tr>
 </table>
@@ -983,6 +1007,7 @@ JSON
   }
 }
 ```
+
 </i>
 </td>
 </tr>
@@ -1001,7 +1026,7 @@ JSON
  </td>
  <td>
 
- ```json
+```json
 {
   "device_config": {
     "rs485_resistor_enabled": false,
@@ -1018,10 +1043,10 @@ JSON
   "mac": "End Node Mac"
 }
 ```
+
  </td>
 </tr>
 </table>
-
 
 ### <span style="color: rgb(240,95,34)">Measurement</span>
 
@@ -1067,11 +1092,12 @@ JSON
  </td>
  <td>
 
- ```json
+```json
 {
   "status": "Measurement started"
 }
 ```
+
  </td>
 </tr>
 </tr>
@@ -1090,11 +1116,12 @@ JSON
  </td>
  <td>
 
- ```json
+```json
 {
   "status": "Measurement done"
 }
 ```
+
  </td>
 </tr>
 </tr>
@@ -1113,7 +1140,7 @@ JSON
  </td>
  <td>
 
- ```json
+```json
 {
   "unixtimestamp": 1734443808,
   "calibrated_sampling_rate": 26746,
@@ -1126,10 +1153,509 @@ JSON
   "measurement_buffer_size": 300000
 }
 ```
+
  </td>
 </tr>
 </table>
 
 ## <span style="color: rgb(240,95,34)">HTTP Integration</span>
 
-heree.
+### <span style="color: rgb(240,95,34)">Login</span>
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Body</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+POST
+</td>
+<td>
+<b> /login</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>
+
+```json
+{
+  "password": "<DEFAULT_PASSWORD>"
+}
+```
+
+</i>
+</td>
+</tr>
+<tr>
+ <td>
+ GET
+ </td>
+ <td>
+ <b> /login</b>
+ </td>
+ <td>
+ JOSN
+ </td>
+ <td>
+ <i>
+
+```json
+{
+  "token": "CLjziyTeTzlMsv100mvgkxnTQl1nGYXpQvsIStAW16WrMjxzLvhNTOGhcFFzU38mT8sHKFhxBOm3309qxSmzKIHJux3rUbjVTkywmayA1O05hKaQn9jlY99YMmp1NorF"
+}
+```
+
+ </i>
+ </td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">Information</span>
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Body</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+GET
+</td>
+<td>
+<b> /info</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>
+
+```json
+{
+  "mac_address": "CA:B8:50:XX:XX:XX",
+  "version": "3.1.9",
+  "is_network_connected": true,
+  "is_internet_connected": true
+}
+```
+
+</i>
+</td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">Firmware Update Over the Air (OTA)</span>
+
+otaa
+
+### <span style="color: rgb(240,95,34)">Restart</span>
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Body</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+GET
+</td>
+<td>
+<b> /restart</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>
+</i>
+</td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">Measurement Upload URL</span>
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Body</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+GET
+</td>
+<td>
+<b> /binary-url</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>
+
+```json
+{
+  "url": "https://core.sensemore.io/measurement"
+}
+```
+
+</i>
+</td>
+</tr>
+<tr>
+ <td>
+ POST
+ </td>
+ <td>
+ <b>/binary-url</b>
+ </td>
+ <td>
+ JOSN
+ </td>
+ <td>
+ <i>
+
+```json
+{
+  "url": "https://core.sensemore.io/measurement"
+}
+```
+
+ </i>
+ </td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">Senseway - Wired Pro Communication Speed</span>
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Body</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+GET
+</td>
+<td>
+<b> /baudrate</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>
+
+```json
+{
+  "baudrate": 921600
+}
+```
+
+</i>
+</td>
+</tr>
+<tr>
+ <td>
+ POST
+ </td>
+ <td>
+ <b> /baudrate</b>
+ </td>
+ <td>
+ JOSN
+ </td>
+ <td>
+ <i>
+
+```json
+{
+  "baudrate": 921600
+}
+```
+
+ </i>
+ </td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">Device List</span>
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Body</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+GET
+</td>
+<td>
+<b> /device-count</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>
+
+```json
+{
+  "count": 2
+}
+```
+
+</i>
+</td>
+</tr>
+</table>
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Body</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+GET
+</td>
+<td>
+<b> /device-list</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>
+
+```json
+{
+  "devices": [
+    {
+      "mac": "CA:B8:41:XX:XX:XX",
+      "device_config": {
+        "rs485_resistor_enabled": false,
+        "trigger_enabled": false,
+        "accelerometer_range": 16,
+        "sampling_rate": 25600,
+        "sample_size": 50000,
+        "sensor_type": 1,
+        "scheduler_enabled": false
+      }
+    },
+    {
+      "mac": "CA:B8:30:XX:XX:XX",
+      "device_config": {
+        "rs485_resistor_enabled": false,
+        "trigger_enabled": false,
+        "accelerometer_range": 16,
+        "sampling_rate": 25600,
+        "sample_size": 50000,
+        "sensor_type": 1,
+        "scheduler_enabled": false
+      }
+    }
+  ]
+}
+```
+
+</i>
+</td>
+</tr>
+</table>
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Body</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+GET
+</td>
+<td>
+<b> /devices</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>
+
+```json
+{
+  "devices": [
+    {
+      "mac": "CA:B8:41:XX:XX:XX",
+      "status": "connected",
+      "version": "2.1.14",
+      "device_config": {
+        "rs485_resistor_enabled": false,
+        "trigger_enabled": false,
+        "accelerometer_range": 16,
+        "sampling_rate": 25600,
+        "sample_size": 50000,
+        "sensor_type": 1,
+        "scheduler_enabled": false
+      }
+    },
+    {
+      "mac": "CA:B8:30:XX:XX:XX",
+      "status": "scanned",
+      "rssi": -58,
+      "version": "3.0,0",
+      "device_config": {
+        "rs485_resistor_enabled": false,
+        "trigger_enabled": false,
+        "accelerometer_range": 16,
+        "sampling_rate": 25600,
+        "sample_size": 50000,
+        "sensor_type": 1,
+        "scheduler_enabled": false
+      }
+    }
+  ]
+}
+```
+
+</i>
+</td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">Device Firmware Update Over The Air (OTA)</span>
+
+### <span style="color: rgb(240,95,34)">Device Add & Remove</span>
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Body</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+POST
+</td>
+<td>
+<b> /device-add</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>
+
+```json
+{
+  "mac": "CA:B8:XX:XX:XX:XX"
+}
+```
+
+</i>
+</td>
+</tr>
+</table>
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Body</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+POST
+</td>
+<td>
+<b> /device-remove</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>
+
+```json
+{
+  "mac": "CA:B8:XX:XX:XX:XX"
+}
+```
+
+</i>
+</td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">Device Measurement Configuration</span>
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Body</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+GET
+</td>
+<td>
+<b> /device-config</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>
+
+```json
+{}
+```
+
+</i>
+</td>
+</tr>
+<tr>
+ <td>
+ POST
+ </td>
+ <td>
+ <b> /device-config</b>
+ </td>
+ <td>
+ JOSN
+ </td>
+ <td>
+ <i>
+
+```json
+{}
+```
+
+ </i>
+ </td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">Measurement</span>
