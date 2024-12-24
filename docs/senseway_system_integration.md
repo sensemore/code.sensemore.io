@@ -48,7 +48,7 @@ This section explains which topics to use when communicating with Senseway over 
 
 ### <span style="color: rgb(240,95,34)">Information</span>
 
-When Senseway powers on, it publishes a status message containing basic device information including **Firmware Verion**. This status message can also be retrieved using the following topic:
+When Senseway powers on, it publishes a status message containing basic device information including **Firmware Version**. This status message can also be retrieved using the following topic:
 
 <table>
 <tr>

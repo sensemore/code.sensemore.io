@@ -57,7 +57,7 @@ This section explains which topics to use when communicating with Wired Pro over
 
 ### <span style="color: rgb(240,95,34)">Information</span>
 
-When Wired Pro powers on, it publishes a status message containing basic device information including **Firmware Verion**. This status message can also be retrieved using the following topic:
+When Wired Pro powers on, it publishes a status message containing basic device information including **Firmware Version**. This status message can also be retrieved using the following topic:
 
 <table>
 <tr>
