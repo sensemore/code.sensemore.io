@@ -42,8 +42,6 @@ https://www.hivemq.com/blog/mqtt-security-fundamentals-tls-ssl/
 
 ### <span style="color: rgb(240,95,34)">HTTP</span>
 
-HTTP here..
-
 ## <span style="color: rgb(240,95,34)">MQTT Integration</span>
 
 This section explains which topics to use when communicating with Senseway over MQTT and how messages should be interpreted.
@@ -1215,7 +1213,35 @@ JSON
 </tr>
 </table>
 
+### <span style="color: rgb(240,95,34)">Logout</span>
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Body</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+POST
+</td>
+<td>
+<b> /logout</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>
+</i>
+</td>
+</tr>
+</table>
+
 ### <span style="color: rgb(240,95,34)">Information</span>
+
+Basic information about the device, including its **Firmware Version**, can be retrieved using the following HTTP endpoint:
 
 <table>
 <tr>
@@ -1251,9 +1277,313 @@ JSON
 </tr>
 </table>
 
+### <span style="color: rgb(240,95,34)">Change Password</span>
+
+The device’s HTTP and web configuration interface password can be changed using the following HTTP endpoint:
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Body</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+PUT
+</td>
+<td>
+<b> /change_password</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>
+
+```json
+{
+  "old_password": "<DEAFULT_PASSWORD>",
+  "new_password": "12345678"
+}
+```
+
+</i>
+</td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">NTP</span>
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Body</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+GET
+</td>
+<td>
+<b> /sntp</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>
+
+```json
+{
+  "sntp_server": "http://pool.ntp.org/"
+}
+```
+
+</i>
+</td>
+</tr>
+<tr>
+ <td>
+ POST
+ </td>
+ <td>
+ <b>/sntp</b>
+ </td>
+ <td>
+ JOSN
+ </td>
+ <td>
+ <i>
+
+```json
+{
+  "sntp_server": "http://pool.ntp.org/"
+}
+```
+
+ </i>
+ </td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">MQTT</span>
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Body</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+GET
+</td>
+<td>
+<b> /mqtt</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>
+
+```json
+{
+  "endpoint": "mqtts://iot.sensemore.io:8883",
+  "auth_type": "certificate",
+  "username": ""
+}
+```
+
+</i>
+</td>
+</tr>
+<tr>
+ <td>
+ PUT
+ </td>
+ <td>
+ <b>/mqtt</b>
+ </td>
+ <td>
+ JOSN
+ </td>
+ <td>
+ <i>
+
+```json
+{
+  "endpoint": "mqtts://iot.sensemore.io:8883",
+  "auth_type": "certificate",
+  "username": "",
+  "ca_cert": "<-----BEGIN CERTIFICATE----->",
+  "client_cert": "<-----BEGIN CERTIFICATE----->",
+  "client_key": "<-----BEGIN RSA PRIVATE KEY----->"
+}
+```
+
+ </i>
+ </td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">Wi-Fi Scan</span>
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Body</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+GET
+</td>
+<td>
+<b> /network-wifi-scan</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>
+
+```json
+{}
+```
+
+</i>
+</td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">Network Settings</span>
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Body</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+GET
+</td>
+<td>
+<b> /network</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>
+
+```json
+{
+  "network_mode": 0,
+  "network_mac": "XX:XX:XX:XX:XX:XX",
+  "network_ip": "192.168.1.109",
+  "is_network_connected": true,
+  "wifi_configurations": {
+    "wifi_sta_configurations": {
+      "ssid": "Sensemore",
+      "password": "<PASSWORD>",
+      "wpa2_ent_enabled": false,
+      "wpa2_ent_id": " ",
+      "wpa2_ent_username": " ",
+      "rssi": -47
+    },
+    "wifi_ap_configurations": {
+      "ssid": "SENSEWAY-CA:B8:50:XX:XX:XX",
+      "password": "<PASSWORD>",
+      "wifi_ap_visibility": 1
+    }
+  },
+  "ethernet_configurations": null
+}
+```
+
+</i>
+</td>
+</tr>
+<tr>
+ <td>
+ POST
+ </td>
+ <td>
+ <b>/network</b>
+ </td>
+ <td>
+ JOSN
+ </td>
+ <td>
+ <i>
+
+```json
+{
+  "network_mode": 0,
+  "network_mac": "XX:XX:XX:XX:XX:XX",
+  "network_ip": "192.168.1.109",
+  "is_network_connected": true,
+  "wifi_configurations": {
+    "wifi_sta_configurations": {
+      "ssid": "Sensemore",
+      "password": "<PASSWORD>",
+      "wpa2_ent_enabled": false,
+      "wpa2_ent_id": " ",
+      "wpa2_ent_username": " ",
+      "rssi": -47
+    },
+    "wifi_ap_configurations": {
+      "ssid": "SENSEWAY-CA:B8:50:XX:XX:XX",
+      "password": "<PASSWORD>",
+      "wifi_ap_visibility": 1
+    }
+  },
+  "ethernet_configurations": null
+}
+```
+
+ </i>
+ </td>
+</tr>
+</table>
+
 ### <span style="color: rgb(240,95,34)">Firmware Update Over the Air (OTA)</span>
 
-otaa
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Body</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+POST
+</td>
+<td>
+<b> /ota</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>
+
+```json
+{}
+```
+
+</i>
+</td>
+</tr>
+</table>
 
 ### <span style="color: rgb(240,95,34)">Restart</span>
 
@@ -1543,6 +1873,35 @@ JSON
 
 ### <span style="color: rgb(240,95,34)">Device Firmware Update Over The Air (OTA)</span>
 
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Body</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+POST
+</td>
+<td>
+<b> /device-ota</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>
+
+```json
+{}
+```
+
+</i>
+</td>
+</tr>
+</table>
+
 ### <span style="color: rgb(240,95,34)">Device Add & Remove</span>
 
 <table>
@@ -1659,3 +2018,65 @@ JSON
 </table>
 
 ### <span style="color: rgb(240,95,34)">Measurement</span>
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Body</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+Post
+</td>
+<td>
+<b> /device-measure</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>
+
+```json
+{}
+```
+
+</i>
+</td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">Danger Zone</span>
+
+#### <span style="color: rgb(240,95,34)">Device Operational Mode</span>
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Body</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+Post
+</td>
+<td>
+<b> /device-measure</b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>
+
+```json
+{}
+```
+
+</i>
+</td>
+</tr>
+</table>
