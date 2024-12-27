@@ -1,4 +1,4 @@
-# <span style="color: rgb(240,95,34)">Wired Pro Wi-Fi Integration Documentation</span>  
+# <span style="color: rgb(240,95,34)">Wired Pro Wi-Fi Integration Documentation</span>
 
 ### <span style="color: rgb(240,95,34)">Wired Pro Operational Modes</span>
 
@@ -8,14 +8,14 @@ In this mode, Wired Pro connects to Senseway (or other gateways) via an RS485 ca
 **2. Wi-Fi mode:**  
 In Wi-Fi mode, Wired Pro functions as its own gateway, managing its sensors independently. This documentation focuses on the Wi-Fi mode.
 
-<img src="images/Sensemore_product_wiredpro.gif"/>  
+<img src="images/Sensemore_product_wiredpro.gif"/>
 
 Wired Pro Wi-Fi is a combined gateway and sensor array capable of capturing 3-axis accelerometer, magnetic field, and temperature readings. It can process measurements, apply measurement strategies, and upload data to the cloud. Powered by a 5-36V DC input, Wired Pro Wi-Fi operates without the need for charging.
 
 Chekout Wired Pro Wi-Fi data sheet _<http://sensemore.io/>_  
 Chekout Wired Pro Wi-Fi installation guide _<http://sensemore.io/>_
 
-Before starting to speak about Wired Pro system integration, configure your Wired Pro's MQTT, NTP and HTTP settings. 
+Before starting to speak about Wired Pro system integration, configure your Wired Pro's MQTT, NTP and HTTP settings.
 
 ### <span style="color: rgb(240,95,34)">Accessing Configuration Page</span>
 
@@ -25,20 +25,23 @@ Once Wired Pro is connected to a network via Wi-Fi, its configuration page can b
 ## <span style="color: rgb(240,95,34)">Connectivity</span>
 
 ### <span style="color: rgb(240,95,34)">Wi-Fi</span>
+
 Wired Pro supports Wi-Fi for wireless network connections.
 
 ### <span style="color: rgb(240,95,34)">NTP</span>
+
 Time information is also used in the measurement messages sent by Wired Pro. Time synchronization is needed for this. For OnPremise or private installations, default NTP server can be modified in Wired Pro Configuration page `Settings > NTP`.  
 _Default: <http://pool.ntp.org/>_
 
 ### <span style="color: rgb(240,95,34)">MQTT</span>
-Wired Pro needs MQTT / TLS configuration and supports variety of authentication mechanisms including: plaintext MQTT, MQTTs with and without password, and MQTTs with Client certificate.  
-The MQTT Broker Server to be used must support TLS  and provide the following for certificate-based connections:
 
--   MQTT endpoint (_mqtts: //my-mqtt-broker.server: 8883_)
--   CA (CA certificate)
--   Client Cert (a created and signed certificate from CA)
--   Client Key (private key of the certificate generated through the CA)
+Wired Pro needs MQTT / TLS configuration and supports variety of authentication mechanisms including: plaintext MQTT, MQTTs with and without password, and MQTTs with Client certificate.  
+The MQTT Broker Server to be used must support TLS and provide the following for certificate-based connections:
+
+- MQTT endpoint (_mqtts: //my-mqtt-broker.server: 8883_)
+- CA (CA certificate)
+- Client Cert (a created and signed certificate from CA)
+- Client Key (private key of the certificate generated through the CA)
 
 Required certificates and endpoint information are defined at `Settings > MQTT` in the Wired Pro configuration page. Wired Pro uses these certificates for the future MQTT connections.
 
@@ -46,8 +49,8 @@ Details
 https://www.hivemq.com/blog/mqtt-security-fundamentals-tls-ssl/
 
 ### <span style="color: rgb(240,95,34)">HTTP</span>
-HTTP here..
 
+Wired Pro can be controlled over HTTP, allowing for configuration modifications and measurement actions. Accessing HTTP endpoints requires an initial login, after which the received token must be used for subsequent communications. Detailed information about HTTP endpoints, including those utilized by the Wired Pro Configuration Web Page, is available in the HTTP Integration section.
 
 ## <span style="color: rgb(240,95,34)">MQTT Integration</span>
 
@@ -115,6 +118,7 @@ Wired Pro
   }
 }
 ```
+
 </td>
 <td>
 
@@ -139,6 +143,7 @@ Wired Pro
   }
 }
 ```
+
 </td>
 </tr>
 </table>
@@ -169,9 +174,10 @@ User
 
 ```json
 {
-  "url" : "http://link.mydomain.com/WiredPro.bin"  
+  "url": "http://link.mydomain.com/WiredPro.bin"
 }
 ```
+
 </td>
 </tr>
 <tr>
@@ -189,6 +195,7 @@ Wired Pro
   "status": "OTA accepted"
 }
 ```
+
 </td>
 </tr>
 <tr>
@@ -219,6 +226,7 @@ Wired Pro
   "status": "Restarting device due to OTA"
 }
 ```
+
 </td>
 </tr>
 </table>
@@ -291,14 +299,14 @@ JSON
  <b> sensemore/&lt;GatewayMac&gt;/devices/get/accepted</b>
  </td>
  <td>
- JOSN
+ JSON
  </td>
  <td>
  <i>Device Config JSON</i>
  </td>
  <td>
 
- ```json
+```json
 {
   "devices": [
     {
@@ -316,13 +324,14 @@ JSON
   ]
 }
 ```
+
  </td>
 </tr>
 </table>
 
 ### <span style="color: rgb(240,95,34)">Measurement Configuration</span>
 
-Wired Pro's measurement configuration can be viewed or modifyed over MQTT with the following topics. 
+Wired Pro's measurement configuration can be viewed or modifyed over MQTT with the following topics.
 
 <table>
 <tr>
@@ -357,14 +366,14 @@ JSON
  <b> sensemore/&lt;GatewayMac&gt;/device/&lt;GatewayMac&gt;/config/get/accepted</b>
  </td>
  <td>
- JOSN
+ JSON
  </td>
  <td>
  <i>Config JSON</i>
  </td>
  <td>
 
- ```json
+```json
 {
   "device_mac": "CA:B8:XX:XX:XX:XX",
   "device_config": {
@@ -376,6 +385,7 @@ JSON
   }
 }
 ```
+
  </td>
 </tr>
 </table>
@@ -416,6 +426,7 @@ JSON
   }
 }
 ```
+
 </i>
 </td>
 </tr>
@@ -427,14 +438,14 @@ JSON
  <b> sensemore/&lt;GatewayMac&gt;/device/&lt;GatewayMac&gt;/config/set/accepted</b>
  </td>
  <td>
- JOSN
+ JSON
  </td>
  <td>
  <i>Status JSON</i>
  </td>
  <td>
 
- ```json
+```json
 {
   "device_mac": "CA:B8:41:DE:AD:00",
   "device_config": {
@@ -447,6 +458,7 @@ JSON
   "status": "Device config updated"
 }
 ```
+
  </td>
 </tr>
 </table>
@@ -489,6 +501,7 @@ Wired Pro
   "status": "success"
 }
 ```
+
 </td>
 </tr>
 <tr>
@@ -542,6 +555,7 @@ Wired Pro
   "measurement_buffer_size": 300000
 }
 ```
+
 </td>
 </tr>
 <tr>
@@ -558,10 +572,448 @@ Wired Pro
   "status": "Measurement done"
 }
 ```
+
 </td>
 </tr>
 </table>
 
 ## <span style="color: rgb(240,95,34)">HTTP Integration</span>
 
-heree.
+Wired Pro offers extensive HTTP endpoints for retrieving or modifying settings on Wired Pro.
+
+Some endpoints require an authentication token in the header. Endpoints requiring an authentication token in the header are marked with the 🔐 symbol.  
+This token is obtained using the Login endpoint, as shown below:
+
+### <span style="color: rgb(240,95,34)">Login</span>
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Content-Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+POST
+</td>
+<td>
+<b> /login</b>
+</td>
+<td>
+application/json
+</td>
+<td>
+<i>
+
+```json
+{
+  "password": "<DEFAULT_PASSWORD>"
+}
+```
+
+</i>
+</td>
+</tr>
+<tr>
+ <td>
+ GET
+ </td>
+ <td>
+ <b> /login</b>
+ </td>
+ <td>
+ application/json
+ </td>
+ <td>
+ <i>
+
+```json
+{
+  "token": "CLjziyTeTzlMsv100mvgkxnTQl1nGYXpQvsIStAW16WrMjxzLvhNTOGhcFFzU38mT8sHKFhxBOm3309qxSmzKIHJux3rUbjVTkywmayA1O05hKaQn9jlY99YMmp1NorF"
+}
+```
+
+ </i>
+ </td>
+</tr>
+</table>
+
+#### <span style="color: rgb(240,95,34)">Include your token in the Header</span>
+
+Once the authentication token is obtained via the Login endpoint, it must be included in the header of each HTTP request for 🔐 endpoints, as shown below.
+
+```json
+{
+  "Authorization": "CLjziyTeTzlMsv100mvgkxnTQl1nGYXpQvsIStAW16WrMjxzLvhNTOGhcFFzU38mT8sHKFhxBOm3309qxSmzKIHJux3rUbjVTkywmayA1O05hKaQn9jlY99YMmp1NorF"
+}
+```
+
+### <span style="color: rgb(240,95,34)">Logout</span>
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Content-Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+POST
+</td>
+<td>
+<b> /logout</b>
+</td>
+<td>
+application/json
+</td>
+<td>
+<i>
+</i>
+</td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">Information</span>
+
+Basic information about the device, including its **Firmware Version**, can be retrieved using the following HTTP endpoint:
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Content-Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+GET
+</td>
+<td>
+<b> /info</b>
+</td>
+<td>
+application/json
+</td>
+<td>
+<i>
+
+```json
+{
+  "mac_address": "CA:B8:41:XX:XX:XX",
+  "version": "3.0.0",
+  "is_network_connected": true,
+  "is_internet_connected": true
+}
+```
+
+</i>
+</td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">🔐 Change Password</span>
+
+The device’s HTTP and web configuration interface password can be changed using the following HTTP endpoint:
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Content-Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+PUT
+</td>
+<td>
+<b> /change_password</b>
+</td>
+<td>
+application/json
+</td>
+<td>
+<i>
+
+```json
+{
+  "old_password": "<DEAFULT_PASSWORD>",
+  "new_password": "12345678"
+}
+```
+
+</i>
+</td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">🔐 NTP</span>
+
+Time information is part the measurement messages sent by Wired Pro. NTP configuration can be retrieved or modified using the following HTTP endpoint:
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Content-Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+GET
+</td>
+<td>
+<b> /sntp</b>
+</td>
+<td>
+application/json
+</td>
+<td>
+<i>
+
+```json
+{
+  "sntp_server": "http://pool.ntp.org/"
+}
+```
+
+</i>
+</td>
+</tr>
+<tr>
+ <td>
+ POST
+ </td>
+ <td>
+ <b>/sntp</b>
+ </td>
+ <td>
+ application/json
+ </td>
+ <td>
+ <i>
+
+```json
+{
+  "sntp_server": "http://pool.ntp.org/"
+}
+```
+
+ </i>
+ </td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">🔐 Firmware Update Over the Air (OTA)</span>
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Content-Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+POST
+</td>
+<td>
+<b> /ota</b>
+</td>
+<td>
+application/octet-stream
+</td>
+<td>
+<i>
+{}
+</i>
+</td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">🔐 Restart</span>
+
+Wired Pro can be restarted using the following endpoint.
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Content-Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+GET
+</td>
+<td>
+<b> /restart</b>
+</td>
+<td>
+application/json
+</td>
+<td>
+<i>
+</i>
+</td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">🔐 Measurement Upload URL</span>
+
+Wired Pro manages measurement uploads itself by publishing metadata over MQTT and transmitting signal binaries via HTTP.  
+The default binary upload URL is _<https://core.sensemore.io/measurement/>_,
+however, the URL can be retrieved or modified using the following endpoint.
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Content-Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+GET
+</td>
+<td>
+<b> /binary-url</b>
+</td>
+<td>
+application/json
+</td>
+<td>
+<i>
+
+```json
+{
+  "url": "https://core.sensemore.io/measurement"
+}
+```
+
+</i>
+</td>
+</tr>
+<tr>
+ <td>
+ POST
+ </td>
+ <td>
+ <b>/binary-url</b>
+ </td>
+ <td>
+ application/json
+ </td>
+ <td>
+ <i>
+
+```json
+{
+  "url": "https://core.sensemore.io/measurement"
+}
+```
+
+ </i>
+ </td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">🔐 Measurement Configuration</span>
+
+Wired Pro's measurement configuration can be viewed or modifyed with the following endpoint.
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Content-Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+GET
+</td>
+<td>
+<b> /configuration</b>
+</td>
+<td>
+application/json
+</td>
+<td>
+<i>
+
+```json
+{
+  "accelerometer_range": 16,
+  "sampling_rate": 25600,
+  "sample_size": 50000,
+  "scheduler_enabled": 0,
+  "scheduler_period": 0
+}
+```
+
+</i>
+</td>
+</tr>
+<tr>
+ <td>
+ POST
+ </td>
+ <td>
+ <b>/configuration</b>
+ </td>
+ <td>
+ application/json
+ </td>
+ <td>
+ <i>
+
+```json
+{
+  "accelerometer_range": 16,
+  "sampling_rate": 25600,
+  "sample_size": 50000,
+  "scheduler_enabled": 0,
+  "scheduler_period": 0
+}
+```
+
+ </i>
+ </td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">🔐 Measurement </span>
+
+Wired Pro initiates automatic measurement using the scheduling feature. It also accepts manual measurements from the Sensemore Lake platform, MQTT and HTTP based on the configurations set previously. HTTP measurement endpoint is as follows.
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Content-Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+Post
+</td>
+<td>
+<b> /measure</b>
+</td>
+<td>
+application/json
+</td>
+<td>
+<i>
+
+```json
+{}
+```
+
+</i>
+</td>
+</tr>
+</table>
