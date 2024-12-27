@@ -1,6 +1,6 @@
 # <span style="color: rgb(240,95,34)">Duck Integration Document</span>
-<img src="images/Sensemore_product_duck.gif"/>
 
+<img src="images/Sensemore_product_duck.gif"/>
 
 Sensemore Duck is a compact IoT data
 acquisition hardware to collect process
@@ -11,7 +11,7 @@ as; mass flow rate, speed, current, etc.
 Chekout Duck data sheet _<http://sensemore.io/>_  
 Chekout Duck installation guide _<http://sensemore.io/>_
 
-Before starting to speak about Duck system integration, configure your Duck's MQTT, NTP and HTTP settings. 
+Before starting to speak about Duck system integration, configure your Duck's MQTT, NTP and HTTP settings.
 
 ### <span style="color: rgb(240,95,34)">Accessing Configuration Page</span>
 
@@ -21,20 +21,23 @@ Once Duck is connected to a network via Wi-Fi or Ethernet, its configuration pag
 ## <span style="color: rgb(240,95,34)">Connectivity</span>
 
 ### <span style="color: rgb(240,95,34)">Wi-Fi & Ethernet</span>
+
 Duck supports both Wi-Fi and Ethernet for network connections. By default, the network adapter is set to Wi-Fi, but this can be modified in the Settings of the Configuration page `Settings > Connectivity`.
 
 ### <span style="color: rgb(240,95,34)">NTP</span>
+
 Time information is also used in the measurement messages sent by Duck. Time synchronization is needed for this. For OnPremise or private installations, default NTP server can be modified in Duck Configuration page `Settings > NTP`.  
 _Default: <http://pool.ntp.org/>_
 
 ### <span style="color: rgb(240,95,34)">MQTT</span>
-Duck needs MQTT / TLS configuration and supports variety of authentication mechanisms including: plaintext MQTT, MQTTs with and without password, and MQTTs with Client certificate.  
-The MQTT Broker Server to be used must support TLS  and provide the following for certificate-based connections:
 
--   MQTT endpoint (_mqtts: //my-mqtt-broker.server: 8883_)
--   CA (CA certificate)
--   Client Cert (a created and signed certificate from CA)
--   Client Key (private key of the certificate generated through the CA)
+Duck needs MQTT / TLS configuration and supports variety of authentication mechanisms including: plaintext MQTT, MQTTs with and without password, and MQTTs with Client certificate.  
+The MQTT Broker Server to be used must support TLS and provide the following for certificate-based connections:
+
+- MQTT endpoint (_mqtts: //my-mqtt-broker.server: 8883_)
+- CA (CA certificate)
+- Client Cert (a created and signed certificate from CA)
+- Client Key (private key of the certificate generated through the CA)
 
 Required certificates and endpoint information are defined at `Settings > MQTT` in the Duck configuration page. Duck uses these certificates for the future MQTT connections.
 
@@ -42,18 +45,20 @@ Details
 https://www.hivemq.com/blog/mqtt-security-fundamentals-tls-ssl/
 
 ### <span style="color: rgb(240,95,34)">HTTP</span>
-HTTP here..
+
+Duck can be controlled over HTTP, allowing for configuration modifications and measurement actions on attached devices. Accessing HTTP endpoints requires an initial login, after which the received token must be used for subsequent communications. Detailed information about HTTP endpoints, including those utilized by the Duck Configuration Web Page, is available in the HTTP Integration section.
 
 ## <span style="color: rgb(240,95,34)">Duck Sensor Configuration</span>
 
 Duck is compatible with industry standard **4-20mA** sensors. Duck sensor configuration consists of sensor groups. Each group is indented to monitor a
-single point on an equipment.  
+single point on an equipment.
+
 - Multiple sensors can be grouped in a single sensor group to monitor different
-characteristics of a point such as temperature and humidity or acceleration and magnetic
-field.  
+  characteristics of a point such as temperature and humidity or acceleration and magnetic
+  field.
 - One sensor can be configured with one or multiple input channels depending on sensor's
-functionality. For example, distance sensor is configured with a single input channel
-whereas 3-axis acceleration sensor is configured with 3 input channels for x, y z axes.
+  functionality. For example, distance sensor is configured with a single input channel
+  whereas 3-axis acceleration sensor is configured with 3 input channels for x, y z axes.
 
 <table>
 <tr>
@@ -64,7 +69,6 @@ whereas 3-axis acceleration sensor is configured with 3 input channels for x, y 
 <td>
 
 ```json
-
 {
   "heartbeat_interval_min": 15,
   "sensor_groups": [
@@ -73,24 +77,14 @@ whereas 3-axis acceleration sensor is configured with 3 input channels for x, y 
       "sensors": [
         {
           "sensor": "accelerometer",
-          "channels": [
-            0,
-            1,
-            2
-          ],
+          "channels": [0, 1, 2],
           "channel_codes": [
             "accelerometer_x",
             "accelerometer_y",
             "accelerometer_z"
           ],
-          "min_max_voltage": [
-            -5,
-            5
-          ],
-          "min_max_value": [
-            -1000,
-            1000
-          ],
+          "min_max_voltage": [-5, 5],
+          "min_max_value": [-1000, 1000],
           "trigger_differancel_rate": 2
         }
       ]
@@ -103,7 +97,6 @@ whereas 3-axis acceleration sensor is configured with 3 input channels for x, y 
 <td>
 
 ```json
-
 {
   "heartbeat_interval_min": 15,
   "sensor_groups": [
@@ -112,24 +105,14 @@ whereas 3-axis acceleration sensor is configured with 3 input channels for x, y 
       "sensors": [
         {
           "sensor": "accelerometer",
-          "channels": [
-            0,
-            1,
-            2
-          ],
+          "channels": [0, 1, 2],
           "channel_codes": [
             "accelerometer_x",
             "accelerometer_y",
             "accelerometer_z"
           ],
-          "min_max_voltage": [
-            -5,
-            5
-          ],
-          "min_max_value": [
-            -1000,
-            1000
-          ],
+          "min_max_voltage": [-5, 5],
+          "min_max_value": [-1000, 1000],
           "trigger_differancel_rate": 2
         }
       ]
@@ -137,6 +120,7 @@ whereas 3-axis acceleration sensor is configured with 3 input channels for x, y 
   ]
 }
 ```
+
 </td>
 <td>
 </tr>
@@ -209,6 +193,7 @@ Duck
   }
 }
 ```
+
 </td>
 <td>
 
@@ -234,6 +219,7 @@ Duck
   }
 }
 ```
+
 </td>
 </tr>
 </table>
@@ -264,9 +250,10 @@ User
 
 ```json
 {
-  "url" : "http://link.mydomain.com/Duck.bin"  
+  "url": "http://link.mydomain.com/Duck.bin"
 }
 ```
+
 </td>
 </tr>
 <tr>
@@ -284,6 +271,7 @@ Duck
   "status": "OTA accepted"
 }
 ```
+
 </td>
 </tr>
 <tr>
@@ -314,6 +302,7 @@ Duck
   "status": "Restarting device due to OTA"
 }
 ```
+
 </td>
 </tr>
 </table>
@@ -504,13 +493,13 @@ JSON
 ### <span style="color: rgb(240,95,34)">Measuremnt</span>
 
 Duck device is designed for high-performance data acquisition with multiple ways to trigger measurements. It continuously collects data and evaluates conditions for publishing measurements based on the following mechanisms:  
-**1.	Heartbeat:**
+**1. Heartbeat:**
 If no measurement has been published within a time period exceeding the configured heartbeat value, Duck automatically publishes a measurement.  
-**2.	Trigger Difference:**
+**2. Trigger Difference:**
 Duck publishes a measurement when the difference between the current and previous measurements exceeds the configured percentage threshold. The Trigger Difference can be adjusted in the device’s configuration settings.  
-**3.	Sensemore Lake:**
+**3. Sensemore Lake:**
 Users can send manual measurement requests through the Sensemore Lake platform.  
-**4.	MQTT:**
+**4. MQTT:**
 Manual measurement requests can also be sent via MQTT. Details about the MQTT topics are provided in down below.
 
 <table>

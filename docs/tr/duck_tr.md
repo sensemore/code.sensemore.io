@@ -1,4 +1,5 @@
 # <span style="color: rgb(240,95,34)">Duck Entegrasyon Belgesi</span>
+
 <img src="images/Sensemore_product_duck.gif"/>
 
 Sensemore Duck, yalnızca titreşim, sıcaklık ve basınç değil, aynı zamanda kütle akış hızı, hız, akım gibi tüm analog verileri toplamak için kompakt bir IoT veri toplama cihazıdır.
@@ -9,25 +10,29 @@ Duck kurulum rehberini inceleyin: _<http://sensemore.io/>_
 Duck sistem entegrasyonundan bahsetmeye başlamadan önce, Duck cihazınızın MQTT, NTP ve HTTP ayarlarını yapılandırın.
 
 ### <span style="color: rgb(240,95,34)">Yapılandırma Sayfasına Erişim</span>
+
 Duck takıldığında, kısa bir süre sonra **DUCK-CA:B8:DA:XX:XX:XX** SSID ile bir Wi-Fi erişim noktası ağı yayınlar. AP’ye bağlanmak için varsayılan şifreyi kullanın. Cihazınız, captive portalda yapılandırma sayfasına yönledricektir. Cihazınız otomatik olarak captive portalı açmazsa, varsayılan tarayıcınızda [http:\\\\192.168.4.1 ](http:\192.168.4.1) adresine gidin.  
 Duck, Wi-Fi veya Ethernet üzerinden bir ağa bağlandıktan sonra, yapılandırma sayfasına aynı ağdan cihazın yerel IP adresiyle erişilebilir. Yerel IP adresi, yapılandırma sayfasının ana sekmesinde görüntülenir ve ayrıca MQTT bilgi mesajında gösterilir.
 
 ## <span style="color: rgb(240,95,34)">Bağlantı</span>
 
 ### <span style="color: rgb(240,95,34)">Wi-Fi & Ethernet</span>
+
 Duck, ağ bağlantıları için hem Wi-Fi hem de Ethernet’i destekler. Varsayılan olarak, ağ adaptörü Wi-Fi olarak ayarlanmıştır, ancak bu ayar, Konfigürasyon sayfasının `Ayarlar > Bağlantı` bölümünde değiştirilebilir.
 
 ### <span style="color: rgb(240,95,34)">NTP</span>
-Duck tarafından gönderilen ölçüm mesajlarında zaman bilgisi de kullanılır. Bunun için zaman senkronizasyonu gereklidir. Yerel veya özel kurulumlarda, Duck Konfigürasyon sayfasındaki  `Settings > NTP` bölümünden varsayılan NTP sunucusu değiştirilebilir.
+
+Duck tarafından gönderilen ölçüm mesajlarında zaman bilgisi de kullanılır. Bunun için zaman senkronizasyonu gereklidir. Yerel veya özel kurulumlarda, Duck Konfigürasyon sayfasındaki `Settings > NTP` bölümünden varsayılan NTP sunucusu değiştirilebilir.
 _Varsayılan: <http://pool.ntp.org/>_
 
 ### <span style="color: rgb(240,95,34)">MQTT</span>
+
 Duck, MQTT / TLS yapılandırmasına ihtiyaç duyar ve aşağıdakileri içeren çeşitli kimlik doğrulama mekanizmalarını destekler: düz metin MQTT, parola ile veya parolasız MQTTs ve istemci sertifikasıyla MQTTs. Kullanılacak MQTT Broker Sunucusu TLS’yi desteklemelidir ve sertifika tabanlı bağlantılar için aşağıdaki bilgileri sağlamalıdır:
 
--   MQTT endpoint (_mqtts: //my-mqtt-broker.server: 8883_)
--   CA (CA sertifikası)
--   İstemci Sertifikası (CA tarafından oluşturulan ve imzalanan sertifika)
--   İstemci Anahtarı (CA tarafından oluşturulan sertifikanın özel anahtarı)
+- MQTT endpoint (_mqtts: //my-mqtt-broker.server: 8883_)
+- CA (CA sertifikası)
+- İstemci Sertifikası (CA tarafından oluşturulan ve imzalanan sertifika)
+- İstemci Anahtarı (CA tarafından oluşturulan sertifikanın özel anahtarı)
 
 Gerekli sertifikalar ve endpoint bilgileri, Duck konfigürasyon sayfasındaki `Settings > MQTT` bölümünde tanımlanır. Duck, gelecekteki MQTT bağlantıları için bu sertifikaları kullanır.
 
@@ -35,12 +40,14 @@ Detaylar
 https://www.hivemq.com/blog/mqtt-security-fundamentals-tls-ssl/
 
 ### <span style="color: rgb(240,95,34)">HTTP</span>
-HTTP here..
+
+Duck, HTTP üzerinden kontrol edilebilir, bu da bağlı cihazlar üzerinde yapılandırma değişiklikleri ve ölçüm işlemleri yapmayı sağlar. HTTP uç noktalarına erişim, önce bir giriş yapmayı gerektirir, ardından alınan belirteç, sonraki iletişimlerde kullanılmalıdır. HTTP uç noktaları hakkında detaylı bilgi, Duck Yapılandırma Web Sayfası tarafından kullanılanlar dahil, HTTP Entegrasyon bölümünde mevcuttur.
 
 ## <span style="color: rgb(240,95,34)">Duck Sensor Configuration</span>
 
-Duck, endüstri standardı 4-20mA sensörlerle uyumludur. Duck sensör yapılandırması, sensör gruplarından oluşur. Her grup, bir ekipmanın tek bir noktasını izlemeye yöneliktir.  
-- Birden fazla sensör, bir noktayı sıcaklık ve nem veya ivme ve manyetik alan gibi farklı özelliklerini izlemek için bir sensör grubuna dahil edilebilir.  
+Duck, endüstri standardı 4-20mA sensörlerle uyumludur. Duck sensör yapılandırması, sensör gruplarından oluşur. Her grup, bir ekipmanın tek bir noktasını izlemeye yöneliktir.
+
+- Birden fazla sensör, bir noktayı sıcaklık ve nem veya ivme ve manyetik alan gibi farklı özelliklerini izlemek için bir sensör grubuna dahil edilebilir.
 - Bir sensör, sensörün işlevselliğine bağlı olarak bir veya birden fazla giriş kanalıyla yapılandırılabilir. Örneğin, bir mesafe sensörü tek bir giriş kanalıyla yapılandırılırken, 3 eksenli bir ivme sensörü x, y, z eksenleri için üç giriş kanalıyla yapılandırılır.
 
 <table>
@@ -52,7 +59,6 @@ Duck, endüstri standardı 4-20mA sensörlerle uyumludur. Duck sensör yapıland
 <td>
 
 ```json
-
 {
   "heartbeat_interval_min": 15,
   "sensor_groups": [
@@ -61,24 +67,14 @@ Duck, endüstri standardı 4-20mA sensörlerle uyumludur. Duck sensör yapıland
       "sensors": [
         {
           "sensor": "accelerometer",
-          "channels": [
-            0,
-            1,
-            2
-          ],
+          "channels": [0, 1, 2],
           "channel_codes": [
             "accelerometer_x",
             "accelerometer_y",
             "accelerometer_z"
           ],
-          "min_max_voltage": [
-            -5,
-            5
-          ],
-          "min_max_value": [
-            -1000,
-            1000
-          ],
+          "min_max_voltage": [-5, 5],
+          "min_max_value": [-1000, 1000],
           "trigger_differancel_rate": 2
         }
       ]
@@ -91,7 +87,6 @@ Duck, endüstri standardı 4-20mA sensörlerle uyumludur. Duck sensör yapıland
 <td>
 
 ```json
-
 {
   "heartbeat_interval_min": 15,
   "sensor_groups": [
@@ -100,24 +95,14 @@ Duck, endüstri standardı 4-20mA sensörlerle uyumludur. Duck sensör yapıland
       "sensors": [
         {
           "sensor": "accelerometer",
-          "channels": [
-            0,
-            1,
-            2
-          ],
+          "channels": [0, 1, 2],
           "channel_codes": [
             "accelerometer_x",
             "accelerometer_y",
             "accelerometer_z"
           ],
-          "min_max_voltage": [
-            -5,
-            5
-          ],
-          "min_max_value": [
-            -1000,
-            1000
-          ],
+          "min_max_voltage": [-5, 5],
+          "min_max_value": [-1000, 1000],
           "trigger_differancel_rate": 2
         }
       ]
@@ -125,6 +110,7 @@ Duck, endüstri standardı 4-20mA sensörlerle uyumludur. Duck sensör yapıland
   ]
 }
 ```
+
 </td>
 <td>
 </tr>
@@ -197,6 +183,7 @@ Duck
   }
 }
 ```
+
 </td>
 <td>
 
@@ -222,6 +209,7 @@ Duck
   }
 }
 ```
+
 </td>
 </tr>
 </table>
@@ -252,9 +240,10 @@ User
 
 ```json
 {
-  "url" : "http://link.mydomain.com/Duck.bin"  
+  "url": "http://link.mydomain.com/Duck.bin"
 }
 ```
+
 </td>
 </tr>
 <tr>
@@ -272,6 +261,7 @@ Duck
   "status": "OTA accepted"
 }
 ```
+
 </td>
 </tr>
 <tr>
@@ -302,6 +292,7 @@ Duck
   "status": "Restarting device due to OTA"
 }
 ```
+
 </td>
 </tr>
 </table>
@@ -492,16 +483,16 @@ JSON
 ### <span style="color: rgb(240,95,34)">Measuremnt</span>
 
 Duck cihazı, ölçümleri tetiklemek için birden fazla yönteme sahip olup, yüksek performanslı veri toplama için tasarlanmıştır. Cihaz, verileri sürekli olarak toplar ve aşağıdaki mekanizmalara dayalı olarak ölçümleri yayınlama koşullarını değerlendirir:
-**1.	Kalp Atışı (Heartbeat):**
+**1. Kalp Atışı (Heartbeat):**
 Belirlenen kalp atışı değerini aşan bir süre boyunca hiçbir ölçüm yayınlanmamışsa, Duck otomatik olarak bir ölçüm yayınlar.
 
-**2.	Tetik Farkı (Trigger Difference):**
+**2. Tetik Farkı (Trigger Difference):**
 Mevcut ve önceki ölçümler arasındaki fark, yapılandırılmış yüzde eşiğini aştığında Duck bir ölçüm yayınlar. Tetik Farkı, cihazın yapılandırma ayarlarından ayarlanabilir.
 
-**3.	Sensemore Lake:**
+**3. Sensemore Lake:**
 Kullanıcılar, Sensemore Lake platformu üzerinden manuel ölçüm isteği gönderebilir.
 
-**4.	MQTT:**
+**4. MQTT:**
 Manuel ölçüm talepleri MQTT üzerinden de gönderilebilir. MQTT konuları hakkında detaylı bilgiler aşağıda verilmiştir.
 
 <table>
