@@ -42,6 +42,8 @@ https://www.hivemq.com/blog/mqtt-security-fundamentals-tls-ssl/
 
 ### <span style="color: rgb(240,95,34)">HTTP</span>
 
+Senseway can be controlled over HTTP, allowing for configuration modifications and measurement actions on attached devices. Accessing HTTP endpoints requires an initial login, after which the received token must be used for subsequent communications. Detailed information about HTTP endpoints, including those utilized by the Senseway Configuration Web Page, is available in the HTTP Integration section.
+
 ## <span style="color: rgb(240,95,34)">MQTT Integration</span>
 
 This section explains which topics to use when communicating with Senseway over MQTT and how messages should be interpreted.
@@ -292,7 +294,7 @@ JSON
  <b> sensemore/&lt;GatewayMac&gt;/binaryurl/get/accepted</b>
  </td>
  <td>
- JOSN
+ JSON
  </td>
  <td>
  <i>Binary URL JSON</i>
@@ -350,7 +352,7 @@ JSON
  <b> sensemore/&lt;GatewayMac&gt;/binaryurl/set/accepted</b>
  </td>
  <td>
- JOSN
+ JSON
  </td>
  <td>
  <i>Status JSON</i>
@@ -412,7 +414,7 @@ JSON
  <b> sensemore/&lt;GatewayMac&gt;/baudrate/get/accepted</b>
  </td>
  <td>
- JOSN
+ JSON
  </td>
  <td>
  <i>Baudrate JSON</i>
@@ -472,7 +474,7 @@ JSON
  <b> sensemore/&lt;GatewayMac&gt;/baudrate/set/accepted</b>
  </td>
  <td>
- JOSN
+ JSON
  </td>
  <td>
  <i>Status JSON</i>
@@ -527,7 +529,7 @@ JSON
  <b> sensemore/&lt;GatewayMac&gt;/device-list/get/accepted</b>
  </td>
  <td>
- JOSN
+ JSON
  </td>
  <td>
  <i>Scan JSON</i>
@@ -606,7 +608,7 @@ JSON
  <b> sensemore/&lt;GatewayMac&gt;/devices/get/accepted</b>
  </td>
  <td>
- JOSN
+ JSON
  </td>
  <td>
  <i>Config JSON</i>
@@ -731,7 +733,7 @@ Senseway
 
 ### <span style="color: rgb(240,95,34)">Device Add & Remove</span>
 
-Senseway's sensor configuration can be viewed or modifyed over MQTT with the following topics.
+The devices attached to Senseway can be viewed or modified using the following topics.
 
 <table>
 <tr>
@@ -774,7 +776,7 @@ JSON
  <b> sensemore/&lt;GatewayMac&gt;/device/add/accepted</b>
  </td>
  <td>
- JOSN
+ JSON
  </td>
  <td>
  <i>Status JSON</i>
@@ -832,7 +834,7 @@ JSON
  <b> sensemore/&lt;GatewayMac&gt;/device/remove/accepted</b>
  </td>
  <td>
- JOSN
+ JSON
  </td>
  <td>
  <i>Status JSON</i>
@@ -938,7 +940,7 @@ JSON
  <b> sensemore/&lt;GatewayMac&gt;/device/&lt;DeviceMac&gt;/config/get/accepted</b>
  </td>
  <td>
- JOSN
+ JSON
  </td>
  <td>
  <i>Config JSON</i>
@@ -1017,7 +1019,7 @@ JSON
  <b> sensemore/&lt;GatewayMac&gt;/device/&lt;DeviceMac&gt;/config/set/accepted</b>
  </td>
  <td>
- JOSN
+ JSON
  </td>
  <td>
  <i>Status JSON</i>
@@ -1083,7 +1085,7 @@ JSON
  <b> sensemore/&lt;GatewayMac&gt;/device/&lt;DeviceMac&gt;/measure/&lt;MeasuremnetUUID&gt;/accepted</b>
  </td>
  <td>
- JOSN
+ JSON
  </td>
  <td>
  <i>Status JSON</i>
@@ -1107,7 +1109,7 @@ JSON
  <b> sensemore/&lt;GatewayMac&gt;/device/&lt;DeviceMac&gt;/measure/&lt;MeasuremnetUUID&gt;/done</b>
  </td>
  <td>
- JOSN
+ JSON
  </td>
  <td>
  <i>Status JSON</i>
@@ -1131,7 +1133,7 @@ JSON
  <b> sensemore/&lt;GatewayMac&gt;/device/&lt;DeviceMac&gt;/measure/&lt;MeasuremnetUUID&gt;/metadatas</b>
  </td>
  <td>
- JOSN
+ JSON
  </td>
  <td>
  <i>Metadata JSON</i>
@@ -1158,13 +1160,18 @@ JSON
 
 ## <span style="color: rgb(240,95,34)">HTTP Integration</span>
 
+Senseway offers extensive HTTP endpoints for retrieving or modifying settings on Senseway and its attached devices.
+
+Some endpoints require an authentication token in the header. Endpoints requiring an authentication token in the header are marked with the 🔐 symbol.  
+This token is obtained using the Login endpoint, as shown below:
+
 ### <span style="color: rgb(240,95,34)">Login</span>
 
 <table>
 <tr>
 <th>Method</th>
 <th>Endpoint</th>
-<th>Body</th>
+<th>Content-Type</th>
 <th>Example</th>
 </tr>
 <tr>
@@ -1175,7 +1182,7 @@ POST
 <b> /login</b>
 </td>
 <td>
-JSON
+application/json
 </td>
 <td>
 <i>
@@ -1197,7 +1204,7 @@ JSON
  <b> /login</b>
  </td>
  <td>
- JOSN
+ application/json
  </td>
  <td>
  <i>
@@ -1213,13 +1220,23 @@ JSON
 </tr>
 </table>
 
+#### <span style="color: rgb(240,95,34)">Include your token in the Header</span>
+
+Once the authentication token is obtained via the Login endpoint, it must be included in the header of each HTTP request for 🔐 endpoints, as shown below.
+
+```json
+{
+  "Authorization": "CLjziyTeTzlMsv100mvgkxnTQl1nGYXpQvsIStAW16WrMjxzLvhNTOGhcFFzU38mT8sHKFhxBOm3309qxSmzKIHJux3rUbjVTkywmayA1O05hKaQn9jlY99YMmp1NorF"
+}
+```
+
 ### <span style="color: rgb(240,95,34)">Logout</span>
 
 <table>
 <tr>
 <th>Method</th>
 <th>Endpoint</th>
-<th>Body</th>
+<th>Content-Type</th>
 <th>Example</th>
 </tr>
 <tr>
@@ -1230,7 +1247,7 @@ POST
 <b> /logout</b>
 </td>
 <td>
-JSON
+application/json
 </td>
 <td>
 <i>
@@ -1247,7 +1264,7 @@ Basic information about the device, including its **Firmware Version**, can be r
 <tr>
 <th>Method</th>
 <th>Endpoint</th>
-<th>Body</th>
+<th>Content-Type</th>
 <th>Example</th>
 </tr>
 <tr>
@@ -1258,7 +1275,7 @@ GET
 <b> /info</b>
 </td>
 <td>
-JSON
+application/json
 </td>
 <td>
 <i>
@@ -1277,7 +1294,7 @@ JSON
 </tr>
 </table>
 
-### <span style="color: rgb(240,95,34)">Change Password</span>
+### <span style="color: rgb(240,95,34)">🔐 Change Password</span>
 
 The device’s HTTP and web configuration interface password can be changed using the following HTTP endpoint:
 
@@ -1285,7 +1302,7 @@ The device’s HTTP and web configuration interface password can be changed usin
 <tr>
 <th>Method</th>
 <th>Endpoint</th>
-<th>Body</th>
+<th>Content-Type</th>
 <th>Example</th>
 </tr>
 <tr>
@@ -1296,7 +1313,7 @@ PUT
 <b> /change_password</b>
 </td>
 <td>
-JSON
+application/json
 </td>
 <td>
 <i>
@@ -1313,13 +1330,15 @@ JSON
 </tr>
 </table>
 
-### <span style="color: rgb(240,95,34)">NTP</span>
+### <span style="color: rgb(240,95,34)">🔐 NTP</span>
+
+Time information is part the measurement messages sent by Senseway. NTP configuration can be retrieved or modified using the following HTTP endpoint:
 
 <table>
 <tr>
 <th>Method</th>
 <th>Endpoint</th>
-<th>Body</th>
+<th>Content-Type</th>
 <th>Example</th>
 </tr>
 <tr>
@@ -1330,7 +1349,7 @@ GET
 <b> /sntp</b>
 </td>
 <td>
-JSON
+application/json
 </td>
 <td>
 <i>
@@ -1352,7 +1371,7 @@ JSON
  <b>/sntp</b>
  </td>
  <td>
- JOSN
+ application/json
  </td>
  <td>
  <i>
@@ -1368,199 +1387,13 @@ JSON
 </tr>
 </table>
 
-### <span style="color: rgb(240,95,34)">MQTT</span>
+### <span style="color: rgb(240,95,34)">🔐 Firmware Update Over the Air (OTA)</span>
 
 <table>
 <tr>
 <th>Method</th>
 <th>Endpoint</th>
-<th>Body</th>
-<th>Example</th>
-</tr>
-<tr>
-<td>
-GET
-</td>
-<td>
-<b> /mqtt</b>
-</td>
-<td>
-JSON
-</td>
-<td>
-<i>
-
-```json
-{
-  "endpoint": "mqtts://iot.sensemore.io:8883",
-  "auth_type": "certificate",
-  "username": ""
-}
-```
-
-</i>
-</td>
-</tr>
-<tr>
- <td>
- PUT
- </td>
- <td>
- <b>/mqtt</b>
- </td>
- <td>
- JOSN
- </td>
- <td>
- <i>
-
-```json
-{
-  "endpoint": "mqtts://iot.sensemore.io:8883",
-  "auth_type": "certificate",
-  "username": "",
-  "ca_cert": "<-----BEGIN CERTIFICATE----->",
-  "client_cert": "<-----BEGIN CERTIFICATE----->",
-  "client_key": "<-----BEGIN RSA PRIVATE KEY----->"
-}
-```
-
- </i>
- </td>
-</tr>
-</table>
-
-### <span style="color: rgb(240,95,34)">Wi-Fi Scan</span>
-
-<table>
-<tr>
-<th>Method</th>
-<th>Endpoint</th>
-<th>Body</th>
-<th>Example</th>
-</tr>
-<tr>
-<td>
-GET
-</td>
-<td>
-<b> /network-wifi-scan</b>
-</td>
-<td>
-JSON
-</td>
-<td>
-<i>
-
-```json
-{}
-```
-
-</i>
-</td>
-</tr>
-</table>
-
-### <span style="color: rgb(240,95,34)">Network Settings</span>
-
-<table>
-<tr>
-<th>Method</th>
-<th>Endpoint</th>
-<th>Body</th>
-<th>Example</th>
-</tr>
-<tr>
-<td>
-GET
-</td>
-<td>
-<b> /network</b>
-</td>
-<td>
-JSON
-</td>
-<td>
-<i>
-
-```json
-{
-  "network_mode": 0,
-  "network_mac": "XX:XX:XX:XX:XX:XX",
-  "network_ip": "192.168.1.109",
-  "is_network_connected": true,
-  "wifi_configurations": {
-    "wifi_sta_configurations": {
-      "ssid": "Sensemore",
-      "password": "<PASSWORD>",
-      "wpa2_ent_enabled": false,
-      "wpa2_ent_id": " ",
-      "wpa2_ent_username": " ",
-      "rssi": -47
-    },
-    "wifi_ap_configurations": {
-      "ssid": "SENSEWAY-CA:B8:50:XX:XX:XX",
-      "password": "<PASSWORD>",
-      "wifi_ap_visibility": 1
-    }
-  },
-  "ethernet_configurations": null
-}
-```
-
-</i>
-</td>
-</tr>
-<tr>
- <td>
- POST
- </td>
- <td>
- <b>/network</b>
- </td>
- <td>
- JOSN
- </td>
- <td>
- <i>
-
-```json
-{
-  "network_mode": 0,
-  "network_mac": "XX:XX:XX:XX:XX:XX",
-  "network_ip": "192.168.1.109",
-  "is_network_connected": true,
-  "wifi_configurations": {
-    "wifi_sta_configurations": {
-      "ssid": "Sensemore",
-      "password": "<PASSWORD>",
-      "wpa2_ent_enabled": false,
-      "wpa2_ent_id": " ",
-      "wpa2_ent_username": " ",
-      "rssi": -47
-    },
-    "wifi_ap_configurations": {
-      "ssid": "SENSEWAY-CA:B8:50:XX:XX:XX",
-      "password": "<PASSWORD>",
-      "wifi_ap_visibility": 1
-    }
-  },
-  "ethernet_configurations": null
-}
-```
-
- </i>
- </td>
-</tr>
-</table>
-
-### <span style="color: rgb(240,95,34)">Firmware Update Over the Air (OTA)</span>
-
-<table>
-<tr>
-<th>Method</th>
-<th>Endpoint</th>
-<th>Body</th>
+<th>Content-Type</th>
 <th>Example</th>
 </tr>
 <tr>
@@ -1571,27 +1404,25 @@ POST
 <b> /ota</b>
 </td>
 <td>
-JSON
+application/octet-stream
 </td>
 <td>
 <i>
-
-```json
 {}
-```
-
 </i>
 </td>
 </tr>
 </table>
 
-### <span style="color: rgb(240,95,34)">Restart</span>
+### <span style="color: rgb(240,95,34)">🔐 Restart</span>
+
+Senseway can be restarted using the following endpoint.
 
 <table>
 <tr>
 <th>Method</th>
 <th>Endpoint</th>
-<th>Body</th>
+<th>Content-Type</th>
 <th>Example</th>
 </tr>
 <tr>
@@ -1602,7 +1433,7 @@ GET
 <b> /restart</b>
 </td>
 <td>
-JSON
+application/json
 </td>
 <td>
 <i>
@@ -1611,13 +1442,17 @@ JSON
 </tr>
 </table>
 
-### <span style="color: rgb(240,95,34)">Measurement Upload URL</span>
+### <span style="color: rgb(240,95,34)">🔐 Measurement Upload URL</span>
+
+Senseway manages measurement uploads for attached devices by publishing metadata over MQTT and transmitting signal binaries via HTTP.  
+The default binary upload URL is _<https://core.sensemore.io/measurement/>_,
+however, the URL can be retrieved or modified using the following endpoint.
 
 <table>
 <tr>
 <th>Method</th>
 <th>Endpoint</th>
-<th>Body</th>
+<th>Content-Type</th>
 <th>Example</th>
 </tr>
 <tr>
@@ -1628,7 +1463,7 @@ GET
 <b> /binary-url</b>
 </td>
 <td>
-JSON
+application/json
 </td>
 <td>
 <i>
@@ -1650,7 +1485,7 @@ JSON
  <b>/binary-url</b>
  </td>
  <td>
- JOSN
+ application/json
  </td>
  <td>
  <i>
@@ -1666,13 +1501,21 @@ JSON
 </tr>
 </table>
 
-### <span style="color: rgb(240,95,34)">Senseway - Wired Pro Communication Speed</span>
+### <span style="color: rgb(240,95,34)">🔐 Senseway - Wired Pro Communication Speed</span>
+
+Senseway communicates with Wired Pro over RS485, which has a theoretical range of up to one kilometer.
+This allows Senseway and Wired Pro to be placed up to 1 km apart and connected via an RS485 cable.
+As the distance between them increases, the baudrate must be lowered to increase reliability.
+Baudrate refers to the number of bits transmitted per second. At shorter distances, increasing the baudrate can increase communication speed between Senseway and Wired Pro.
+The baudrate can be viewed or modified via HTTP using the following endpoint.
+
+:warning: When connecting multiple Wired Pros to the same Senseway, a bus topology must be used, ensuring no parallel lines are present.
 
 <table>
 <tr>
 <th>Method</th>
 <th>Endpoint</th>
-<th>Body</th>
+<th>Content-Type</th>
 <th>Example</th>
 </tr>
 <tr>
@@ -1683,7 +1526,7 @@ GET
 <b> /baudrate</b>
 </td>
 <td>
-JSON
+application/json
 </td>
 <td>
 <i>
@@ -1705,7 +1548,7 @@ JSON
  <b> /baudrate</b>
  </td>
  <td>
- JOSN
+ application/json
  </td>
  <td>
  <i>
@@ -1721,13 +1564,17 @@ JSON
 </tr>
 </table>
 
-### <span style="color: rgb(240,95,34)">Device List</span>
+**Valid badurate values:** 115200, 460800, 921600, 1000000
+
+### <span style="color: rgb(240,95,34)">🔐 Device List</span>
+
+The list of devices attached to Senseway, along with their measurement configurations, can be retrieved using the following endpoint.
 
 <table>
 <tr>
 <th>Method</th>
 <th>Endpoint</th>
-<th>Body</th>
+<th>Content-Type</th>
 <th>Example</th>
 </tr>
 <tr>
@@ -1738,7 +1585,7 @@ GET
 <b> /device-count</b>
 </td>
 <td>
-JSON
+application/json
 </td>
 <td>
 <i>
@@ -1758,7 +1605,7 @@ JSON
 <tr>
 <th>Method</th>
 <th>Endpoint</th>
-<th>Body</th>
+<th>Content-Type</th>
 <th>Example</th>
 </tr>
 <tr>
@@ -1769,7 +1616,7 @@ GET
 <b> /device-list</b>
 </td>
 <td>
-JSON
+application/json
 </td>
 <td>
 <i>
@@ -1810,11 +1657,16 @@ JSON
 </tr>
 </table>
 
+Senseway evaluates the connection status of each assigned sensor upon receiving a scan command.
+It then sends a result message that includes the **Firmware Version** of each connected device.
+
+:warning: Infinity, Infinity Pro and Nomad may appear as "not scanned" if they are on sleeping schedule.
+
 <table>
 <tr>
 <th>Method</th>
 <th>Endpoint</th>
-<th>Body</th>
+<th>Content-Type</th>
 <th>Example</th>
 </tr>
 <tr>
@@ -1825,7 +1677,7 @@ GET
 <b> /devices</b>
 </td>
 <td>
-JSON
+application/json
 </td>
 <td>
 <i>
@@ -1871,13 +1723,13 @@ JSON
 </tr>
 </table>
 
-### <span style="color: rgb(240,95,34)">Device Firmware Update Over The Air (OTA)</span>
+### <span style="color: rgb(240,95,34)">🔐 Device Firmware Update Over The Air (OTA)</span>
 
 <table>
 <tr>
 <th>Method</th>
 <th>Endpoint</th>
-<th>Body</th>
+<th>Content-Type</th>
 <th>Example</th>
 </tr>
 <tr>
@@ -1888,7 +1740,7 @@ POST
 <b> /device-ota</b>
 </td>
 <td>
-JSON
+application/octet-stream
 </td>
 <td>
 <i>
@@ -1902,13 +1754,15 @@ JSON
 </tr>
 </table>
 
-### <span style="color: rgb(240,95,34)">Device Add & Remove</span>
+### <span style="color: rgb(240,95,34)">🔐 Device Add & Remove</span>
+
+The devices attached to Senseway can be viewed or modified using the following endpoints.
 
 <table>
 <tr>
 <th>Method</th>
 <th>Endpoint</th>
-<th>Body</th>
+<th>Content-Type</th>
 <th>Example</th>
 </tr>
 <tr>
@@ -1919,7 +1773,7 @@ POST
 <b> /device-add</b>
 </td>
 <td>
-JSON
+application/json
 </td>
 <td>
 <i>
@@ -1939,7 +1793,7 @@ JSON
 <tr>
 <th>Method</th>
 <th>Endpoint</th>
-<th>Body</th>
+<th>Content-Type</th>
 <th>Example</th>
 </tr>
 <tr>
@@ -1950,7 +1804,7 @@ POST
 <b> /device-remove</b>
 </td>
 <td>
-JSON
+application/json
 </td>
 <td>
 <i>
@@ -1966,13 +1820,67 @@ JSON
 </tr>
 </table>
 
-### <span style="color: rgb(240,95,34)">Device Measurement Configuration</span>
+### <span style="color: rgb(240,95,34)">🔐 Device Measurement Configuration</span>
+
+Senseway is compatible with both wired sensors (Wired Pro) and wireless sensors (Infinity, Infinity Pro, Nomad). Wireless sensors typically utilize a sleep schedule feature to extend their battery life, allowing for operation of up to 2 years on a single charge.
+
+<table>
+<tr>
+<th>Device Config</th>
+<th>Explaniation</th>
+</tr>
+<tr>
+<td>
+
+```json
+{
+  "device_mac": "CA:B8:XX:XX:XX:XX",
+  "device_config": {
+    "rs485_resistor_enabled": false,
+    "accelerometer_range": 16,
+    "sampling_rate": 25600,
+    "sample_size": 50000,
+    "sensor_type": 1,
+    "scheduler_enabled": false,
+    "trigger_enabled": false
+  }
+}
+```
+
+</td>
+<td>
+
+```json
+
+{
+  "device_mac": "Device ID",
+  "device_config": {
+    "rs485_resistor_enabled": Termination resistor, only applicable to Wired Pro,
+    "accelerometer_range": 16,
+    "sampling_rate": 25600,
+    "sample_size": 50000,
+    "sensor_type": [1 for accelerometer, 0 for unkown devices],
+    "scheduler_enabled": Periodic measurement & sleep schedule for Infinity family devices,
+    "trigger_enabled": Senseway tigger number for a perticular device
+  }
+}
+```
+
+</td>
+<td>
+</tr>
+</table>
+:warning: When multiple Wired Pros are connected to the same Senseway, 
+only the termination resistor of the Wired Pro farthest from the Senseway should be enabled. 
+Enabling termination resistors on multiple Wired Pros connected to the same Senseway may permanently damage your devices.
+
+The configuration of a specific device can be retrieved using the following topic.
 
 <table>
 <tr>
 <th>Method</th>
 <th>Endpoint</th>
-<th>Body</th>
+<th>Content-Type</th>
 <th>Example</th>
 </tr>
 <tr>
@@ -1983,13 +1891,24 @@ GET
 <b> /device-config</b>
 </td>
 <td>
-JSON
+application/json
 </td>
 <td>
 <i>
 
 ```json
-{}
+{
+  "device_mac": "CA:B8:XX:XX:XX:XX",
+  "device_config": {
+    "rs485_resistor_enabled": false,
+    "accelerometer_range": 16,
+    "sampling_rate": 25600,
+    "sample_size": 50000,
+    "sensor_type": 1,
+    "scheduler_enabled": false,
+    "trigger_enabled": false
+  }
+}
 ```
 
 </i>
@@ -2003,13 +1922,24 @@ JSON
  <b> /device-config</b>
  </td>
  <td>
- JOSN
+ application/json
  </td>
  <td>
  <i>
 
 ```json
-{}
+{
+  "device_mac": "CA:B8:XX:XX:XX:XX",
+  "device_config": {
+    "rs485_resistor_enabled": false,
+    "accelerometer_range": 16,
+    "sampling_rate": 25600,
+    "sample_size": 50000,
+    "sensor_type": 1,
+    "scheduler_enabled": false,
+    "trigger_enabled": false
+  }
+}
 ```
 
  </i>
@@ -2017,13 +1947,15 @@ JSON
 </tr>
 </table>
 
-### <span style="color: rgb(240,95,34)">Measurement</span>
+### <span style="color: rgb(240,95,34)">🔐 Measurement</span>
+
+Senseway initiates automatic measurement using the scheduling feature. It also accepts manual measurements from the Sensemore Lake platform as well as MQTT & HTTP based on the configurations set previously. HTTP measurement endpoints are as follows.
 
 <table>
 <tr>
 <th>Method</th>
 <th>Endpoint</th>
-<th>Body</th>
+<th>Content-Type</th>
 <th>Example</th>
 </tr>
 <tr>
@@ -2034,46 +1966,15 @@ Post
 <b> /device-measure</b>
 </td>
 <td>
-JSON
+application/json
 </td>
 <td>
 <i>
 
 ```json
-{}
-```
-
-</i>
-</td>
-</tr>
-</table>
-
-### <span style="color: rgb(240,95,34)">Danger Zone</span>
-
-#### <span style="color: rgb(240,95,34)">Device Operational Mode</span>
-
-<table>
-<tr>
-<th>Method</th>
-<th>Endpoint</th>
-<th>Body</th>
-<th>Example</th>
-</tr>
-<tr>
-<td>
-Post
-</td>
-<td>
-<b> /device-measure</b>
-</td>
-<td>
-JSON
-</td>
-<td>
-<i>
-
-```json
-{}
+{
+  "mac": "CA:B8:XX:XX:XX:XX"
+}
 ```
 
 </i>
