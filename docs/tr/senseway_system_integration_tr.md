@@ -41,7 +41,7 @@ https://www.hivemq.com/blog/mqtt-security-fundamentals-tls-ssl/
 
 ### <span style="color: rgb(240,95,34)">HTTP</span>
 
-HTTP here..
+Senseway, HTTP üzerinden kontrol edilebilir, bu da bağlı cihazlar üzerinde yapılandırma değişiklikleri ve ölçüm işlemleri yapmayı sağlar. HTTP uç noktalarına erişim, önce bir giriş yapmayı gerektirir, ardından alınan belirteç, sonraki iletişimlerde kullanılmalıdır. HTTP uç noktaları hakkında detaylı bilgi, Senseway Yapılandırma Web Sayfası tarafından kullanılanlar dahil, HTTP Entegrasyon bölümünde mevcuttur.
 
 ## <span style="color: rgb(240,95,34)">MQTT Entegrasyonu</span>
 
