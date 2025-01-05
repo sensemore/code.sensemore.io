@@ -371,7 +371,9 @@ JSON
 	<i>Config JSON</i>
 	</td>
 	<td>
-	{
+
+```json
+{
   "heartbeat_interval_min": 98,
   "sensor_groups": [
     {
@@ -379,27 +381,18 @@ JSON
       "sensors": [
         {
           "sensor": "accelerometer",
-          "channels": [
-            0
-          ],
-          "channel_codes": [
-            "accelerometer_x"
-          ],
-          "min_max_voltage": [
-            -5,
-            5
-          ],
-          "min_max_value": [
-            -1000,
-            1000
-          ],
+          "channels": [0],
+          "channel_codes": ["accelerometer_x"],
+          "min_max_voltage": [-5, 5],
+          "min_max_value": [-1000, 1000],
           "trigger_differancel_rate": 2
         }
       ]
     }
   ]
 }
-	</td>
+```
+
 </tr>
 </table>
 
@@ -428,6 +421,8 @@ JSON
 </td>
 <td>
 <i>
+
+```json
 {
   "heartbeat_interval_min": 15,
   "sensor_groups": [
@@ -436,26 +431,18 @@ JSON
       "sensors": [
         {
           "sensor": "accelerometer",
-          "channels": [
-            0
-          ],
-          "channel_codes": [
-            "accelerometer_x"
-          ],
-          "min_max_voltage": [
-            -5,
-            5
-          ],
-          "min_max_value": [
-            -1000,
-            1000
-          ],
+          "channels": [0],
+          "channel_codes": ["accelerometer_x"],
+          "min_max_voltage": [-5, 5],
+          "min_max_value": [-1000, 1000],
           "trigger_differancel_rate": 2
         }
       ]
     }
   ]
 }
+```
+
 </i>
 </td>
 </tr>
@@ -473,9 +460,15 @@ JSON
 	<i>Status JSON</i>
 	</td>
 	<td>
-	{
-	"status": "OK, device will be restarted"
-	}
+  <i>
+
+```json
+{
+  "status": "OK, device will be restarted"
+}
+```
+
+<i>
 	</td>
 </tr>
 </table>
@@ -534,9 +527,15 @@ JSON
 	<i>Status JSON</i>
 	</td>
 	<td>
-	{
-		"status": "initiated"
-	}	
+  <i>
+
+```json
+{
+  "status": "initiated"
+}
+```
+
+<i>
 	</td>
 	<tr>
 	<td>
@@ -552,7 +551,10 @@ JSON
 	<i>Metadata JSON</i>
 	</td>
 	<td>
-	{
+    <i>
+
+```json
+{
   "measurement_uid": "f86e2b10-6475-42ed-95ab-b37fe24ca888",
   "calibrated_sampling_rate": 6403,
   "sampling_rate": 6403,
@@ -576,20 +578,10 @@ JSON
         "sensors": [
           {
             "sensor": "accelerometer",
-            "channels": [
-              0
-            ],
-            "channel_codes": [
-              "accelerometer_x"
-            ],
-            "min_max_voltage": [
-              -5,
-              5
-            ],
-            "min_max_value": [
-              -1000,
-              1000
-            ],
+            "channels": [0],
+            "channel_codes": ["accelerometer_x"],
+            "min_max_voltage": [-5, 5],
+            "min_max_value": [-1000, 1000],
             "trigger_differancel_rate": 2
           }
         ]
@@ -597,6 +589,9 @@ JSON
     ]
   }
 }
+```
+
+<i>
 	</td>
 </tr>
 </tr>
@@ -604,4 +599,431 @@ JSON
 
 ## <span style="color: rgb(240,95,34)">HTTP Entegrasyonu</span>
 
-heree.
+Duck ve bağlı cihazlarının ayarlarını görüntülemek veya değiştirmek için kapsamlı HTTP uç noktaları bulunur.
+
+Bazı uç noktalar, başlıkta bir kimlik doğrulama tokenı gerektirir. Kimlik doğrulama tokını gerektiren uç noktalar, 🔐 simgesiyle işaretlenmiştir.
+Bu tokını, aşağıda gösterildiği gibi **Giriş** uç noktası kullanılarak elde edilir:
+
+### <span style="color: rgb(240,95,34)">Giriş</span>
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Content-Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+POST
+</td>
+<td>
+<b> /login</b>
+</td>
+<td>
+application/json
+</td>
+<td>
+<i>
+
+```json
+{
+  "password": "<DEFAULT_PASSWORD>"
+}
+```
+
+</i>
+</td>
+</tr>
+<tr>
+ <td>
+ GET
+ </td>
+ <td>
+ <b> /login</b>
+ </td>
+ <td>
+ application/json
+ </td>
+ <td>
+ <i>
+
+```json
+{
+  "token": "CLjziyTeTzlMsv100mvgkxnTQl1nGYXpQvsIStAW16WrMjxzLvhNTOGhcFFzU38mT8sHKFhxBOm3309qxSmzKIHJux3rUbjVTkywmayA1O05hKaQn9jlY99YMmp1NorF"
+}
+```
+
+ </i>
+ </td>
+</tr>
+</table>
+
+#### <span style="color: rgb(240,95,34)">Tokenını başlığa ekle</span>
+
+Kimlik doğrulama tokenı Giriş uç noktası aracılığıyla alındıktan sonra, her HTTP isteğinde 🔐 uç noktaları için başlığa eklenmesi gerekir, aşağıda gösterildiği gibi.
+
+```json
+{
+  "Authorization": "CLjziyTeTzlMsv100mvgkxnTQl1nGYXpQvsIStAW16WrMjxzLvhNTOGhcFFzU38mT8sHKFhxBOm3309qxSmzKIHJux3rUbjVTkywmayA1O05hKaQn9jlY99YMmp1NorF"
+}
+```
+
+### <span style="color: rgb(240,95,34)">Çıkış</span>
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Content-Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+POST
+</td>
+<td>
+<b> /logout</b>
+</td>
+<td>
+application/json
+</td>
+<td>
+<i>
+</i>
+</td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">Information</span>
+
+Cihaz hakkında temel bilgiler, **Donanım Yazılımı Sürümü** dahil, aşağıdaki HTTP uç noktası kullanılarak alınabilir:
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Content-Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+GET
+</td>
+<td>
+<b> /info</b>
+</td>
+<td>
+application/json
+</td>
+<td>
+<i>
+
+```json
+{
+  "mac_address": "CA:B8:DA:XX:XX:XX",
+  "version": "3.0.0",
+  "is_network_connected": true,
+  "is_internet_connected": true
+}
+```
+
+</i>
+</td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">🔐 Şifre Değisimi</span>
+
+Cihazın HTTP ve web yapılandırma arayüzü şifresi, aşağıdaki HTTP uç noktası kullanılarak değiştirilebilirç
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Content-Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+PUT
+</td>
+<td>
+<b> /change_password</b>
+</td>
+<td>
+application/json
+</td>
+<td>
+<i>
+
+```json
+{
+  "old_password": "<DEAFULT_PASSWORD>",
+  "new_password": "12345678"
+}
+```
+
+</i>
+</td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">🔐 NTP</span>
+
+Zaman bilgisi, Duck tarafından gönderilen ölçüm mesajlarının bir parçasıdır. NTP yapılandırması, aşağıdaki HTTP uç noktası kullanılarak alınabilir veya değiştirilebilir.
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Content-Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+GET
+</td>
+<td>
+<b> /sntp</b>
+</td>
+<td>
+application/json
+</td>
+<td>
+<i>
+
+```json
+{
+  "sntp_server": "http://pool.ntp.org/"
+}
+```
+
+</i>
+</td>
+</tr>
+<tr>
+ <td>
+ POST
+ </td>
+ <td>
+ <b>/sntp</b>
+ </td>
+ <td>
+ application/json
+ </td>
+ <td>
+ <i>
+
+```json
+{
+  "sntp_server": "http://pool.ntp.org/"
+}
+```
+
+ </i>
+ </td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">🔐 Havadan Yazılım Güncellemesi (OTA)</span>
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Content-Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+POST
+</td>
+<td>
+<b> /ota</b>
+</td>
+<td>
+application/octet-stream
+</td>
+<td>
+<i>
+{}
+</i>
+</td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">🔐 Yeniden Başlatma</span>
+
+Duck, aşağıdaki uç nokta kullanılarak yeniden başlatılabilir.
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Content-Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+GET
+</td>
+<td>
+<b> /restart</b>
+</td>
+<td>
+application/json
+</td>
+<td>
+<i>
+</i>
+</td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">🔐 Ölçüm Yükleme URL’si</span>
+
+Duck, bağlı cihazların ölçüm yüklemelerini MQTT üzerinden meta veriler yayınlayarak ve sinyal binary dosyalarını HTTP aracılığıyla ileterek yönetir.  
+Varsayılan binary yükleme URL’si _<https://core.sensemore.io/measurement/>_ şeklindedir, ancak bu URL aşağıdaki uç nokta kullanılarak alınabilir veya değiştirilebilir.
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Content-Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+GET
+</td>
+<td>
+<b> /binary-url</b>
+</td>
+<td>
+application/json
+</td>
+<td>
+<i>
+
+```json
+{
+  "url": "https://core.sensemore.io/measurement"
+}
+```
+
+</i>
+</td>
+</tr>
+<tr>
+ <td>
+ POST
+ </td>
+ <td>
+ <b>/binary-url</b>
+ </td>
+ <td>
+ application/json
+ </td>
+ <td>
+ <i>
+
+```json
+{
+  "url": "https://core.sensemore.io/measurement"
+}
+```
+
+ </i>
+ </td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">🔐 Sensor Configuration</span>
+
+Duck'ın sensör yapılandırması aşağıdaki HTTP uç noktaları üzerinden görüntülenebilir veya değiştirilebilir.
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Content-Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+GET
+</td>
+<td>
+<b> /configuration</b>
+</td>
+<td>
+application/json
+</td>
+<td>
+<i>
+
+```json
+{
+  "heartbeat_interval_min": 98,
+  "sensor_groups": [
+    {
+      "sensor_group_code": "fe1e2714-5ac0-404c-9eb1-20f3a1d2a214",
+      "sensors": [
+        {
+          "sensor": "accelerometer",
+          "channels": [0],
+          "channel_codes": ["accelerometer_x"],
+          "min_max_voltage": [-5, 5],
+          "min_max_value": [-1000, 1000],
+          "trigger_differancel_rate": 2
+        }
+      ]
+    }
+  ]
+}
+```
+
+</i>
+</td>
+</tr>
+<tr>
+ <td>
+ POST
+ </td>
+ <td>
+ <b> /configuration</b>
+ </td>
+ <td>
+ application/json
+ </td>
+ <td>
+ <i>
+
+```json
+{
+  "heartbeat_interval_min": 98,
+  "sensor_groups": [
+    {
+      "sensor_group_code": "fe1e2714-5ac0-404c-9eb1-20f3a1d2a214",
+      "sensors": [
+        {
+          "sensor": "accelerometer",
+          "channels": [0],
+          "channel_codes": ["accelerometer_x"],
+          "min_max_voltage": [-5, 5],
+          "min_max_value": [-1000, 1000],
+          "trigger_differancel_rate": 2
+        }
+      ]
+    }
+  ]
+}
+```
+
+ </i>
+ </td>
+</tr>
+</table>
+
+:exclamation: Duck'ın sensör yapılandırmasını değiştirmek cihazın yeniden başlatılmasına neden olacaktır.

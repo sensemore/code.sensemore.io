@@ -381,7 +381,9 @@ JSON
 	<i>Config JSON</i>
 	</td>
 	<td>
-	{
+
+```json
+{
   "heartbeat_interval_min": 98,
   "sensor_groups": [
     {
@@ -389,27 +391,18 @@ JSON
       "sensors": [
         {
           "sensor": "accelerometer",
-          "channels": [
-            0
-          ],
-          "channel_codes": [
-            "accelerometer_x"
-          ],
-          "min_max_voltage": [
-            -5,
-            5
-          ],
-          "min_max_value": [
-            -1000,
-            1000
-          ],
+          "channels": [0],
+          "channel_codes": ["accelerometer_x"],
+          "min_max_voltage": [-5, 5],
+          "min_max_value": [-1000, 1000],
           "trigger_differancel_rate": 2
         }
       ]
     }
   ]
 }
-	</td>
+```
+
 </tr>
 </table>
 
@@ -438,6 +431,8 @@ JSON
 </td>
 <td>
 <i>
+
+```json
 {
   "heartbeat_interval_min": 15,
   "sensor_groups": [
@@ -446,26 +441,18 @@ JSON
       "sensors": [
         {
           "sensor": "accelerometer",
-          "channels": [
-            0
-          ],
-          "channel_codes": [
-            "accelerometer_x"
-          ],
-          "min_max_voltage": [
-            -5,
-            5
-          ],
-          "min_max_value": [
-            -1000,
-            1000
-          ],
+          "channels": [0],
+          "channel_codes": ["accelerometer_x"],
+          "min_max_voltage": [-5, 5],
+          "min_max_value": [-1000, 1000],
           "trigger_differancel_rate": 2
         }
       ]
     }
   ]
 }
+```
+
 </i>
 </td>
 </tr>
@@ -483,10 +470,16 @@ JSON
 	<i>Status JSON</i>
 	</td>
 	<td>
-	{
-	"status": "OK, device will be restarted"
-	}
-	</td>
+  <i>
+
+```json
+{
+  "status": "OK, device will be restarted"
+}
+```
+
+<i>
+</td>
 </tr>
 </table>
 
@@ -541,25 +534,34 @@ JSON
 	<i>Status JSON</i>
 	</td>
 	<td>
-	{
-		"status": "initiated"
-	}	
-	</td>
-	<tr>
-	<td>
-	Duck
-	</td>
-	<td>
-	<b> sensemore/&lt;DuckMac&gt;/device/&lt;DuckMac&gt;/measure/&lt;MEASUREMENT_UUID&gt;/metadata<b>
-	</td>
-	<td>
-	JSON
-	</td>
-	<td>
-	<i>Metadata JSON</i>
-	</td>
-	<td>
-	{
+  <i>
+
+```json
+{
+  "status": "initiated"
+}
+```
+
+<i>
+</td>
+<tr>
+<td>
+Duck
+</td>
+<td>
+<b> sensemore/&lt;DuckMac&gt;/device/&lt;DuckMac&gt;/measure/&lt;MEASUREMENT_UUID&gt;/metadata<b>
+</td>
+<td>
+JSON
+</td>
+<td>
+<i>Metadata JSON</i>
+    </td>
+    <td>
+    <i>
+
+```json
+{
   "measurement_uid": "f86e2b10-6475-42ed-95ab-b37fe24ca888",
   "calibrated_sampling_rate": 6403,
   "sampling_rate": 6403,
@@ -583,20 +585,10 @@ JSON
         "sensors": [
           {
             "sensor": "accelerometer",
-            "channels": [
-              0
-            ],
-            "channel_codes": [
-              "accelerometer_x"
-            ],
-            "min_max_voltage": [
-              -5,
-              5
-            ],
-            "min_max_value": [
-              -1000,
-              1000
-            ],
+            "channels": [0],
+            "channel_codes": ["accelerometer_x"],
+            "min_max_voltage": [-5, 5],
+            "min_max_value": [-1000, 1000],
             "trigger_differancel_rate": 2
           }
         ]
@@ -604,11 +596,444 @@ JSON
     ]
   }
 }
-	</td>
+```
+
+<i>
+
+</td>
+
 </tr>
 </tr>
 </table>
 
 ## <span style="color: rgb(240,95,34)">HTTP Integration</span>
 
-heree.
+Duck offers extensive HTTP endpoints for retrieving or modifying settings on Duck and its attached devices.
+
+Some endpoints require an authentication token in the header. Endpoints requiring an authentication token in the header are marked with the 🔐 symbol.  
+This token is obtained using the Login endpoint, as shown below:
+
+### <span style="color: rgb(240,95,34)">Login</span>
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Content-Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+POST
+</td>
+<td>
+<b> /login</b>
+</td>
+<td>
+application/json
+</td>
+<td>
+<i>
+
+```json
+{
+  "password": "<DEFAULT_PASSWORD>"
+}
+```
+
+</i>
+</td>
+</tr>
+<tr>
+ <td>
+ GET
+ </td>
+ <td>
+ <b> /login</b>
+ </td>
+ <td>
+ application/json
+ </td>
+ <td>
+ <i>
+
+```json
+{
+  "token": "CLjziyTeTzlMsv100mvgkxnTQl1nGYXpQvsIStAW16WrMjxzLvhNTOGhcFFzU38mT8sHKFhxBOm3309qxSmzKIHJux3rUbjVTkywmayA1O05hKaQn9jlY99YMmp1NorF"
+}
+```
+
+ </i>
+ </td>
+</tr>
+</table>
+
+#### <span style="color: rgb(240,95,34)">Include your token in the Header</span>
+
+Once the authentication token is obtained via the Login endpoint, it must be included in the header of each HTTP request for 🔐 endpoints, as shown below.
+
+```json
+{
+  "Authorization": "CLjziyTeTzlMsv100mvgkxnTQl1nGYXpQvsIStAW16WrMjxzLvhNTOGhcFFzU38mT8sHKFhxBOm3309qxSmzKIHJux3rUbjVTkywmayA1O05hKaQn9jlY99YMmp1NorF"
+}
+```
+
+### <span style="color: rgb(240,95,34)">Logout</span>
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Content-Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+POST
+</td>
+<td>
+<b> /logout</b>
+</td>
+<td>
+application/json
+</td>
+<td>
+<i>
+</i>
+</td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">Information</span>
+
+Basic information about the device, including its **Firmware Version**, can be retrieved using the following HTTP endpoint:
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Content-Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+GET
+</td>
+<td>
+<b> /info</b>
+</td>
+<td>
+application/json
+</td>
+<td>
+<i>
+
+```json
+{
+  "mac_address": "CA:B8:DA:XX:XX:XX",
+  "version": "3.0.0",
+  "is_network_connected": true,
+  "is_internet_connected": true
+}
+```
+
+</i>
+</td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">🔐 Change Password</span>
+
+The device’s HTTP and web configuration interface password can be changed using the following HTTP endpoint:
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Content-Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+PUT
+</td>
+<td>
+<b> /change_password</b>
+</td>
+<td>
+application/json
+</td>
+<td>
+<i>
+
+```json
+{
+  "old_password": "<DEAFULT_PASSWORD>",
+  "new_password": "12345678"
+}
+```
+
+</i>
+</td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">🔐 NTP</span>
+
+Time information is part the measurement messages sent by Duck. NTP configuration can be retrieved or modified using the following HTTP endpoint:
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Content-Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+GET
+</td>
+<td>
+<b> /sntp</b>
+</td>
+<td>
+application/json
+</td>
+<td>
+<i>
+
+```json
+{
+  "sntp_server": "http://pool.ntp.org/"
+}
+```
+
+</i>
+</td>
+</tr>
+<tr>
+ <td>
+ POST
+ </td>
+ <td>
+ <b>/sntp</b>
+ </td>
+ <td>
+ application/json
+ </td>
+ <td>
+ <i>
+
+```json
+{
+  "sntp_server": "http://pool.ntp.org/"
+}
+```
+
+ </i>
+ </td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">🔐 Firmware Update Over the Air (OTA)</span>
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Content-Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+POST
+</td>
+<td>
+<b> /ota</b>
+</td>
+<td>
+application/octet-stream
+</td>
+<td>
+<i>
+{}
+</i>
+</td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">🔐 Restart</span>
+
+Duck can be restarted using the following endpoint.
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Content-Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+GET
+</td>
+<td>
+<b> /restart</b>
+</td>
+<td>
+application/json
+</td>
+<td>
+<i>
+</i>
+</td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">🔐 Measurement Upload URL</span>
+
+Duck manages measurement uploads for attached devices by publishing metadata over MQTT and transmitting signal binaries via HTTP.  
+The default binary upload URL is _<https://core.sensemore.io/measurement/>_,
+however, the URL can be retrieved or modified using the following endpoint.
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Content-Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+GET
+</td>
+<td>
+<b> /binary-url</b>
+</td>
+<td>
+application/json
+</td>
+<td>
+<i>
+
+```json
+{
+  "url": "https://core.sensemore.io/measurement"
+}
+```
+
+</i>
+</td>
+</tr>
+<tr>
+ <td>
+ POST
+ </td>
+ <td>
+ <b>/binary-url</b>
+ </td>
+ <td>
+ application/json
+ </td>
+ <td>
+ <i>
+
+```json
+{
+  "url": "https://core.sensemore.io/measurement"
+}
+```
+
+ </i>
+ </td>
+</tr>
+</table>
+
+### <span style="color: rgb(240,95,34)">🔐 Sensor Configuration</span>
+
+Duck's sensor configuration can be viewed or changed over HTTP with the following endpoints.
+
+<table>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Content-Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>
+GET
+</td>
+<td>
+<b> /configuration</b>
+</td>
+<td>
+application/json
+</td>
+<td>
+<i>
+
+```json
+{
+  "heartbeat_interval_min": 98,
+  "sensor_groups": [
+    {
+      "sensor_group_code": "fe1e2714-5ac0-404c-9eb1-20f3a1d2a214",
+      "sensors": [
+        {
+          "sensor": "accelerometer",
+          "channels": [0],
+          "channel_codes": ["accelerometer_x"],
+          "min_max_voltage": [-5, 5],
+          "min_max_value": [-1000, 1000],
+          "trigger_differancel_rate": 2
+        }
+      ]
+    }
+  ]
+}
+```
+
+</i>
+</td>
+</tr>
+<tr>
+ <td>
+ POST
+ </td>
+ <td>
+ <b> /configuration</b>
+ </td>
+ <td>
+ application/json
+ </td>
+ <td>
+ <i>
+
+```json
+{
+  "heartbeat_interval_min": 98,
+  "sensor_groups": [
+    {
+      "sensor_group_code": "fe1e2714-5ac0-404c-9eb1-20f3a1d2a214",
+      "sensors": [
+        {
+          "sensor": "accelerometer",
+          "channels": [0],
+          "channel_codes": ["accelerometer_x"],
+          "min_max_voltage": [-5, 5],
+          "min_max_value": [-1000, 1000],
+          "trigger_differancel_rate": 2
+        }
+      ]
+    }
+  ]
+}
+```
+
+ </i>
+ </td>
+</tr>
+</table>
+
+:exclamation: Changing Duck’s sensor configuration will trigger a restart of the device.
