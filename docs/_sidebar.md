@@ -1,4 +1,4 @@
 - [Senseway Integration Documentation](senseway_system_integration.md)
-- [Wired Pro Wi-Fi Integration Documentation](wired_pro_wifi.md)
+- [Wired Pro Integration Documentation](wired_pro_wifi.md)
 - [Duck Integration Documentation](duck.md)
 - [Infinity Android API Documentation](android_api.md)

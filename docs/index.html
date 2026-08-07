@@ -54,6 +54,34 @@
 
       /* Change the sidebar bullets */
     }
+
+    /* Wide reference tables (MQTT topics, HTTP endpoints) carry JSON samples in
+       their cells. Keep them inside the content column and let the table scroll
+       on its own instead of stretching the page. */
+    .markdown-section table {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+    }
+
+    .markdown-section table td {
+      vertical-align: top;
+    }
+
+    /* Cap the JSON samples so a single long line can't blow the column up. */
+    .markdown-section table td pre,
+    .markdown-section table td pre[data-lang] {
+      max-width: 32em;
+      overflow-x: auto;
+      font-size: 12px;
+      line-height: 1.45;
+      margin: 0.4em 0;
+    }
+
+    .markdown-section table td pre>code {
+      white-space: pre;
+    }
   </style>
 </body>
 

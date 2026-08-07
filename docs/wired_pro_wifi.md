@@ -129,7 +129,7 @@ When Wired Pro powers on, it publishes a status message containing basic device 
 User
 </td>
 <td>
-<b> sensemore/<GatewayMac>/info</b>
+<b> sensemore/&lt;GatewayMac&gt;/info</b>
 </td>
 <td>
 JSON
@@ -145,6 +145,60 @@ JSON
 <td>
 Wired Pro
 </td>
+<td><b>sensemore/&lt;GatewayMac&gt;/info/accepted</b></td>
+<td>JSON</td>
+<td>
+
+```json
+{
+  "Product": "WIREDPRO",
+  "Current Running Application": "<WIREDPRO_APPLICATION_NAME>",
+  "Version": "<FIRMWARE_VERSION>",
+  "Compile Date": "<FIRMWARE_COMPILE_DATE>",
+  "Compile Time": "<FIRMWARE_COMPILE_TIME>",
+  "ESP-IDF Version": "<ESPRESSIF_IDF_VERSION>",
+  "RSSI": <RECEIVED_SIGNAL_STRENGTH_INDICATOR>,
+  "Local IP": "<ASSIGNED_LOCAL_IP>",
+  "Network MAC": "<NETWORK_MAC_ADDRESS>",
+  "Last Reset Reason": "<RESET_REASON>",
+  "Runtime MS": <TIME_SINCE_LAST_RESET>,
+  "Memory Info": {
+    "Total Free Bytes": <TOTAL_FREE_HEAP_BYTES>,
+    "Total Allocated Bytes": <TOTAL_ALLOCATED_HEAP_BYTES>,
+    "Min Free Bytes": <MIN_FREE_HEAP_BYTES>,
+    "Largest Free Bytes": <LARGEST_FREE_HEAP_BLOCK_BYTES>
+  }
+}
+```
+
+</td>
+<td>
+
+```json
+{
+  "Product": "WIREDPRO",
+  "Current Running Application": "WiredPro-3-1-2",
+  "Version": "3.1.2",
+  "Compile Date": "Jan 8 2018",
+  "Compile Time": "12:00:00",
+  "ESP-IDF Version": "v5.1.4",
+  "RSSI": -60,
+  "Local IP": "192.168.1.161",
+  "Network MAC": "00:00:00:00:00:00",
+  "Last Reset Reason": "POWERON",
+  "Runtime MS": 1231660,
+  "Memory Info": {
+    "Total Free Bytes": 66576,
+    "Total Allocated Bytes": 198868,
+    "Min Free Bytes": 60216,
+    "Largest Free Bytes": 40960
+  }
+}
+```
+
+</td>
+</tr>
+</table>
 
 ❗️ `Memory Info` reports **heap** statistics, not storage capacity.
 
@@ -168,6 +222,73 @@ on a plaintext HTTP endpoint reachable from the device.
 <td>
 User
 </td>
+<td><b>sensemore/&lt;GatewayMac&gt;/ota</b></td>
+<td>JSON</td>
+<td>
+<i>http url</i>
+</td>
+<td>
+
+```json
+{
+  "url": "http://link.mydomain.com/WiredPro.bin"
+}
+```
+
+</td>
+</tr>
+<tr>
+<td>
+Wired Pro
+</td>
+<td><b>sensemore/&lt;GatewayMac&gt;/ota/accepted</b></td>
+<td>JSON</td>
+<td><i>Status JSON</i></td>
+<td>
+
+```json
+{
+  "status": "OTA accepted"
+}
+```
+
+</td>
+</tr>
+<tr>
+<td>
+Wired Pro
+</td>
+<td><b>sensemore/&lt;GatewayMac&gt;/ota/rejected</b></td>
+<td>JSON</td>
+<td><i>Status JSON</i></td>
+<td>
+
+```json
+{
+  "status": "'url' is not exists or invalid!"
+}
+```
+
+</td>
+</tr>
+<tr>
+<td>
+Wired Pro
+</td>
+<td><b>sensemore/&lt;GatewayMac&gt;/ota/done</b></td>
+<td>JSON</td>
+<td><i>Status JSON</i></td>
+<td>
+
+```json
+{
+  "status": "Restarting device due to OTA"
+}
+```
+
+</td>
+</tr>
+</table>
 
 ### <span style="color: rgb(240,95,34)">Restart</span>
 
@@ -186,7 +307,7 @@ Wired Pro can be restarted using the following topic.
 User
 </td>
 <td>
-<b> sensemore/<GatewayMac>/restart</b>
+<b> sensemore/&lt;GatewayMac&gt;/restart</b>
 </td>
 <td>
 JSON
@@ -220,7 +341,7 @@ Wired Pro's measurement strategy and configuration can be retrieved using the fo
 User
 </td>
 <td>
-<b> sensemore/<GatewayMac>/devices/get</b>
+<b> sensemore/&lt;GatewayMac&gt;/devices/get</b>
 </td>
 <td>
 JSON
@@ -237,7 +358,7 @@ JSON
  Wired Pro
  </td>
  <td>
- <b> sensemore/<GatewayMac>/devices/get/accepted</b>
+ <b> sensemore/&lt;GatewayMac&gt;/devices/get/accepted</b>
  </td>
  <td>
  JSON
@@ -246,6 +367,32 @@ JSON
  <i>Device Config JSON</i>
  </td>
  <td>
+
+```json
+{
+  "devices": [
+    {
+      "mac": "CA:B8:41:XX:XX:XX",
+      "status": "connected",
+      "version": "3.1.2",
+      "device_config": {
+        "accelerometer_range": 16,
+        "sampling_rate": 25600,
+        "sample_size": 50000,
+        "scheduler_enabled": true,
+        "hearthbeat_interval_seconds": 1800,
+        "min_trigger_interval_seconds": 300,
+        "relative_change": 0.1,
+        "absolute_change": 0.05
+      }
+    }
+  ]
+}
+```
+
+ </td>
+</tr>
+</table>
 
 ### <span style="color: rgb(240,95,34)">MQTT Measurement Configuration</span>
 
@@ -264,7 +411,7 @@ Wired Pro's measurement configuration can be viewed or modified over MQTT with t
 User
 </td>
 <td>
-<b> sensemore/<GatewayMac>/device/<GatewayMac>/config/get</b>
+<b> sensemore/&lt;GatewayMac&gt;/device/&lt;GatewayMac&gt;/config/get</b>
 </td>
 <td>
 JSON
@@ -281,7 +428,7 @@ JSON
  Wired Pro
  </td>
  <td>
- <b> sensemore/<GatewayMac>/device/<GatewayMac>/config/get/accepted</b>
+ <b> sensemore/&lt;GatewayMac&gt;/device/&lt;GatewayMac&gt;/config/get/accepted</b>
  </td>
  <td>
  JSON
@@ -290,6 +437,26 @@ JSON
  <i>Config JSON</i>
  </td>
  <td>
+
+```json
+{
+  "device_mac": "CA:B8:41:XX:XX:XX",
+  "device_config": {
+    "accelerometer_range": 16,
+    "sampling_rate": 25600,
+    "sample_size": 50000,
+    "scheduler_enabled": true,
+    "hearthbeat_interval_seconds": 1800,
+    "min_trigger_interval_seconds": 300,
+    "relative_change": 0.1,
+    "absolute_change": 0.05
+  }
+}
+```
+
+ </td>
+</tr>
+</table>
 
 <table>
 <tr>
@@ -304,7 +471,7 @@ JSON
 User
 </td>
 <td>
-<b> sensemore/<GatewayMac>/device/<GatewayMac>/config/set</b>
+<b> sensemore/&lt;GatewayMac&gt;/device/&lt;GatewayMac&gt;/config/set</b>
 </td>
 <td>
 JSON
@@ -314,6 +481,84 @@ JSON
 </td>
 <td>
 <i>
+
+```json
+{
+  "device_mac": "CA:B8:41:XX:XX:XX",
+  "device_config": {
+    "accelerometer_range": 16,
+    "sampling_rate": 25600,
+    "sample_size": 50000,
+    "scheduler_enabled": true,
+    "hearthbeat_interval_seconds": 1800,
+    "min_trigger_interval_seconds": 300,
+    "relative_change": 0.1,
+    "absolute_change": 0.05
+  }
+}
+```
+
+</i>
+</td>
+</tr>
+<tr>
+ <td>
+ Wired Pro
+ </td>
+ <td>
+ <b> sensemore/&lt;GatewayMac&gt;/device/&lt;GatewayMac&gt;/config/set/accepted</b>
+ </td>
+ <td>
+ JSON
+ </td>
+ <td>
+ <i>Status JSON</i>
+ </td>
+ <td>
+
+```json
+{
+  "device_mac": "CA:B8:41:XX:XX:XX",
+  "device_config": {
+    "accelerometer_range": 16,
+    "sampling_rate": 25600,
+    "sample_size": 50000,
+    "scheduler_enabled": true,
+    "hearthbeat_interval_seconds": 1800,
+    "min_trigger_interval_seconds": 300,
+    "relative_change": 0.1,
+    "absolute_change": 0.05
+  },
+  "status": "Device config updated"
+}
+```
+
+ </td>
+</tr>
+<tr>
+ <td>
+ Wired Pro
+ </td>
+ <td>
+ <b> sensemore/&lt;GatewayMac&gt;/device/&lt;GatewayMac&gt;/config/set/rejected</b>
+ </td>
+ <td>
+ JSON
+ </td>
+ <td>
+ <i>Status JSON</i>
+ </td>
+ <td>
+
+```json
+{
+  "status": "Invalid payload! 'hearthbeat_interval_seconds' is missing or invalid"
+}
+```
+
+ </td>
+</tr>
+</table>
 
 ❗️ `scheduler_enabled` must be a JSON **boolean** on this transport.
 
@@ -333,7 +578,7 @@ Wired Pro initiates automatic measurements using the [smart measurement strategy
 <td>
 User
 </td>
-<td><b>sensemore/<GatewayMac>/device/<GatewayMac>/measure/<MEASUREMENT_UUID></b></td>
+<td><b>sensemore/&lt;GatewayMac&gt;/device/&lt;GatewayMac&gt;/measure/&lt;MEASUREMENT_UUID&gt;</b></td>
 <td>JSON</td>
 <td>
 <i>Empty JSON</i>
@@ -345,10 +590,90 @@ User
 <td>
 Wired Pro
 </td>
-<td><b>sensemore/<GatewayMac>/device/<GatewayMac>/measure/<MEASUREMENT_UUID>/accepted</b></td>
+<td><b>sensemore/&lt;GatewayMac&gt;/device/&lt;GatewayMac&gt;/measure/&lt;MEASUREMENT_UUID&gt;/accepted</b></td>
 <td><i>JSON</i></td>
 <td><i>Status JSON</i></td>
 <td>
+
+```json
+{
+  "status": "success"
+}
+```
+
+</td>
+</tr>
+<tr>
+<td>
+Wired Pro
+</td>
+<td><b>sensemore/&lt;GatewayMac&gt;/device/&lt;GatewayMac&gt;/measure/&lt;MEASUREMENT_UUID&gt;/metadatas</b></td>
+<td><i>JSON</i></td>
+<td><i>Metadata JSON</i></td>
+<td>
+
+```json
+{
+  "unixtimestamp": 1734617027,
+  "sum_x": -3250.361328125,
+  "sum_y": 1844.42333984375,
+  "sum_z": -7643.8251953125,
+  "mean_x": -0.39005896173346932,
+  "mean_y": 0.2213396543674247,
+  "mean_z": -0.91729571526611065,
+  "peak_x": 0.038008180483469323,
+  "peak_y": 0.0423322206325753,
+  "peak_z": 0.039735534733889355,
+  "peak_to_peak_x": 0.07373046875,
+  "peak_to_peak_y": 0.0791015625,
+  "peak_to_peak_z": 0.07080078125,
+  "clearance_x": 164.31150332922692,
+  "clearance_y": 193.61163139253921,
+  "clearance_z": 195.9534386192756,
+  "crest_x": 7.6797359331360573,
+  "crest_y": 8.9543432043988656,
+  "crest_z": 9.27409693825784,
+  "vrms_x": 0.017510145845642453,
+  "vrms_y": 0.050003347640017633,
+  "vrms_z": 0.01880110921075584,
+  "grms_x": 0.0049491520039737225,
+  "grms_y": 0.00472756288945675,
+  "grms_z": 0.0042845718562603,
+  "kurtosis_x": 17.458915614260821,
+  "kurtosis_y": 18.276360133218649,
+  "kurtosis_z": 17.757537090857209,
+  "skewness_x": 0.65933222563406724,
+  "skewness_y": 1.4794854818975853,
+  "skewness_z": -1.0167293724548387,
+  "temperature": 41.1187515258789,
+  "calibrated_sampling_rate": 26513,
+  "sampling_rate": 25600,
+  "sample_size": 50000,
+  "accelerometer_range": 16,
+  "measurement_buffer_size": 300000
+}
+```
+
+</td>
+</tr>
+<tr>
+<td>
+Wired Pro
+</td>
+<td><b>sensemore/&lt;GatewayMac&gt;/device/&lt;GatewayMac&gt;/measure/&lt;MEASUREMENT_UUID&gt;/done</b></td>
+<td><i>JSON</i></td>
+<td><i>Status JSON</i></td>
+<td>
+
+```json
+{
+  "status": "Measurement done"
+}
+```
+
+</td>
+</tr>
+</table>
 
 Units: `grms_*`, `peak_*`, `peak_to_peak_*`, `mean_*` are in **g**; `vrms_*` is in **mm/s**;
 `temperature` is in **°C**. `calibrated_sampling_rate` is the measured actual ODR of the
@@ -387,6 +712,28 @@ application/json
 </td>
 <td>
 <i>
+
+```json
+{
+  "password": "<DEVICE_PASSWORD>"
+}
+```
+
+</i>
+</td>
+<td>
+<i>
+
+```json
+{
+  "token": "CLjziyTeTzlMsv100mvgkxnTQl1nGYXpQvsIStAW16WrMjxzLvhNTOGhcFFzU38mT8sHKFhxBOm3309qxSmzKIHJux3rUbjVTkywmayA1O05hKaQn9jlY99YMmp1NorF"
+}
+```
+
+</i>
+</td>
+</tr>
+</table>
 
 ❗️ The token is returned in the **response body of `POST /login`**. There is no
 `GET /login` endpoint. Only one token is valid at a time — logging in again invalidates the
@@ -451,6 +798,20 @@ application/json
 <td>
 <i>
 
+```json
+{
+  "mac_address": "CA:B8:41:XX:XX:XX",
+  "version": "3.1.2",
+  "is_network_connected": true,
+  "is_internet_connected": true
+}
+```
+
+</i>
+</td>
+</tr>
+</table>
+
 ### <span style="color: rgb(240,95,34)">🔐 Change Password</span>
 
 The device's HTTP and web configuration interface password can be changed using the following HTTP endpoint. On success the current token is invalidated and a new login is required.
@@ -475,6 +836,28 @@ application/json
 <td>
 <i>
 
+Request:
+
+```json
+{
+  "old_password": "<CURRENT_PASSWORD>",
+  "new_password": "12345678"
+}
+```
+
+Response:
+
+```json
+{
+  "success": true
+}
+```
+
+</i>
+</td>
+</tr>
+</table>
+
 ### <span style="color: rgb(240,95,34)">🔐 NTP</span>
 
 Time information is part of the measurement messages sent by Wired Pro. NTP configuration can be retrieved or modified using the following HTTP endpoint.
@@ -498,6 +881,49 @@ application/json
 </td>
 <td>
 <i>
+
+```json
+{
+  "sntp_server": "pool.ntp.org"
+}
+```
+
+</i>
+</td>
+</tr>
+<tr>
+ <td>
+ POST
+ </td>
+ <td>
+ <b>/sntp</b>
+ </td>
+ <td>
+ application/json
+ </td>
+ <td>
+ <i>
+
+Request:
+
+```json
+{
+  "sntp_server": "pool.ntp.org"
+}
+```
+
+Response:
+
+```json
+{
+  "success": true
+}
+```
+
+ </i>
+ </td>
+</tr>
+</table>
 
 ❗️ Hostname only — see the [NTP](#ntp) note above.
 
@@ -584,6 +1010,49 @@ application/json
 <td>
 <i>
 
+```json
+{
+  "url": "https://core.sensemore.io/measurement"
+}
+```
+
+</i>
+</td>
+</tr>
+<tr>
+ <td>
+ POST
+ </td>
+ <td>
+ <b>/binary-url</b>
+ </td>
+ <td>
+ application/json
+ </td>
+ <td>
+ <i>
+
+Request:
+
+```json
+{
+  "url": "https://core.sensemore.io/measurement"
+}
+```
+
+Response:
+
+```json
+{
+  "success": true
+}
+```
+
+ </i>
+ </td>
+</tr>
+</table>
+
 ### <span style="color: rgb(240,95,34)">🔐 HTTP Measurement Configuration</span>
 
 Wired Pro's measurement configuration can be viewed or modified with the following endpoint. Field semantics and constraints are documented in [Measurement Strategy](#measurement-strategy).
@@ -607,6 +1076,63 @@ application/json
 </td>
 <td>
 <i>
+
+```json
+{
+  "accelerometer_range": 16,
+  "sampling_rate": 25600,
+  "sample_size": 50000,
+  "scheduler_enabled": 1,
+  "hearthbeat_interval_seconds": 1800,
+  "min_trigger_interval_seconds": 300,
+  "relative_change": 0.1,
+  "absolute_change": 0.05
+}
+```
+
+</i>
+</td>
+</tr>
+<tr>
+ <td>
+ POST
+ </td>
+ <td>
+ <b>/configuration</b>
+ </td>
+ <td>
+ application/json
+ </td>
+ <td>
+ <i>
+
+Request — all eight fields are required:
+
+```json
+{
+  "accelerometer_range": 16,
+  "sampling_rate": 25600,
+  "sample_size": 50000,
+  "scheduler_enabled": 1,
+  "hearthbeat_interval_seconds": 1800,
+  "min_trigger_interval_seconds": 300,
+  "relative_change": 0.1,
+  "absolute_change": 0.05
+}
+```
+
+Response:
+
+```json
+{
+  "success": true
+}
+```
+
+ </i>
+ </td>
+</tr>
+</table>
 
 ❗️ `scheduler_enabled` must be a JSON **number** (`0`/`1`) on this transport.
 
@@ -639,7 +1165,59 @@ POST
 application/json
 </td>
 <td>
+<i>No body required. Send an empty JSON object <code>{}</code>.</i>
+</td>
+<td>
 <i>
+
+The measurement metadata, in the same shape as the MQTT `metadatas` payload:
+
+```json
+{
+  "unixtimestamp": 1734617027,
+  "sum_x": -3250.361328125,
+  "sum_y": 1844.42333984375,
+  "sum_z": -7643.8251953125,
+  "mean_x": -0.39005896173346932,
+  "mean_y": 0.2213396543674247,
+  "mean_z": -0.91729571526611065,
+  "peak_x": 0.038008180483469323,
+  "peak_y": 0.0423322206325753,
+  "peak_z": 0.039735534733889355,
+  "peak_to_peak_x": 0.07373046875,
+  "peak_to_peak_y": 0.0791015625,
+  "peak_to_peak_z": 0.07080078125,
+  "clearance_x": 164.31150332922692,
+  "clearance_y": 193.61163139253921,
+  "clearance_z": 195.9534386192756,
+  "crest_x": 7.6797359331360573,
+  "crest_y": 8.9543432043988656,
+  "crest_z": 9.27409693825784,
+  "vrms_x": 0.017510145845642453,
+  "vrms_y": 0.050003347640017633,
+  "vrms_z": 0.01880110921075584,
+  "grms_x": 0.0049491520039737225,
+  "grms_y": 0.00472756288945675,
+  "grms_z": 0.0042845718562603,
+  "kurtosis_x": 17.458915614260821,
+  "kurtosis_y": 18.276360133218649,
+  "kurtosis_z": 17.757537090857209,
+  "skewness_x": 0.65933222563406724,
+  "skewness_y": 1.4794854818975853,
+  "skewness_z": -1.0167293724548387,
+  "temperature": 41.1187515258789,
+  "calibrated_sampling_rate": 26513,
+  "sampling_rate": 25600,
+  "sample_size": 50000,
+  "accelerometer_range": 16,
+  "measurement_buffer_size": 300000
+}
+```
+
+</i>
+</td>
+</tr>
+</table>
 
 ### <span style="color: rgb(240,95,34)">🔐 Trigger Measurement</span>
 
@@ -679,7 +1257,30 @@ POST
 application/json
 </td>
 <td>
+<i>No body required. Send an empty JSON object <code>{}</code>.</i>
+</td>
+<td>
 <i>
+
+```json
+{
+  "success": true
+}
+```
+
+On failure the device responds with `500` and an error object:
+
+```json
+{
+  "success": false,
+  "error": "Failed to trigger measurement and upload"
+}
+```
+
+</i>
+</td>
+</tr>
+</table>
 
 ## <span style="color: rgb(240,95,34)">RS485 Integration</span>
 
